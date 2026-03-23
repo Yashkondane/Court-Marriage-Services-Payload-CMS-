@@ -96,6 +96,7 @@ export async function POST(request: NextRequest) {
               heading: `${service.title} in ${area.name}`,
               subheading: `Expert ${service.title.toLowerCase()} services in ${area.name}, ${city.name}. Contact our experienced lawyers today.`,
               style: 'fullWidth',
+              layoutStyle: 'standard',
               visibility: { showOnDesktop: true, showOnMobile: true, targetType: 'global' },
             },
             {
