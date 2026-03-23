@@ -67,6 +67,10 @@ export const Hero: Block = {
         { label: 'Split (Image + Text)', value: 'split' },
         { label: 'Centered', value: 'centered' },
       ],
+      admin: {
+        condition: (data) => data.layoutStyle === 'standard',
+        description: 'Choose the layout style for the standard hero section.',
+      },
     },
     ...visibilityFields,
   ],

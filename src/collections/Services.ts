@@ -36,6 +36,27 @@ export const Services: CollectionConfig = {
       relationTo: 'media',
     },
     {
+      name: 'showInHeader',
+      type: 'checkbox',
+      label: 'Show in Main Navigation Dropdown',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'If enabled, this service will appear in the "Services" menu in the header.',
+      },
+    },
+    {
+      name: 'menuOrder',
+      type: 'number',
+      label: 'Menu Order',
+      defaultValue: 0,
+      admin: {
+        position: 'sidebar',
+        description: 'Lower numbers appear first in the dropdown.',
+        condition: (data) => data.showInHeader,
+      },
+    },
+    {
       name: 'icon',
       type: 'upload',
       relationTo: 'media',

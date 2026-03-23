@@ -2,6 +2,7 @@ import React from 'react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getPayload } from '@/lib/payload/getPayload'
+import { serializeLexical } from '@/lib/payload/lexical'
 
 type Params = Promise<{ slug: string }>
 
@@ -49,25 +50,32 @@ export default async function NewsDetailPage({ params }: { params: Params }) {
     const item = result.docs[0] as any
 
     return (
-      <article>
-        <section className="bg-[var(--color-primary)] text-white py-16">
+      <article className="bg-white min-h-screen">
+        <section className="bg-[var(--color-primary)] text-white py-16 md:py-24 border-b-4 border-[var(--color-secondary)]">
           <div className="container-page max-w-4xl mx-auto">
             {item.publishedDate && (
-              <span className="text-sm text-white/60 mb-3 block">
-                {new Date(item.publishedDate).toLocaleDateString('en-IN', {
+              <span className="text-sm text-[var(--color-secondary-light)] mb-4 block font-medium uppercase tracking-widest">
+                NEWS • {new Date(item.publishedDate).toLocaleDateString('en-IN', {
                   day: 'numeric', month: 'long', year: 'numeric',
                 })}
               </span>
             )}
-            <h1 className="text-3xl md:text-5xl font-bold mb-4">{item.title}</h1>
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 font-[var(--font-heading)] leading-tight">{item.title}</h1>
             {item.excerpt && (
-              <p className="text-lg text-white/80 max-w-3xl">{item.excerpt}</p>
+              <p className="text-xl text-white/80 max-w-3xl leading-relaxed">{item.excerpt}</p>
             )}
           </div>
         </section>
-        <section className="py-12">
-          <div className="container-page max-w-4xl mx-auto rich-text">
-            <p>News content rendered here via Lexical.</p>
+
+        <section className="py-16 md:py-24">
+          <div className="container-page max-w-4xl mx-auto rich-text prose prose-lg prose-slate prose-headings:font-[var(--font-heading)]">
+            {item.content && (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: serializeLexical(item.content),
+                }}
+              />
+            )}
           </div>
         </section>
       </article>

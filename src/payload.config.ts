@@ -3,8 +3,14 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import {
+  lexicalEditor,
+  InlineCodeFeature,
+  LinkFeature,
+  BlocksFeature,
+} from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
+import { CodeSnippet } from '@/blocks/CodeSnippet'
 
 import { Users } from '@/collections/Users'
 import { Media } from '@/collections/Media'
@@ -48,7 +54,16 @@ export default buildConfig({
     Lawyers,
   ],
 
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [
+      ...defaultFeatures,
+      InlineCodeFeature(),
+      LinkFeature(),
+      BlocksFeature({
+        blocks: [CodeSnippet],
+      }),
+    ],
+  }),
 
   secret: process.env.PAYLOAD_SECRET || 'CHANGE-ME-PAYLOAD-SECRET',
 

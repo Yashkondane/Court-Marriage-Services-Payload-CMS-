@@ -260,6 +260,9 @@ export interface Page {
           text?: string | null;
           link?: string | null;
         };
+        /**
+         * Choose the layout style for the standard hero section.
+         */
         style?: ('fullWidth' | 'split' | 'centered') | null;
         /**
          * Control where and on which devices this block appears.
@@ -561,6 +564,14 @@ export interface Service {
    */
   slug: string;
   banner?: (number | null) | Media;
+  /**
+   * If enabled, this service will appear in the "Services" menu in the header.
+   */
+  showInHeader?: boolean | null;
+  /**
+   * Lower numbers appear first in the dropdown.
+   */
+  menuOrder?: number | null;
   icon?: (number | null) | Media;
   content?: {
     root: {
@@ -864,9 +875,25 @@ export interface Testimonial {
 export interface ServicesCarouselBlockType {
   heading: string;
   /**
-   * Select the services to display in the carousel. You can drag and drop to reorder.
+   * Add and reorder services for the carousel. You can also override the default service icon here.
    */
-  services: (number | Service)[];
+  items: {
+    service: number | Service;
+    /**
+     * Optional: Override the default service icon.
+     */
+    customIcon?: (number | null) | Media;
+    /**
+     * Optional: Override the default highlights. If left empty, highlights from the service will be used.
+     */
+    highlights?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+    id?: string | null;
+  }[];
   /**
    * Control where and on which devices this block appears.
    */
@@ -1467,7 +1494,19 @@ export interface PagesSelect<T extends boolean = true> {
  */
 export interface ServicesCarouselBlockTypeSelect<T extends boolean = true> {
   heading?: T;
-  services?: T;
+  items?:
+    | T
+    | {
+        service?: T;
+        customIcon?: T;
+        highlights?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        id?: T;
+      };
   visibility?:
     | T
     | {
@@ -1535,6 +1574,8 @@ export interface ServicesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   banner?: T;
+  showInHeader?: T;
+  menuOrder?: T;
   icon?: T;
   content?: T;
   highlights?:

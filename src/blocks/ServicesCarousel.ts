@@ -12,14 +12,44 @@ export const ServicesCarousel: Block = {
       defaultValue: 'Lead India Services',
     },
     {
-      name: 'services',
-      type: 'relationship',
-      relationTo: 'services',
-      hasMany: true,
+      name: 'items',
+      type: 'array',
       required: true,
+      minRows: 1,
       admin: {
-        description: 'Select the services to display in the carousel. You can drag and drop to reorder.',
+        description: 'Add and reorder services for the carousel. You can also override the default service icon here.',
       },
+      fields: [
+        {
+          name: 'service',
+          type: 'relationship',
+          relationTo: 'services',
+          required: true,
+        },
+        {
+          name: 'customIcon',
+          type: 'upload',
+          relationTo: 'media',
+          admin: {
+            description: 'Optional: Override the default service icon.',
+          },
+        },
+        {
+          name: 'highlights',
+          type: 'array',
+          label: 'Custom Highlights',
+          admin: {
+            description: 'Optional: Override the default highlights. If left empty, highlights from the service will be used.',
+          },
+          fields: [
+            {
+              name: 'text',
+              type: 'text',
+              required: true,
+            },
+          ],
+        },
+      ],
     },
     ...visibilityFields,
   ],

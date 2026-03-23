@@ -6,6 +6,12 @@ export const Media: CollectionConfig = {
   slug: 'media',
   upload: {
     mimeTypes: ['image/*', 'video/*', 'application/pdf'],
+    formatOptions: {
+      format: 'webp',
+      options: {
+        quality: 80,
+      },
+    },
     imageSizes: [
       { name: 'thumbnail', width: 300, height: 300, position: 'centre' },
       { name: 'card', width: 768, height: 432, position: 'centre' },

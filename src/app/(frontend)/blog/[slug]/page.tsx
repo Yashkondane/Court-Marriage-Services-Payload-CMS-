@@ -2,6 +2,7 @@ import React from 'react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getPayload } from '@/lib/payload/getPayload'
+import { serializeLexical } from '@/lib/payload/lexical'
 
 type Params = Promise<{ slug: string }>
 
@@ -57,32 +58,39 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
     const blog = result.docs[0] as any
 
     return (
-      <article>
-        <section className="bg-[var(--color-primary)] text-white py-16">
+      <article className="bg-white min-h-screen">
+        <section className="bg-[var(--color-primary)] text-white py-16 md:py-24">
           <div className="container-page max-w-4xl mx-auto">
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3 mb-6">
               {blog.categories?.[0]?.category && (
-                <span className="text-sm text-[var(--color-secondary)] font-semibold uppercase">
+                <span className="text-sm bg-[var(--color-secondary)] text-[var(--color-primary-dark)] px-3 py-1 rounded font-bold uppercase tracking-wider">
                   {blog.categories[0].category}
                 </span>
               )}
               {blog.publishedDate && (
-                <span className="text-sm text-white/60">
+                <span className="text-sm text-white/70">
                   {new Date(blog.publishedDate).toLocaleDateString('en-IN', {
                     day: 'numeric', month: 'long', year: 'numeric',
                   })}
                 </span>
               )}
             </div>
-            <h1 className="text-3xl md:text-5xl font-bold mb-4">{blog.title}</h1>
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 font-[var(--font-heading)] leading-tight">{blog.title}</h1>
             {blog.excerpt && (
-              <p className="text-lg text-white/80 max-w-3xl">{blog.excerpt}</p>
+              <p className="text-xl text-white/80 max-w-3xl leading-relaxed">{blog.excerpt}</p>
             )}
           </div>
         </section>
-        <section className="py-12">
-          <div className="container-page max-w-4xl mx-auto rich-text">
-            <p>Blog content rendered here via Lexical.</p>
+        
+        <section className="py-16 md:py-24">
+          <div className="container-page max-w-4xl mx-auto rich-text prose prose-lg prose-slate prose-headings:font-[var(--font-heading)]">
+            {blog.content && (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: serializeLexical(blog.content),
+                }}
+              />
+            )}
           </div>
         </section>
       </article>
