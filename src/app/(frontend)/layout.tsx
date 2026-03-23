@@ -11,7 +11,11 @@ export const metadata: Metadata = {
   },
   description:
     'Expert legal services for court marriage, property disputes, family law, and more. Trusted lawyers across India.',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL 
+      ? (process.env.NEXT_PUBLIC_SITE_URL.startsWith('http') ? process.env.NEXT_PUBLIC_SITE_URL : `https://${process.env.NEXT_PUBLIC_SITE_URL}`) 
+      : 'http://localhost:3000'
+  ),
   openGraph: {
     type: 'website',
     locale: 'en_IN',
