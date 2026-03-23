@@ -78,10 +78,10 @@ const CircularTestimonials: React.FC<CircularTestimonialsProps> = ({
   }, [testimonials.length]);
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto h-[500px] flex items-center justify-center overflow-hidden bg-white dark:bg-neutral-950 font-sans">
+    <div className="relative w-full max-w-5xl mx-auto h-[500px] flex items-center justify-center overflow-hidden bg-transparent font-sans">
       <div className="relative w-full h-full flex items-center justify-center">
         {/* Outer Circular Path */}
-        <div className="absolute w-[350px] h-[350px] border border-dashed border-neutral-200 dark:border-neutral-800 rounded-full" />
+        <div className="absolute w-[350px] h-[350px] border border-dashed border-[#1a365d]/10 rounded-full" />
 
         {/* Floating Avatars */}
         {testimonialsAround.map((pos) => {
@@ -97,21 +97,27 @@ const CircularTestimonials: React.FC<CircularTestimonialsProps> = ({
                 opacity: isSelected ? 1 : 0.4,
               }}
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
-              className={`absolute w-12 h-12 rounded-full border-2 cursor-pointer transition-colors duration-300 ${
+              className={`absolute w-12 h-12 rounded-full border-2 cursor-pointer transition-all duration-300 ${
                 isSelected
-                  ? "border-neutral-800 dark:border-neutral-200"
-                  : "border-transparent"
+                  ? "border-[#c7a84b] scale-110 shadow-lg shadow-[#c7a84b]/20"
+                  : "border-transparent opacity-40 hover:opacity-100"
               }`}
               onClick={() => {
                 setIsAutoPlaying(false);
                 setCurrentIndex(pos.index);
               }}
             >
-              <img
-                src={testimonials[pos.index].img}
-                alt={testimonials[pos.index].name}
-                className="w-full h-full rounded-full object-cover"
-              />
+              <div className="w-full h-full rounded-full overflow-hidden bg-slate-100 relative">
+                <img
+                  src={testimonials[pos.index].img}
+                  alt={testimonials[pos.index].name}
+                  className="w-full h-full rounded-full object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/placeholder-avatar.png';
+                  }}
+                />
+              </div>
             </motion.div>
           );
         })}
@@ -125,33 +131,37 @@ const CircularTestimonials: React.FC<CircularTestimonialsProps> = ({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="bg-white dark:bg-neutral-900 rounded-3xl p-8 shadow-2xl border border-neutral-100 dark:border-neutral-800 flex flex-col items-center text-center"
+              className="bg-white rounded-3xl p-8 shadow-2xl shadow-[#1a365d]/5 border border-slate-100 flex flex-col items-center text-center"
             >
-              <div className="w-20 h-20 rounded-2xl overflow-hidden mb-6 shadow-lg rotate-3 group-hover:rotate-0 transition-transform duration-300">
+              <div className="w-20 h-20 rounded-2xl overflow-hidden mb-6 shadow-xl ring-4 ring-slate-50 rotate-3 transition-transform duration-300">
                 <img
                   src={testimonials[currentIndex].img}
                   alt={testimonials[currentIndex].name}
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/placeholder-avatar.png';
+                  }}
                 />
               </div>
 
               <div className="mb-6 relative">
-                <span className="absolute -top-4 -left-4 text-4xl text-neutral-200 dark:text-neutral-800 font-serif">
+                <span className="absolute -top-6 -left-4 text-6xl text-[#c7a84b]/10 font-serif">
                   &ldquo;
                 </span>
-                <p className="text-neutral-700 dark:text-neutral-300 text-base italic leading-relaxed relative z-10 px-2">
+                <p className="text-[#1a365d] text-lg italic leading-relaxed relative z-10 px-2 font-medium">
                   {testimonials[currentIndex].quote}
                 </p>
-                <span className="absolute -bottom-4 -right-4 text-4xl text-neutral-200 dark:text-neutral-800 font-serif">
+                <span className="absolute -bottom-10 -right-4 text-6xl text-[#c7a84b]/10 font-serif">
                   &rdquo;
                 </span>
               </div>
 
               <div>
-                <h4 className="font-bold text-neutral-900 dark:text-white text-lg">
+                <h4 className="font-heading font-bold text-[#1a365d] text-2xl mb-1">
                   {testimonials[currentIndex].name}
                 </h4>
-                <p className="text-neutral-500 dark:text-neutral-400 text-sm font-medium">
+                <p className="text-[#c7a84b] text-sm font-bold uppercase tracking-widest">
                   {testimonials[currentIndex].role}
                 </p>
               </div>
@@ -162,17 +172,17 @@ const CircularTestimonials: React.FC<CircularTestimonialsProps> = ({
           <div className="flex justify-center gap-4 mt-8">
             <button
               onClick={handlePrev}
-              className="p-3 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors shadow-md group"
+              className="p-4 rounded-full bg-slate-100 text-[#1a365d] hover:bg-slate-200 transition-all shadow-md group border border-slate-200"
               aria-label="Previous testimonial"
             >
-              <FaArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              <FaArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             </button>
             <button
               onClick={handleNext}
-              className="p-3 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors shadow-md group"
+              className="p-4 rounded-full bg-[#1a365d] text-white hover:bg-[#2a4a7f] transition-all shadow-lg group"
               aria-label="Next testimonial"
             >
-              <FaArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <FaArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>
