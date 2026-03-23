@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
     const payload = await getPayload()
     const pages = await payload.find({
       collection: 'pages',
-      where: { slug: { equals: 'home' }, status: { equals: 'published' } },
+      where: { slug: { equals: 'home' } },
       limit: 1,
     })
 
@@ -50,7 +50,7 @@ export default async function HomePage() {
     const payload = await getPayload()
     const pages = await payload.find({
       collection: 'pages',
-      where: { slug: { equals: 'home' }, status: { equals: 'published' } },
+      where: { slug: { equals: 'home' } },
       limit: 1,
       depth: 3,
     })

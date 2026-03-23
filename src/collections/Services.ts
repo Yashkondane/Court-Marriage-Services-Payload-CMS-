@@ -7,7 +7,7 @@ export const Services: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'updatedAt'],
-    group: 'Content',
+    group: 'Legal Services',
   },
   access: {
     create: isAdmin,

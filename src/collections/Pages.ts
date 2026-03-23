@@ -17,10 +17,14 @@ import { LawyerList } from '@/blocks/LawyerList'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
+  labels: {
+    singular: 'Web Page',
+    plural: 'Web Pages',
+  },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'status', 'updatedAt'],
-    group: 'Content',
+    group: 'Web Pages',
   },
   versions: {
     drafts: true,

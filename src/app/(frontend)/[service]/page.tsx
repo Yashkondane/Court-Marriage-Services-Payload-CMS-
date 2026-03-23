@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     const payload = await getPayload()
     const pages = await payload.find({
       collection: 'pages',
-      where: { slug: { equals: serviceSlug }, status: { equals: 'published' } },
+      where: { slug: { equals: serviceSlug } },
       limit: 1,
       depth: 2,
     })
@@ -57,7 +57,7 @@ export default async function ServicePage({ params }: { params: Params }) {
 
     const pages = await payload.find({
       collection: 'pages',
-      where: { slug: { equals: serviceSlug }, status: { equals: 'published' } },
+      where: { slug: { equals: serviceSlug } },
       limit: 1,
       depth: 3,
     })
