@@ -8,6 +8,7 @@ export function TestimonialsBlockComponent({ block }: { block: any }) {
     name: t.name || t.author || 'Anonymous',
     role: t.designation || '',
     img: t.photo?.url || '/placeholder-avatar.png',
+    rating: t.rating || 5,
   }))
 
   return (

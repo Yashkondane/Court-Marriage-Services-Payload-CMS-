@@ -14,6 +14,7 @@ interface Testimonial {
   name: string;
   role: string;
   img: string;
+  rating?: number;
 }
 
 interface CircularTestimonialsProps {
@@ -71,17 +72,17 @@ const CircularTestimonials: React.FC<CircularTestimonialsProps> = ({
     const num = testimonials.length;
     return testimonials.map((_, i) => {
       const angle = (i / num) * 2 * Math.PI;
-      const x = Math.cos(angle) * 150; // Radius
-      const y = Math.sin(angle) * 150;
+      const x = Math.cos(angle) * 220; // Radius
+      const y = Math.sin(angle) * 220;
       return { x, y, index: i };
     });
   }, [testimonials.length]);
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto h-[500px] flex items-center justify-center overflow-hidden bg-transparent font-sans">
+    <div className="relative w-full max-w-6xl mx-auto h-[650px] flex items-center justify-center overflow-hidden bg-transparent font-sans">
       <div className="relative w-full h-full flex items-center justify-center">
         {/* Outer Circular Path */}
-        <div className="absolute w-[350px] h-[350px] border border-dashed border-[#1a365d]/10 rounded-full" />
+        <div className="absolute w-[450px] h-[450px] border border-dashed border-[#1a365d]/10 rounded-full" />
 
         {/* Floating Avatars */}
         {testimonialsAround.map((pos) => {
@@ -93,13 +94,13 @@ const CircularTestimonials: React.FC<CircularTestimonialsProps> = ({
               animate={{
                 x: pos.x,
                 y: pos.y,
-                scale: isSelected ? 1.2 : 0.8,
+                scale: isSelected ? 1.25 : 0.8,
                 opacity: isSelected ? 1 : 0.4,
               }}
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
-              className={`absolute w-12 h-12 rounded-full border-2 cursor-pointer transition-all duration-300 ${
+              className={`absolute w-16 h-16 rounded-full border-2 cursor-pointer transition-all duration-300 ${
                 isSelected
-                  ? "border-[#c7a84b] scale-110 shadow-lg shadow-[#c7a84b]/20"
+                  ? "border-[#c7a84b] scale-125 shadow-xl shadow-[#c7a84b]/30"
                   : "border-transparent opacity-40 hover:opacity-100"
               }`}
               onClick={() => {
@@ -123,7 +124,7 @@ const CircularTestimonials: React.FC<CircularTestimonialsProps> = ({
         })}
 
         {/* Central Content Card */}
-        <div className="relative z-10 w-[300px] md:w-[400px]">
+        <div className="relative z-10 w-[350px] md:w-[550px]">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentIndex}
@@ -131,9 +132,9 @@ const CircularTestimonials: React.FC<CircularTestimonialsProps> = ({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="bg-white rounded-3xl p-8 shadow-2xl shadow-[#1a365d]/5 border border-slate-100 flex flex-col items-center text-center"
+              className="bg-white rounded-[40px] p-12 md:p-16 shadow-2xl shadow-[#1a365d]/10 border border-slate-100 flex flex-col items-center text-center"
             >
-              <div className="w-20 h-20 rounded-2xl overflow-hidden mb-6 shadow-xl ring-4 ring-slate-50 rotate-3 transition-transform duration-300">
+              <div className="w-24 h-24 rounded-3xl overflow-hidden mb-6 shadow-2xl ring-4 ring-slate-50 rotate-3 transition-transform duration-300">
                 <img
                   src={testimonials[currentIndex].img}
                   alt={testimonials[currentIndex].name}
@@ -145,23 +146,41 @@ const CircularTestimonials: React.FC<CircularTestimonialsProps> = ({
                 />
               </div>
 
-              <div className="mb-6 relative">
-                <span className="absolute -top-6 -left-4 text-6xl text-[#c7a84b]/10 font-serif">
+              {/* Star Rating */}
+              <div className="flex items-center gap-1 mb-8">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <svg
+                    key={i}
+                    className={`w-6 h-6 ${
+                      i < (testimonials[currentIndex].rating || 5)
+                        ? "text-[#c7a84b] fill-[#c7a84b]"
+                        : "text-slate-200 fill-slate-200"
+                    }`}
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                  </svg>
+                ))}
+              </div>
+
+              <div className="mb-10 relative">
+                <span className="absolute -top-10 -left-6 text-8xl text-[#c7a84b]/10 font-serif">
                   &ldquo;
                 </span>
-                <p className="text-[#1a365d] text-lg italic leading-relaxed relative z-10 px-2 font-medium">
+                <p className="text-[#1a365d] text-2xl md:text-3xl italic leading-relaxed relative z-10 px-4 font-medium font-heading">
                   {testimonials[currentIndex].quote}
                 </p>
-                <span className="absolute -bottom-10 -right-4 text-6xl text-[#c7a84b]/10 font-serif">
+                <span className="absolute -bottom-16 -right-6 text-8xl text-[#c7a84b]/10 font-serif">
                   &rdquo;
                 </span>
               </div>
 
               <div>
-                <h4 className="font-heading font-bold text-[#1a365d] text-2xl mb-1">
+                <h4 className="font-heading font-bold text-[#1a365d] text-3xl md:text-4xl mb-2">
                   {testimonials[currentIndex].name}
                 </h4>
-                <p className="text-[#c7a84b] text-sm font-bold uppercase tracking-widest">
+                <p className="text-[#c7a84b] text-base md:text-lg font-bold uppercase tracking-[0.2em]">
                   {testimonials[currentIndex].role}
                 </p>
               </div>
