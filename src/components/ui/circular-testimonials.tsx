@@ -79,7 +79,7 @@ const CircularTestimonials: React.FC<CircularTestimonialsProps> = ({
   }, [testimonials.length]);
 
   return (
-    <div className="relative w-full max-w-6xl mx-auto h-[650px] flex items-center justify-center overflow-hidden bg-transparent font-sans">
+    <div className="relative w-full max-w-6xl mx-auto min-h-[750px] flex items-center justify-center font-sans py-10">
       <div className="relative w-full h-full flex items-center justify-center">
         {/* Outer Circular Path */}
         <div className="absolute w-[450px] h-[450px] border border-dashed border-[#1a365d]/10 rounded-full" />
@@ -165,22 +165,22 @@ const CircularTestimonials: React.FC<CircularTestimonialsProps> = ({
               </div>
 
               <div className="mb-10 relative">
-                <span className="absolute -top-10 -left-6 text-8xl text-[#c7a84b]/10 font-serif">
+                <span className="absolute -top-10 -left-6 text-7xl text-[#c7a84b]/10 font-serif">
                   &ldquo;
                 </span>
-                <p className="text-[#1a365d] text-2xl md:text-3xl italic leading-relaxed relative z-10 px-4 font-medium font-heading">
+                <p className="text-[#1a365d] text-xl md:text-2xl italic leading-relaxed relative z-10 px-4 font-medium font-heading">
                   {testimonials[currentIndex].quote}
                 </p>
-                <span className="absolute -bottom-16 -right-6 text-8xl text-[#c7a84b]/10 font-serif">
+                <span className="absolute -bottom-16 -right-6 text-7xl text-[#c7a84b]/10 font-serif">
                   &rdquo;
                 </span>
               </div>
 
               <div>
-                <h4 className="font-heading font-bold text-[#1a365d] text-3xl md:text-4xl mb-2">
+                <h4 className="font-heading font-bold text-[#1a365d] text-2xl md:text-3xl mb-2">
                   {testimonials[currentIndex].name}
                 </h4>
-                <p className="text-[#c7a84b] text-base md:text-lg font-bold uppercase tracking-[0.2em]">
+                <p className="text-[#c7a84b] text-sm md:text-base font-bold uppercase tracking-[0.2em]">
                   {testimonials[currentIndex].role}
                 </p>
               </div>
