@@ -64,7 +64,7 @@ function LawyerCard({ lawyer, showBio, showContact }: { lawyer: any, showBio: bo
           />
         ) : (
           <div className="w-full h-full bg-slate-100 flex items-center justify-center text-6xl opacity-20">
-            ⚖️
+            {/* Professional placeholder instead of emoji */}
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -76,16 +76,14 @@ function LawyerCard({ lawyer, showBio, showContact }: { lawyer: any, showBio: bo
           <h3 className="text-xl font-bold text-[#1a365d] group-hover:text-[#2a4a7f] transition-colors leading-tight">
             Adv. {lawyer.name}
           </h3>
-          {lawyer.designation && (
-            <p className="text-sm font-semibold text-amber-600 uppercase tracking-wider mt-1">
+            <p className="text-sm font-semibold text-[#1a365d]/70 uppercase tracking-wider mt-1">
               {lawyer.designation}
             </p>
-          )}
         </div>
 
         {lawyer.experience && (
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 rounded-full text-amber-800 text-xs font-bold mb-4 w-fit">
-            <span>✨ {lawyer.experience}+ Years Exp.</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-slate-700 text-xs font-bold mb-4 w-fit">
+            <span>{lawyer.experience}+ Years Exp.</span>
           </div>
         )}
 
@@ -101,12 +99,12 @@ function LawyerCard({ lawyer, showBio, showContact }: { lawyer: any, showBio: bo
             <div className="flex flex-col gap-2 pt-4 border-t border-slate-100">
               {lawyer.email && (
                 <a href={`mailto:${lawyer.email}`} className="text-xs text-slate-500 hover:text-[#1a365d] flex items-center gap-2">
-                  📧 {lawyer.email}
+                  {lawyer.email}
                 </a>
               )}
               {lawyer.phone && (
                 <a href={`tel:${lawyer.phone}`} className="text-xs text-slate-500 hover:text-[#1a365d] flex items-center gap-2">
-                  📞 {lawyer.phone}
+                  {lawyer.phone}
                 </a>
               )}
             </div>

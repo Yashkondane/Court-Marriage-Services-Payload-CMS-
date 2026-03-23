@@ -11,7 +11,7 @@ export function LogosBlock({ block }: { block: any }) {
     <section className="py-20 bg-slate-50 border-y border-slate-100">
       <div className="container-page">
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-3 block">
+          <span className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 block">
             Media Recognition
           </span>
           <h2 className="text-3xl md:text-4xl font-bold text-[#1a365d]">
