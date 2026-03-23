@@ -322,6 +322,13 @@ async function seed() {
             },
           },
         },
+        {
+          blockType: 'lawyerList',
+          heading: 'Meet Our Expert Advocates',
+          subheading: 'Dedicated legal professionals with years of experience in family and marriage law.',
+          showBio: true,
+          showContact: true,
+        },
       ],
     },
   ]

@@ -8,25 +8,28 @@ export function LogosBlock({ block }: { block: any }) {
   if (!logos || logos.length === 0) return null
 
   return (
-    <section className="py-16 bg-white border-t border-gray-100">
+    <section className="py-20 bg-slate-50 border-y border-slate-100">
       <div className="container-page">
-        {heading && (
-          <div className="text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-medium text-gray-900">{heading}</h2>
-          </div>
-        )}
+        <div className="text-center mb-12">
+          <span className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-3 block">
+            Media Recognition
+          </span>
+          <h2 className="text-3xl md:text-4xl font-bold text-[#1a365d]">
+            {heading || 'As Featured In'}
+          </h2>
+        </div>
 
-        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
+        <div className="flex flex-wrap justify-center items-center gap-10 md:gap-20">
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {logos.map((logoItem: any, index: number) => {
             const img = logoItem.image
             if (!img?.url) return null
 
             const logoElement = (
-              <div key={index} className="relative w-24 h-24 md:w-32 md:h-32 grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100 cursor-pointer">
+              <div key={index} className="relative w-32 h-16 md:w-40 md:h-20 hover:scale-110 transition-transform duration-300 cursor-pointer flex items-center justify-center">
                 <Image
                   src={img.url}
-                  alt={img.alt || 'Partner logo'}
+                  alt={img.alt || 'Media logo'}
                   fill
                   className="object-contain"
                 />

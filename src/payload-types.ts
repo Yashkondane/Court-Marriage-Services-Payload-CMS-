@@ -504,6 +504,33 @@ export interface Page {
     | ServicesCarouselBlockType
     | CodeSnippetBlockType
     | LogosBlockType
+    | {
+        heading: string;
+        /**
+         * Brief description of the legal team
+         */
+        subheading?: string | null;
+        /**
+         * Maximum number of lawyers to show (leave empty for all)
+         */
+        limit?: number | null;
+        showBio?: boolean | null;
+        showContact?: boolean | null;
+        /**
+         * Control where and on which devices this block appears.
+         */
+        visibility?: {
+          showOnDesktop?: boolean | null;
+          showOnMobile?: boolean | null;
+          targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+          targetPages?: (number | Page)[] | null;
+          targetServices?: (number | Service)[] | null;
+          targetLocations?: (number | Location)[] | null;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'lawyerList';
+      }
   )[];
   /**
    * 🔗 Only fill this out if this is a dedicated Service Page (e.g., "Court Marriage Services"). Links this page to that parent service.
@@ -1465,6 +1492,27 @@ export interface PagesSelect<T extends boolean = true> {
         servicesCarousel?: T | ServicesCarouselBlockTypeSelect<T>;
         codeSnippet?: T | CodeSnippetBlockTypeSelect<T>;
         logos?: T | LogosBlockTypeSelect<T>;
+        lawyerList?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              limit?: T;
+              showBio?: T;
+              showContact?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
       };
   service?: T;
   location?: T;

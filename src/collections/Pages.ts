@@ -13,6 +13,7 @@ import { TestimonialsBlock } from '@/blocks/TestimonialsBlock'
 import { ServicesCarousel } from '@/blocks/ServicesCarousel'
 import { CodeSnippet } from '@/blocks/CodeSnippet'
 import { Logos } from '@/blocks/Logos'
+import { LawyerList } from '@/blocks/LawyerList'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -68,6 +69,7 @@ export const Pages: CollectionConfig = {
                 ServicesCarousel,
                 CodeSnippet,
                 Logos,
+                LawyerList,
               ],
               admin: {
                 description: '🎨 Build your webpage here! Click "Add Block" below to stack sections (like a Hero banner, then a Services Carousel). You can drag and drop them to reorder.',
