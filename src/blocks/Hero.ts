@@ -34,41 +34,9 @@ export const Hero: Block = {
       admin: { description: 'Supporting text below the headline' },
     },
     {
-      name: 'showBackgroundImage',
-      type: 'checkbox',
-      defaultValue: true,
-      admin: {
-        description: 'Toggle the background banner image. If off, a clean background will be used.',
-      },
-    },
-    {
       name: 'backgroundImage',
       type: 'upload',
       relationTo: 'media',
-      admin: {
-        condition: (data) => data.showBackgroundImage,
-      },
-    },
-    {
-      name: 'sideImage',
-      type: 'upload',
-      relationTo: 'media',
-      admin: {
-        condition: (data) => data.style === 'split' || data.layoutStyle === 'withLeadForm',
-        description: 'The image to display on the side of the content.',
-      },
-    },
-    {
-      name: 'sideImageShape',
-      type: 'select',
-      defaultValue: 'circular',
-      options: [
-        { label: 'Circular', value: 'circular' },
-        { label: 'Square/Rounded', value: 'square' },
-      ],
-      admin: {
-        condition: (data) => data.style === 'split' || data.layoutStyle === 'withLeadForm',
-      },
     },
     {
       name: 'ctaText',
