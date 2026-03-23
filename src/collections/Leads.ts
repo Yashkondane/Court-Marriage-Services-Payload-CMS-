@@ -27,6 +27,10 @@ export const Leads: CollectionConfig = {
       required: true,
     },
     {
+      name: 'email',
+      type: 'email',
+    },
+    {
       name: 'service',
       type: 'text',
       required: true,

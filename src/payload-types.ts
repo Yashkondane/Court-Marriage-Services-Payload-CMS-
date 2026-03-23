@@ -976,6 +976,7 @@ export interface Lead {
   id: number;
   name: string;
   phone: string;
+  email?: string | null;
   service: string;
   message?: string | null;
   /**
@@ -1620,6 +1621,7 @@ export interface LocationsSelect<T extends boolean = true> {
 export interface LeadsSelect<T extends boolean = true> {
   name?: T;
   phone?: T;
+  email?: T;
   service?: T;
   message?: T;
   sourceUrl?: T;
