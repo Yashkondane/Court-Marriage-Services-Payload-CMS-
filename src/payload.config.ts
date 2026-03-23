@@ -103,10 +103,14 @@ export default buildConfig({
   ],
 
   cors: [
-    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+    process.env.NEXT_PUBLIC_SITE_URL 
+      ? (process.env.NEXT_PUBLIC_SITE_URL.startsWith('http') ? process.env.NEXT_PUBLIC_SITE_URL : `https://${process.env.NEXT_PUBLIC_SITE_URL}`) 
+      : 'http://localhost:3000',
   ],
 
   csrf: [
-    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+    process.env.NEXT_PUBLIC_SITE_URL 
+      ? (process.env.NEXT_PUBLIC_SITE_URL.startsWith('http') ? process.env.NEXT_PUBLIC_SITE_URL : `https://${process.env.NEXT_PUBLIC_SITE_URL}`) 
+      : 'http://localhost:3000',
   ],
 })
