@@ -22,12 +22,10 @@ export const LawyerList: Block = {
       },
     },
     {
-      name: 'selectedLawyers',
-      type: 'relationship',
-      relationTo: 'lawyers',
-      hasMany: true,
+      name: 'filterBySpecialty',
+      type: 'text',
       admin: {
-        description: 'Manually select specific lawyers to display. If left empty, the most recent lawyers will be shown automatically.',
+        description: 'Optional: Type a specialty (e.g., "Criminal", "Family") to only show lawyers with that specialty. Leave empty to show all.',
       },
     },
     {

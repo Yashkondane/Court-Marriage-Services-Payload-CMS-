@@ -7,24 +7,25 @@ import { getPayload } from '@/lib/payload/getPayload'
 export async function LawyerListBlock({ block }: { block: any }) {
   const payload = await getPayload()
   
-  let lawyersToDisplay = []
+  const limit = typeof block.limit === 'number' ? block.limit : 4
+  const filterBySpecialty = block.filterBySpecialty
 
-  // If specific lawyers are selected, use those
-  if (block.selectedLawyers && block.selectedLawyers.length > 0) {
-    // Relationships return the full object or ID depending on depth, 
-    // but RenderBlocks usually receives populated depth
-    lawyersToDisplay = block.selectedLawyers.map((lawyer: any) => 
-      typeof lawyer === 'object' ? lawyer : { id: lawyer } // Fallback if not fully populated
-    )
-  } else {
-    // Otherwise, fetch recent based on limit
-    const { docs: recentLawyers } = await payload.find({
-      collection: 'lawyers',
-      limit: block.limit || 100,
-      sort: '-createdAt',
-    })
-    lawyersToDisplay = recentLawyers
+  // Always fetch from the database to ensure we have the full lawyer profiles including images
+  const whereClause: any = {}
+  if (filterBySpecialty) {
+    whereClause['specializations.specialization'] = {
+      contains: filterBySpecialty,
+    }
   }
+
+  const { docs: fetchedLawyers } = await payload.find({
+    collection: 'lawyers',
+    where: whereClause,
+    limit: limit,
+    sort: '-createdAt', // Most recently added first
+  })
+  
+  const lawyers = fetchedLawyers as any[]
 
   return (
     <div className="py-16 md:py-24 bg-slate-50">
@@ -41,8 +42,8 @@ export async function LawyerListBlock({ block }: { block: any }) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {lawyersToDisplay.length > 0 ? (
-            lawyersToDisplay.map((lawyer: any) => (
+          {lawyers.length > 0 ? (
+            lawyers.map((lawyer: any) => (
               <LawyerCard 
                 key={lawyer.id} 
                 lawyer={lawyer} 
