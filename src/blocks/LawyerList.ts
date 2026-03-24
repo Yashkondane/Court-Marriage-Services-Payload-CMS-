@@ -22,6 +22,13 @@ export const LawyerList: Block = {
       },
     },
     {
+      name: 'filterByNames',
+      type: 'text',
+      admin: {
+        description: 'Optional: To show specific lawyers, type their exact names separated by commas (e.g., "Arvind Singh, Rahul Sharma"). Leave this empty to automatically show the most recent ones.',
+      },
+    },
+    {
       name: 'limit',
       type: 'number',
       admin: {
