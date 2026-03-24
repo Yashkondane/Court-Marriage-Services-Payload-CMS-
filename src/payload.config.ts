@@ -78,7 +78,6 @@ export default buildConfig({
         rejectUnauthorized: false,
       },
     },
-    push: true, // Forces schema sync on Vercel to create missing columns like lawyers_id
   }),
 
   sharp,

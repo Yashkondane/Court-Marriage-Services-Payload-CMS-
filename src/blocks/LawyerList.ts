@@ -22,17 +22,10 @@ export const LawyerList: Block = {
       },
     },
     {
-      name: 'filterBySpecialty',
-      type: 'text',
-      admin: {
-        description: 'Optional: Type a specialty (e.g., "Criminal", "Family") to only show lawyers with that specialty. Leave empty to show all.',
-      },
-    },
-    {
       name: 'limit',
       type: 'number',
       admin: {
-        description: 'Maximum number of auto-fetched lawyers to show (only applies if no specific lawyers are selected above)',
+        description: 'Maximum number of auto-fetched lawyers to show',
       },
     },
     {

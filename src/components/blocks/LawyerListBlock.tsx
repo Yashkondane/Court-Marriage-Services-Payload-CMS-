@@ -7,22 +7,10 @@ import { getPayload } from '@/lib/payload/getPayload'
 export async function LawyerListBlock({ block }: { block: any }) {
   const payload = await getPayload()
   
-  const limit = typeof block.limit === 'number' ? block.limit : 4
-  const filterBySpecialty = block.filterBySpecialty
-
-  // Always fetch from the database to ensure we have the full lawyer profiles including images
-  const whereClause: any = {}
-  if (filterBySpecialty) {
-    whereClause['specializations.specialization'] = {
-      contains: filterBySpecialty,
-    }
-  }
-
   const { docs: fetchedLawyers } = await payload.find({
     collection: 'lawyers',
-    where: whereClause,
-    limit: limit,
-    sort: '-createdAt', // Most recently added first
+    limit: block.limit || 4,
+    sort: '-createdAt',
   })
   
   const lawyers = fetchedLawyers as any[]
