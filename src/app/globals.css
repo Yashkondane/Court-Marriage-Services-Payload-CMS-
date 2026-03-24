@@ -46,6 +46,95 @@ h1, h2, h3, h4, h5, h6 {
   padding-right: 1.5rem;
 }
 
+/* Rich Text Styles - Premium Typography */
+.rich-text {
+  color: var(--color-text-primary);
+  font-size: 1.125rem;
+  line-height: 1.8;
+}
+
+/* Headings */
+.rich-text h1, .rich-text h2, .rich-text h3, .rich-text h4, .rich-text h5, .rich-text h6 {
+  font-family: var(--font-heading);
+  color: var(--color-primary);
+  margin-top: 2em;
+  margin-bottom: 1em;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+.rich-text h1 { font-size: 2.5rem; margin-top: 0; }
+.rich-text h2 { font-size: 2rem; border-bottom: 2px solid var(--color-bg-primary); padding-bottom: 0.5rem; }
+.rich-text h3 { font-size: 1.625rem; }
+.rich-text h4 { font-size: 1.375rem; color: var(--color-primary-light); }
+.rich-text h5 { font-size: 1.25rem; font-weight: 600; }
+.rich-text h6 { font-size: 1.125rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); }
+
+/* Paragraphs & Spacing */
+.rich-text p { margin-bottom: 1.5rem; color: #334155; }
+.rich-text strong { color: var(--color-primary-dark); font-weight: 600; }
+
+/* Lists - Custom Brand Styling */
+.rich-text ul, .rich-text ol {
+  margin-bottom: 1.5rem;
+  padding-left: 0;
+  list-style: none; /* Remove default to use custom markers */
+}
+
+/* Unordered List */
+.rich-text ul li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #334155;
+}
+.rich-text ul li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--color-secondary); /* Gold bullets */
+  font-size: 1.5em;
+  line-height: 1;
+  top: -0.1em;
+}
+
+/* Ordered List */
+.rich-text ol {
+  counter-reset: rich-list;
+}
+.rich-text ol li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 0.75rem;
+  color: #334155;
+}
+.rich-text ol li::before {
+  counter-increment: rich-list;
+  content: counter(rich-list) ".";
+  position: absolute;
+  left: 0;
+  color: var(--color-secondary-dark); /* Dark Gold numbers */
+  font-weight: 700;
+  font-family: var(--font-heading);
+  font-size: 1.1em;
+}
+
+/* Links */
+.rich-text a { 
+  color: var(--color-primary-light); 
+  text-decoration: underline; 
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--color-secondary-light);
+  transition: all 0.2s ease; 
+  font-weight: 500;
+}
+.rich-text a:hover { 
+  color: var(--color-primary-dark);
+  text-decoration-color: var(--color-secondary-dark);
+  background-color: var(--color-bg-primary);
+}
+
 
 
 /* Block Visibility */

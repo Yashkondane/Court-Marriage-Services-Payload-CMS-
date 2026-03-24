@@ -33,17 +33,17 @@ export function HighlightsBlock({ block }: { block: any }) {
               className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 border border-[var(--color-border)] hover:border-[var(--color-secondary)]/30 group"
             >
               {item.icon?.url && (
-                <div className="w-12 h-12 mb-6 relative rounded-lg overflow-hidden bg-[var(--color-primary)]/5 group-hover:bg-[var(--color-secondary)]/10 transition-colors">
+                <div className="w-20 h-20 mb-6 relative rounded-lg overflow-hidden bg-transparent group-hover:scale-105 transition-transform duration-300">
                   <Image
                     src={item.icon.url}
                     alt={item.icon.alt || item.title}
                     fill
-                    className="object-cover"
+                    className="object-contain"
                   />
                 </div>
               )}
               {!item.icon?.url && (
-                <div className="w-12 h-12 mb-6 rounded-lg bg-[var(--color-primary)]/5 flex items-center justify-center text-xl group-hover:bg-[var(--color-secondary)]/10 transition-colors">
+                <div className="w-20 h-20 mb-6 rounded-lg bg-[var(--color-primary)]/5 flex items-center justify-center text-4xl group-hover:bg-[var(--color-secondary)]/10 transition-colors">
                   ⚖️
                 </div>
               )}

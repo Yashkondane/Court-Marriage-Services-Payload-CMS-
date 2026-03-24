@@ -14,7 +14,15 @@ export function HeroBlock({ block }: { block: any }) {
   const isSplit = !isLeadForm && style === 'split'
 
   return (
-    <div className="relative overflow-hidden min-h-[70vh] flex items-center bg-white">
+    <div className={`relative overflow-hidden min-h-[70vh] flex items-center ${bgImage?.url ? 'bg-white' : 'bg-gradient-to-br from-[#f8f6f0]/50 via-white to-slate-50'}`}>
+      {/* Subtle modern background elements when no image is present */}
+      {!bgImage?.url && (
+        <>
+          <div className="absolute inset-0 z-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #1a365d 1px, transparent 0)', backgroundSize: '32px 32px' }} />
+          <div className="absolute top-0 right-0 -m-32 w-[600px] h-[600px] bg-gradient-to-br from-[var(--color-primary)]/5 to-[var(--color-secondary)]/10 rounded-full blur-3xl -z-10" />
+          <div className="absolute bottom-0 left-0 -m-32 w-[600px] h-[600px] bg-gradient-to-tr from-[var(--color-primary)]/5 to-transparent rounded-full blur-3xl -z-10" />
+        </>
+      )}
       {bgImage?.url && (
         <div className="absolute inset-0 z-0">
           <Image
@@ -45,7 +53,14 @@ export function HeroBlock({ block }: { block: any }) {
         } ${isCentered ? 'text-center' : ''}`}>
           
           {/* Text Area */}
-          <div className={`flex flex-col ${isCentered ? 'items-center' : 'items-start'}`}>
+          <div className={`flex flex-col relative z-20 animate-fade-in-up ${isCentered ? 'items-center text-center' : 'items-start'}`}>
+            
+            {/* Elegant Trust Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--color-primary)]/5 text-[var(--color-primary)] font-semibold text-sm mb-6 border border-[var(--color-primary)]/10 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-[var(--color-secondary)] animate-pulse" />
+              Trusted Legal Services In India
+            </div>
+
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 leading-[1.1] tracking-tight text-[#1a365d]">
               {block.heading}
             </h1>
@@ -54,14 +69,15 @@ export function HeroBlock({ block }: { block: any }) {
                 {block.subheading}
               </p>
             )}
-            <div className={`flex flex-wrap gap-4 ${isCentered ? 'justify-center' : ''}`}>
+            <div className={`flex flex-wrap gap-4 mt-4 ${isCentered ? 'justify-center' : ''}`}>
               {block.ctaText && block.ctaLink && (
-                <Link href={block.ctaLink} className="bg-[#1a365d] text-white font-bold px-8 py-4 rounded-full hover:bg-[#2a4a7f] transition-all shadow-lg hover:shadow-xl">
+                <Link href={block.ctaLink} className="group flex items-center gap-2 bg-[#1a365d] text-white font-bold px-8 py-4 rounded-full hover:bg-[#2a4a7f] transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
                   {block.ctaText}
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </Link>
               )}
               {block.secondaryCta?.text && block.secondaryCta?.link && (
-                <Link href={block.secondaryCta.link} className="bg-transparent border-2 border-[#1a365d] text-[#1a365d] font-bold px-8 py-4 rounded-full hover:bg-slate-50 transition-all">
+                <Link href={block.secondaryCta.link} className="flex items-center gap-2 bg-white border-2 border-[#1a365d] text-[#1a365d] font-bold px-8 py-4 rounded-full hover:bg-slate-50 transition-all shadow-sm hover:shadow-md hover:-translate-y-1">
                   {block.secondaryCta.text}
                 </Link>
               )}
