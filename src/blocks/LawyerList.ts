@@ -22,10 +22,19 @@ export const LawyerList: Block = {
       },
     },
     {
+      name: 'selectedLawyers',
+      type: 'relationship',
+      relationTo: 'lawyers',
+      hasMany: true,
+      admin: {
+        description: 'Manually select specific lawyers to display. If left empty, the most recent lawyers will be shown automatically.',
+      },
+    },
+    {
       name: 'limit',
       type: 'number',
       admin: {
-        description: 'Maximum number of lawyers to show (leave empty for all)',
+        description: 'Maximum number of auto-fetched lawyers to show (only applies if no specific lawyers are selected above)',
       },
     },
     {

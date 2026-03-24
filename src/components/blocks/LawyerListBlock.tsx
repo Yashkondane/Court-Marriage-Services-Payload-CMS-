@@ -7,11 +7,24 @@ import { getPayload } from '@/lib/payload/getPayload'
 export async function LawyerListBlock({ block }: { block: any }) {
   const payload = await getPayload()
   
-  const { docs: lawyers } = await payload.find({
-    collection: 'lawyers',
-    limit: block.limit || 100,
-    sort: '-createdAt',
-  })
+  let lawyersToDisplay = []
+
+  // If specific lawyers are selected, use those
+  if (block.selectedLawyers && block.selectedLawyers.length > 0) {
+    // Relationships return the full object or ID depending on depth, 
+    // but RenderBlocks usually receives populated depth
+    lawyersToDisplay = block.selectedLawyers.map((lawyer: any) => 
+      typeof lawyer === 'object' ? lawyer : { id: lawyer } // Fallback if not fully populated
+    )
+  } else {
+    // Otherwise, fetch recent based on limit
+    const { docs: recentLawyers } = await payload.find({
+      collection: 'lawyers',
+      limit: block.limit || 100,
+      sort: '-createdAt',
+    })
+    lawyersToDisplay = recentLawyers
+  }
 
   return (
     <div className="py-16 md:py-24 bg-slate-50">
@@ -28,8 +41,8 @@ export async function LawyerListBlock({ block }: { block: any }) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {lawyers.length > 0 ? (
-            lawyers.map((lawyer: any) => (
+          {lawyersToDisplay.length > 0 ? (
+            lawyersToDisplay.map((lawyer: any) => (
               <LawyerCard 
                 key={lawyer.id} 
                 lawyer={lawyer} 
