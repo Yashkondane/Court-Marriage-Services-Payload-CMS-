@@ -7,23 +7,8 @@ import { getPayload } from '@/lib/payload/getPayload'
 export async function LawyerListBlock({ block }: { block: any }) {
   const payload = await getPayload()
   
-  let whereClause: any = undefined
-
-  if (block.filterByNames) {
-    // Split by comma, remove extra spaces around names
-    const names = block.filterByNames.split(',').map((n: string) => n.trim()).filter(Boolean)
-    if (names.length > 0) {
-      whereClause = {
-        name: {
-          in: names,
-        },
-      }
-    }
-  }
-
   const { docs: fetchedLawyers } = await payload.find({
     collection: 'lawyers',
-    where: whereClause,
     limit: block.limit || 4,
     sort: '-createdAt',
   })
