@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { serializeLexical } from '@/lib/payload/lexical'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function FAQBlock({ block }: { block: any }) {
@@ -55,10 +56,21 @@ function FAQItem({
 
   if (style === 'list') {
     return (
-      <div className="border-b border-[var(--color-border)] pb-4">
-        <h3 className="font-semibold text-lg text-[var(--color-primary)] mb-2">{question}</h3>
-        <div className="text-[var(--color-text-secondary)] leading-relaxed">
-          {typeof answer === 'string' ? answer : 'Answer content'}
+      <div className="border-b border-[var(--color-border)] pb-8 mb-6 last:border-0 last:mb-0">
+        <div className="flex items-start gap-4">
+          <div className="w-8 h-8 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center font-bold flex-shrink-0 mt-1">
+            ✓
+          </div>
+          <div>
+            <h3 className="font-bold text-xl text-[var(--color-primary)] mb-3">{question}</h3>
+            <div className="text-[var(--color-text-secondary)] leading-relaxed rich-text prose prose-sm max-w-none">
+              {typeof answer === 'string' ? (
+                <div dangerouslySetInnerHTML={{ __html: answer }} />
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: serializeLexical(answer) }} />
+              )}
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -81,9 +93,13 @@ function FAQItem({
         </svg>
       </button>
       {isOpen && (
-        <div className="px-5 pb-5 text-[var(--color-text-secondary)] leading-relaxed border-t border-[var(--color-border)]">
-          <div className="pt-4">
-            {typeof answer === 'string' ? answer : 'Answer content'}
+        <div className="px-5 pb-5 text-[var(--color-text-secondary)] leading-relaxed border-t border-[var(--color-border)] bg-slate-50/50">
+          <div className="pt-5 rich-text prose prose-sm max-w-none">
+            {typeof answer === 'string' ? (
+              <div dangerouslySetInnerHTML={{ __html: answer }} />
+            ) : (
+              <div dangerouslySetInnerHTML={{ __html: serializeLexical(answer) }} />
+            )}
           </div>
         </div>
       )}

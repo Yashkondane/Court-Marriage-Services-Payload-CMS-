@@ -14,6 +14,7 @@ import { ServicesCarousel } from '@/blocks/ServicesCarousel'
 import { CodeSnippet } from '@/blocks/CodeSnippet'
 import { Logos } from '@/blocks/Logos'
 import { LawyerList } from '@/blocks/LawyerList'
+import { Documents } from '@/blocks/Documents'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -74,6 +75,7 @@ export const Pages: CollectionConfig = {
                 CodeSnippet,
                 Logos,
                 LawyerList,
+                Documents,
               ],
               admin: {
                 description: '🎨 Build your webpage here! Click "Add Block" below to stack sections (like a Hero banner, then a Services Carousel). You can drag and drop them to reorder.',

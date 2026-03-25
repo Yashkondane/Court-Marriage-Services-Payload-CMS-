@@ -12,6 +12,7 @@ import { ServicesCarouselBlock } from './ServicesCarouselBlock'
 import { LogosBlock } from './LogosBlock'
 import { CodeSnippetBlock } from './CodeSnippetBlock'
 import { LawyerListBlock } from './LawyerListBlock'
+import { DocumentsBlock } from './DocumentsBlock'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Block = Record<string, any>
@@ -24,12 +25,13 @@ const blockComponents: Record<string, React.FC<{ block: Block }>> = {
   cta: CTABlock,
   blogFeed: BlogFeedBlock,
   newsFeed: NewsFeedBlock,
-  galleryBlock: GalleryBlockComponent,
-  testimonialsBlock: TestimonialsBlockComponent,
+  gallery: GalleryBlockComponent,
+  testimonials: TestimonialsBlockComponent,
   servicesCarousel: ServicesCarouselBlock,
   logos: LogosBlock,
   codeSnippet: CodeSnippetBlock,
   lawyerList: LawyerListBlock,
+  documents: DocumentsBlock,
 }
 
 function getVisibilityClasses(block: Block): string {
