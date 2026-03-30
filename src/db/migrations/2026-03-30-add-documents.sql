@@ -1,70 +1,66 @@
--- Recovery SQL for "Documents" Block
--- Run this in the Supabase SQL Editor to fix "relation does not exist" errors on Vercel.
+-- Recovery SQL for "Documents" Block (FINAL VERSION)
+-- Run this in the Supabase SQL Editor to fix "relation does not exist", "integer syntax", or "_uuid missing" errors.
 
--- 1. Create the main Documents block table
-CREATE TABLE IF NOT EXISTS "pages_blocks_documents" (
+-- 1. Drop old tables if they exist
+DROP TABLE IF EXISTS "pages_blocks_documents_items";
+DROP TABLE IF EXISTS "pages_blocks_documents";
+DROP TABLE IF EXISTS "_pages_v_blocks_documents_items";
+DROP TABLE IF EXISTS "_pages_v_blocks_documents";
+
+-- 2. Create the main Documents block table
+CREATE TABLE "pages_blocks_documents" (
 	"_order" integer NOT NULL,
+	"_parent_id" integer NOT NULL,
 	"_path" text NOT NULL,
-	"id" serial PRIMARY KEY,
+	"id" text PRIMARY KEY,
 	"heading" text,
 	"description" text,
 	"visibility_show_on_desktop" boolean DEFAULT true,
 	"visibility_show_on_mobile" boolean DEFAULT true,
 	"visibility_target_type" text DEFAULT 'global',
-	"_parent_id" integer NOT NULL,
-	"_uuid" text NOT NULL,
+	"_uuid" text,
 	"block_name" text
 );
 
--- 2. Create the items array for the main block
-CREATE TABLE IF NOT EXISTS "pages_blocks_documents_items" (
+-- 3. Create the items array for the main block
+CREATE TABLE "pages_blocks_documents_items" (
 	"_order" integer NOT NULL,
-	"id" serial PRIMARY KEY,
+	"_parent_id" text NOT NULL REFERENCES "pages_blocks_documents" ("id") ON DELETE CASCADE,
+	"id" text PRIMARY KEY,
 	"title" text NOT NULL,
 	"icon" text DEFAULT 'document',
 	"content" jsonb NOT NULL,
 	"note" text,
-	"_parent_id" integer NOT NULL,
-	"_uuid" text NOT NULL
+	"_uuid" text
 );
 
--- 3. Create the Versioned Documents block table (Crucial for Drafts/Versions)
-CREATE TABLE IF NOT EXISTS "_pages_v_blocks_documents" (
+-- 4. Create the Versioned Documents block table
+CREATE TABLE "_pages_v_blocks_documents" (
 	"_order" integer NOT NULL,
+	"_parent_id" integer NOT NULL,
 	"_path" text NOT NULL,
-	"id" serial PRIMARY KEY,
+	"id" text PRIMARY KEY,
 	"heading" text,
 	"description" text,
 	"visibility_show_on_desktop" boolean DEFAULT true,
 	"visibility_show_on_mobile" boolean DEFAULT true,
 	"visibility_target_type" text DEFAULT 'global',
-	"_parent_id" integer NOT NULL,
-	"_uuid" text NOT NULL,
+	"_uuid" text,
 	"block_name" text
 );
 
--- 4. Create the items array for the versioned block
-CREATE TABLE IF NOT EXISTS "_pages_v_blocks_documents_items" (
+-- 5. Create the items array for the versioned block
+CREATE TABLE "_pages_v_blocks_documents_items" (
 	"_order" integer NOT NULL,
-	"id" serial PRIMARY KEY,
+	"_parent_id" text NOT NULL REFERENCES "_pages_v_blocks_documents" ("id") ON DELETE CASCADE,
+	"id" text PRIMARY KEY,
 	"title" text NOT NULL,
 	"icon" text DEFAULT 'document',
 	"content" jsonb NOT NULL,
 	"note" text,
-	"_parent_id" integer NOT NULL,
-	"_uuid" text NOT NULL
-);
-
--- Add secondary relationships (for targeting fields if used)
-CREATE TABLE IF NOT EXISTS "pages_blocks_documents_visibility_target_pages" (
-	"_order" integer NOT NULL,
-	"_parent_id" integer NOT NULL,
-	"pages_id" integer NOT NULL,
-	"id" serial PRIMARY KEY
+	"_uuid" text
 );
 
 -- Add indexes for performance
 CREATE INDEX IF NOT EXISTS "pages_blocks_documents_parent_id_idx" ON "pages_blocks_documents" ("_parent_id");
-CREATE INDEX IF NOT EXISTS "pages_blocks_documents_items_parent_id_idx" ON "pages_blocks_documents_items" ("_parent_id");
 CREATE INDEX IF NOT EXISTS "_pages_v_blocks_documents_parent_id_idx" ON "_pages_v_blocks_documents" ("_parent_id");
-CREATE INDEX IF NOT EXISTS "_pages_v_blocks_documents_items_parent_id_idx" ON "_pages_v_blocks_documents_items" ("_parent_id");

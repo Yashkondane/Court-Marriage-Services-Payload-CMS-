@@ -25,7 +25,7 @@ const blockComponents: Record<string, React.FC<{ block: Block }>> = {
   cta: CTABlock,
   blogFeed: BlogFeedBlock,
   newsFeed: NewsFeedBlock,
-  gallery: GalleryBlockComponent,
+  galleryBlock: GalleryBlockComponent,
   testimonialsBlock: TestimonialsBlockComponent,
   servicesCarousel: ServicesCarouselBlock,
   logos: LogosBlock,
