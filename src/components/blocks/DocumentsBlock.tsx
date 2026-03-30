@@ -42,76 +42,103 @@ export function DocumentsBlock({ block }: { block: any }) {
   const items = block.items || []
 
   return (
-    <div className="py-20 bg-slate-50">
-      <div className="container-page">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-[#1a365d] mb-6">
+    <div className="py-24 bg-slate-50 relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-blue-100/30 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-amber-100/20 blur-[100px] rounded-full pointer-events-none" />
+
+      <div className="container-page relative z-10">
+        <div className="text-center max-w-4xl mx-auto mb-20 animate-fade-in">
+          <span className="text-[var(--color-secondary)] font-bold uppercase tracking-[0.2em] text-sm mb-4 block">
+            Requirements Checklist
+          </span>
+          <h2 className="text-4xl md:text-6xl font-extrabold text-[#1a365d] mb-8 leading-tight">
             {block.heading}
           </h2>
           {block.description && (
-            <p className="text-lg text-slate-600 leading-relaxed italic">
-              "{block.description}"
+            <p className="text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto">
+              {block.description}
             </p>
           )}
+          <div className="mt-8 w-24 h-1.5 bg-[var(--color-secondary)] mx-auto rounded-full" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {items.map((item: any, index: number) => (
             <div 
               key={index} 
-              className="group bg-white rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 flex flex-col animate-fade-in-up"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className="group relative bg-white rounded-[2rem] p-10 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_60px_-10px_rgba(26,54,93,0.15)] transition-all duration-500 border border-slate-100 flex flex-col hover:-translate-y-2 overflow-hidden"
+              style={{ animationDelay: `${index * 150}ms` }}
             >
-              {/* Card Header with Icon */}
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-[#1a365d]/5 text-[#1a365d] flex items-center justify-center group-hover:bg-[#1a365d] group-hover:text-white transition-all duration-300 transform group-hover:rotate-6 shadow-sm">
-                  {Icons[item.icon] || Icons.document}
+              {/* Card Accent Top Bar */}
+              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#1a365d] to-[var(--color-secondary)] opacity-0 group-hover:opacity-100 transition-opacity" />
+
+              {/* Card Header */}
+              <div className="flex items-start gap-5 mb-8">
+                <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-[#1a365d] text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+                  <div className="text-[var(--color-secondary)]">
+                    {Icons[item.icon] || Icons.document}
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-[#1a365d]">
-                  {index + 1}. {item.title}
-                </h3>
+                <div>
+                  <span className="text-[var(--color-secondary)] font-bold text-lg block mb-1">0{index + 1}</span>
+                  <h3 className="text-2xl font-bold text-[#1a365d] leading-tight">
+                    {item.title}
+                  </h3>
+                </div>
               </div>
 
-              {/* Card Body - Rich Text */}
-              <div className="flex-1 rich-text prose prose-sm max-w-none prose-ul:pl-0 prose-li:pl-0">
+              {/* Card Body - Styled Content */}
+              <div className="flex-1">
                 <div 
+                  className="text-slate-700 leading-relaxed prose prose-sm max-w-none
+                    prose-ul:list-none prose-ul:pl-0 
+                    prose-li:relative prose-li:pl-8 
+                    prose-li:mb-3
+                    prose-li:before:content-[''] 
+                    prose-li:before:absolute prose-li:before:left-0 prose-li:before:top-[12px]
+                    prose-li:before:w-5 prose-li:before:h-px 
+                    prose-li:before:bg-[var(--color-secondary)]"
                   dangerouslySetInnerHTML={{ __html: serializeLexical(item.content) }} 
-                  className="text-slate-700 space-y-2"
                 />
               </div>
 
-              {/* Optional Note/Tip */}
+              {/* Premium Important Note */}
               {item.note && (
-                <div className="mt-8 pt-6 border-t border-slate-50">
-                  <div className="bg-amber-50 rounded-xl p-4 border border-amber-100/50">
-                    <p className="text-xs font-bold text-amber-800 uppercase tracking-widest mb-1">Important Note</p>
-                    <p className="text-sm text-amber-900 leading-snug">{item.note}</p>
-                  </div>
+                <div className="mt-8 pt-8 border-t border-slate-100">
+                   <div className="bg-[#1a365d]/[0.03] border-l-4 border-[var(--color-secondary)] p-5 rounded-r-2xl">
+                      <div className="flex items-center gap-2 mb-2">
+                        <svg className="w-4 h-4 text-[var(--color-secondary)]" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-[10px] font-black text-[#1a365d] uppercase tracking-wider">Advocate's Note</span>
+                      </div>
+                      <p className="text-sm text-slate-600 font-medium leading-normal italic">
+                        {item.note}
+                      </p>
+                   </div>
                 </div>
               )}
             </div>
           ))}
         </div>
 
-        {/* Dynamic Disclaimer Card */}
-        <div className="mt-16 bg-[#1a365d] rounded-[2.5rem] p-8 md:p-12 text-white relative overflow-hidden shadow-2xl">
-           <div className="absolute top-0 right-0 -m-8 w-64 h-64 bg-white/5 rounded-full blur-3xl pointer-events-none" />
-           <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
-             <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center text-4xl flex-shrink-0 animate-pulse">
-               💡
-             </div>
-             <div>
-               <h4 className="text-2xl font-bold mb-2">Need Professional Assistance?</h4>
-               <p className="text-white/80 text-lg max-w-2xl leading-relaxed">
-                 Gathering legal documents can be confusing. Our expert team at Kaushal & Associates helps you verify and organize everything to ensure a 100% rejection-free registration.
-               </p>
-             </div>
-             <div className="md:ml-auto">
-               <button className="bg-[var(--color-secondary)] text-[#1a365d] px-8 py-4 rounded-full font-bold hover:bg-white transition-all whitespace-nowrap shadow-xl">
-                 Speak to an Expert
-               </button>
-             </div>
-           </div>
+        {/* CTA Footer */}
+        <div className="mt-20 text-center animate-fade-in" style={{ animationDelay: '800ms' }}>
+          <div className="inline-flex flex-col md:flex-row items-center gap-6 bg-white p-6 md:p-4 pr-10 pl-6 rounded-full shadow-xl border border-slate-100">
+            <div className="flex -space-x-3">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-500 overflow-hidden">
+                   <img src={`https://i.pravatar.cc/100?u=${i}`} alt="user" />
+                </div>
+              ))}
+            </div>
+            <p className="text-slate-700 font-medium">Joined by <span className="font-bold text-[#1a365d]">5,400+ clients</span> this year</p>
+            <div className="h-6 w-px bg-slate-200 hidden md:block" />
+            <button className="bg-[#1a365d] text-[var(--color-secondary)] px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform shadow-lg shadow-blue-900/20">
+              Get Verified Document Checklist
+            </button>
+          </div>
         </div>
       </div>
     </div>
