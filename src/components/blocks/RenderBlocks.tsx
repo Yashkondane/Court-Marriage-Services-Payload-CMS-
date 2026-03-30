@@ -26,7 +26,7 @@ const blockComponents: Record<string, React.FC<{ block: Block }>> = {
   blogFeed: BlogFeedBlock,
   newsFeed: NewsFeedBlock,
   gallery: GalleryBlockComponent,
-  testimonials: TestimonialsBlockComponent,
+  testimonialsBlock: TestimonialsBlockComponent,
   servicesCarousel: ServicesCarouselBlock,
   logos: LogosBlock,
   codeSnippet: CodeSnippetBlock,
