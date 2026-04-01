@@ -34,9 +34,47 @@ export const Hero: Block = {
       admin: { description: 'Supporting text below the headline' },
     },
     {
+      name: 'backgroundType',
+      type: 'select',
+      defaultValue: 'image',
+      options: [
+        { label: 'Image Background', value: 'image' },
+        { label: 'Solid Color Background', value: 'color' },
+      ],
+      admin: { position: 'sidebar' },
+    },
+    {
+      name: 'backgroundColor',
+      type: 'select',
+      defaultValue: 'white',
+      options: [
+        { label: 'White', value: 'white' },
+        { label: 'Black', value: 'black' },
+        { label: 'Gold', value: 'gold' },
+      ],
+      admin: {
+        condition: (data) => data.backgroundType === 'color',
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'textColorTheme',
+      type: 'select',
+      defaultValue: 'auto',
+      options: [
+        { label: 'Auto (High Contrast)', value: 'auto' },
+        { label: 'Light Text (White)', value: 'light' },
+        { label: 'Dark Text (Black)', value: 'dark' },
+      ],
+      admin: { position: 'sidebar' },
+    },
+    {
       name: 'backgroundImage',
       type: 'upload',
       relationTo: 'media',
+      admin: {
+        condition: (data) => data.backgroundType === 'image',
+      },
     },
     {
       name: 'ctaText',
