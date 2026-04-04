@@ -5,12 +5,17 @@ import { Hero } from '@/blocks/Hero'
 import { RichContent } from '@/blocks/RichContent'
 import { FAQ } from '@/blocks/FAQ'
 import { Highlights } from '@/blocks/Highlights'
+import { WhyChooseUs } from '@/blocks/WhyChooseUs'
+import { RegistrationLicenses } from '@/blocks/RegistrationLicenses'
+import { HowItWorks } from '@/blocks/HowItWorks'
+import { Consultation } from '@/blocks/Consultation'
 import { CTA } from '@/blocks/CTA'
 import { BlogFeed } from '@/blocks/BlogFeed'
 import { NewsFeed } from '@/blocks/NewsFeed'
 import { GalleryBlock } from '@/blocks/GalleryBlock'
 import { TestimonialsBlock } from '@/blocks/TestimonialsBlock'
 import { ServicesCarousel } from '@/blocks/ServicesCarousel'
+import { LawyersCarousel } from '@/blocks/LawyersCarousel'
 import { CodeSnippet } from '@/blocks/CodeSnippet'
 import { Logos } from '@/blocks/Logos'
 import { LawyerList } from '@/blocks/LawyerList'
@@ -66,12 +71,17 @@ export const Pages: CollectionConfig = {
                 RichContent,
                 FAQ,
                 Highlights,
+                WhyChooseUs,
+                RegistrationLicenses,
+                HowItWorks,
+                Consultation,
                 CTA,
                 BlogFeed,
                 NewsFeed,
                 GalleryBlock,
                 TestimonialsBlock,
                 ServicesCarousel,
+                LawyersCarousel,
                 CodeSnippet,
                 Logos,
                 LawyerList,

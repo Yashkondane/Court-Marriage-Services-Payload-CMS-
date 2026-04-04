@@ -250,6 +250,9 @@ export interface Page {
          * Supporting text below the headline
          */
         subheading?: string | null;
+        backgroundType?: ('image' | 'color') | null;
+        backgroundColor?: ('white' | 'black' | 'gold') | null;
+        textColorTheme?: ('auto' | 'light' | 'dark') | null;
         backgroundImage?: (number | null) | Media;
         /**
          * e.g., "Book a Consultation"
@@ -511,7 +514,7 @@ export interface Page {
          */
         subheading?: string | null;
         /**
-         * Maximum number of lawyers to show (leave empty for all)
+         * Maximum number of auto-fetched lawyers to show
          */
         limit?: number | null;
         showBio?: boolean | null;
@@ -530,6 +533,50 @@ export interface Page {
         id?: string | null;
         blockName?: string | null;
         blockType: 'lawyerList';
+      }
+    | {
+        heading?: string | null;
+        description?: string | null;
+        items?:
+          | {
+              title: string;
+              icon?: ('document' | 'location' | 'calendar' | 'camera' | 'users' | 'shield') | null;
+              content: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              };
+              /**
+               * Optional small note at the bottom (e.g., "Important: ...")
+               */
+              note?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Control where and on which devices this block appears.
+         */
+        visibility?: {
+          showOnDesktop?: boolean | null;
+          showOnMobile?: boolean | null;
+          targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+          targetPages?: (number | Page)[] | null;
+          targetServices?: (number | Service)[] | null;
+          targetLocations?: (number | Location)[] | null;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'documents';
       }
   )[];
   /**
@@ -1004,7 +1051,14 @@ export interface Lead {
   name: string;
   phone: string;
   email?: string | null;
-  service: string;
+  /**
+   * The service they are inquiring about
+   */
+  service?: (number | null) | Service;
+  /**
+   * The city/location they searched from
+   */
+  location?: (number | null) | Location;
   message?: string | null;
   /**
    * The URL from which this lead was generated
@@ -1270,6 +1324,9 @@ export interface PagesSelect<T extends boolean = true> {
               layoutStyle?: T;
               heading?: T;
               subheading?: T;
+              backgroundType?: T;
+              backgroundColor?: T;
+              textColorTheme?: T;
               backgroundImage?: T;
               ctaText?: T;
               ctaLink?: T;
@@ -1513,6 +1570,33 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        documents?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    icon?: T;
+                    content?: T;
+                    note?: T;
+                    id?: T;
+                  };
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
       };
   service?: T;
   location?: T;
@@ -1671,6 +1755,7 @@ export interface LeadsSelect<T extends boolean = true> {
   phone?: T;
   email?: T;
   service?: T;
+  location?: T;
   message?: T;
   sourceUrl?: T;
   updatedAt?: T;

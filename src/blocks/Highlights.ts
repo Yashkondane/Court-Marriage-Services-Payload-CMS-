@@ -40,6 +40,18 @@ export const Highlights: Block = {
       ],
     },
     {
+      name: 'layoutStyle',
+      type: 'select',
+      defaultValue: 'cards',
+      options: [
+        { label: 'Standard Cards (Vertical)', value: 'cards' },
+        { label: 'Stats Bar (Horizontal)', value: 'statsBar' },
+      ],
+      admin: {
+        description: 'Choose if this section looks like feature cards or a trust/stats bar.',
+      },
+    },
+    {
       name: 'columns',
       type: 'select',
       defaultValue: '3',
@@ -48,6 +60,9 @@ export const Highlights: Block = {
         { label: '3 Columns', value: '3' },
         { label: '4 Columns', value: '4' },
       ],
+      admin: {
+        condition: (data) => data.layoutStyle === 'cards',
+      },
     },
     ...visibilityFields,
   ],

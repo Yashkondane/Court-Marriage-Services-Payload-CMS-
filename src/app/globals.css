@@ -1,24 +1,38 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #000000;
-  --color-primary-light: #1a1a1a;
+  --font-heading: 'Manrope', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Premium Black & Gold Palette */
+  --color-primary: #111111;
+  --color-primary-container: #222222;
+  --color-on-primary: #ffffff;
+  
+  --color-secondary: #c29821; /* Gold */
+  --color-secondary-container: #d4bc6e;
+  --color-on-secondary: #111111;
+  
+  --color-surface: #f9f9f9;
+  --color-surface-container: #eeeeee;
+  --color-surface-container-low: #f3f3f3;
+  --color-surface-container-lowest: #ffffff;
+  
+  --color-on-surface: #111111;
+  --color-on-surface-variant: #4b5563;
+  --color-outline-variant: #e5e7eb;
+
+  /* Legacy mapping for backward compatibility */
+  --color-primary-light: #222222;
   --color-primary-dark: #000000;
-  --color-secondary: #c29821;
-  --color-secondary-light: #d4bc6e;
-  --color-secondary-dark: #a88e3a;
-  --color-accent: #e8d5a3;
-  --color-bg-primary: #ffffff;
-  --color-bg-dark: #000000;
-  --color-text-primary: #000000;
-  --color-text-secondary: #475569;
-  --color-text-light: #f1f5f9;
-  --color-border: #e2e8f0;
+  --color-text-primary: #111111;
+  --color-text-secondary: #4b5563;
+  --color-text-light: #ffffff;
+  --color-bg-primary: #f9f9f9;
+  --color-bg-dark: #111111;
+  --color-border: #e5e7eb;
   --color-success: #059669;
   --color-error: #dc2626;
-
-  --font-heading: 'Inter', sans-serif;
-  --font-body: 'Inter', sans-serif;
 }
 
 
@@ -145,6 +159,72 @@ h1, h2, h3, h4, h5, h6 {
   .hide-on-desktop { display: none !important; }
 }
 
+/* Premium Gradients & UI Elements */
+.bg-gold-gradient {
+  background: linear-gradient(135deg, #a47e1b 0%, #d4bc6e 50%, #a47e1b 100%);
+}
+
+.text-gold-gradient {
+  background: linear-gradient(135deg, #a47e1b 0%, #d4bc6e 50%, #a47e1b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #a47e1b 0%, #d4bc6e 50%, #a47e1b 100%);
+  color: #111;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: none;
+  box-shadow: 0 4px 20px rgba(164, 126, 27, 0.2);
+}
+
+.btn-gold:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(164, 126, 27, 0.3);
+}
+
+.btn-whatsapp {
+  background: white;
+  color: #111;
+  border: 1px solid #e5e7eb;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.btn-whatsapp:hover {
+  background: #f9f9f9;
+  border-color: #25d366; /* WhatsApp Green hint on hover? */
+  transform: translateY(-2px);
+}
+
+/* Trust Badge Style */
+.trust-badge {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+
+/* Stats Bar Overlay */
+.stats-bar {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
 /* Animations */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
@@ -155,46 +235,10 @@ h1, h2, h3, h4, h5, h6 {
   animation: fadeInUp 0.6s ease-out forwards;
 }
 
-/* Button Base */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem 2rem;
-  border-radius: 0.375rem;
-  font-weight: 600;
-  font-size: 0.9375rem;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  text-decoration: none;
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
-
-.btn-primary {
-  background-color: var(--color-primary);
-  color: white;
-}
-.btn-primary:hover {
-  background-color: var(--color-primary-light);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(26, 54, 93, 0.25);
-}
-
-.btn-secondary {
-  background-color: var(--color-secondary);
-  color: var(--color-primary-dark);
-}
-.btn-secondary:hover {
-  background-color: var(--color-secondary-light);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(199, 168, 75, 0.25);
-}
-
-.btn-outline {
-  border: 2px solid var(--color-primary);
-  color: var(--color-primary);
-  background: transparent;
-}
-.btn-outline:hover {
-  background-color: var(--color-primary);
-  color: white;
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

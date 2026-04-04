@@ -71,6 +71,43 @@ export const Lawyers: CollectionConfig = {
       },
     },
     {
+      name: 'locationText',
+      type: 'text',
+      admin: {
+        description: 'Specific location to show on the card (e.g., "Barakhamba Road, Delhi")',
+      },
+    },
+    {
+      name: 'isSponsored',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Sponsored Status',
+    },
+    {
+      name: 'isPremiumPartner',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Premium Partner Status',
+    },
+    {
+      name: 'rating',
+      type: 'number',
+      defaultValue: 4.5,
+      admin: {
+        step: 0.1,
+      },
+    },
+    {
+      name: 'ratingCount',
+      type: 'number',
+      defaultValue: 100,
+    },
+    {
+      name: 'responseTime',
+      type: 'text',
+      defaultValue: 'Typically responds in 1 hour',
+    },
+    {
       name: 'email',
       type: 'email',
     },

@@ -9,10 +9,15 @@ import { NewsFeedBlock } from './NewsFeedBlock'
 import { GalleryBlockComponent } from './GalleryBlockComponent'
 import { TestimonialsBlockComponent } from './TestimonialsBlockComponent'
 import { ServicesCarouselBlock } from './ServicesCarouselBlock'
+import { LawyersCarouselBlock } from './LawyersCarouselBlock'
 import { LogosBlock } from './LogosBlock'
 import { CodeSnippetBlock } from './CodeSnippetBlock'
 import { LawyerListBlock } from './LawyerListBlock'
 import { DocumentsBlock } from './DocumentsBlock'
+import { WhyChooseUsBlock } from '@/components/blocks/WhyChooseUsBlock'
+import { RegistrationLicensesBlock } from '@/components/blocks/RegistrationLicensesBlock'
+import { HowItWorksBlock } from '@/components/blocks/HowItWorksBlock'
+import { ConsultationBlock } from './ConsultationBlock'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Block = Record<string, any>
@@ -22,12 +27,17 @@ const blockComponents: Record<string, React.FC<{ block: Block }>> = {
   richContent: RichContentBlock,
   faq: FAQBlock,
   highlights: HighlightsBlock,
+  whyChooseUs: WhyChooseUsBlock,
+  registrationLicenses: RegistrationLicensesBlock,
+  howItWorks: HowItWorksBlock,
+  consultation: ConsultationBlock,
   cta: CTABlock,
   blogFeed: BlogFeedBlock,
   newsFeed: NewsFeedBlock,
   galleryBlock: GalleryBlockComponent,
   testimonialsBlock: TestimonialsBlockComponent,
   servicesCarousel: ServicesCarouselBlock,
+  lawyersCarousel: LawyersCarouselBlock,
   logos: LogosBlock,
   codeSnippet: CodeSnippetBlock,
   lawyerList: LawyerListBlock,

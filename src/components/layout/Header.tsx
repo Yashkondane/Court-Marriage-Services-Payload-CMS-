@@ -1,130 +1,126 @@
-import React from 'react'
+"use client"
+import React, { useState } from 'react'
 import Link from 'next/link'
-import { getPayload } from '@/lib/payload/getPayload'
+import { usePathname } from 'next/navigation'
 
-export async function Header() {
-  let navServices: any[] = []
-  
-  try {
-    const payload = await getPayload()
-    const result = await payload.find({
-      collection: 'services',
-      where: {
-        showInHeader: { equals: true },
-      },
-      sort: 'menuOrder',
-      limit: 100,
-    })
-    navServices = result.docs
-  } catch (error) {
-    console.error('Error fetching nav services:', error)
-  }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function Header({ navServices = [] }: { navServices?: any[] }) {
+  const pathname = usePathname()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  const navLinks = [
+    { label: 'PRACTICE AREAS', href: '/services', isDropdown: true },
+    { label: 'CASE RESULTS', href: '/case-results' },
+    { label: 'LEGAL BLOG', href: '/blog' },
+    { label: 'ABOUT US', href: '/about' },
+    { label: 'CONTACT', href: '/contact' },
+  ]
 
   return (
-    <header className="bg-[var(--color-primary)] text-white sticky top-0 z-50 shadow-lg border-b border-white/5">
+    <header className="bg-black text-white sticky top-0 z-[100] shadow-2xl border-b border-white/10">
       <div className="container-page">
-        {/* Top Bar */}
-        <div className="hidden md:flex items-center justify-between text-sm py-2 border-b border-white/10">
-          <div className="flex items-center gap-6">
-            <a href="tel:+919650515469" className="hover:text-[var(--color-secondary)] transition-colors flex items-center gap-2">
-              <span className="text-lg">📞</span> +91 96505 15469
-            </a>
-            <a href="mailto:info@kaushalassociates.com" className="hover:text-[var(--color-secondary)] transition-colors flex items-center gap-2">
-              <span className="text-lg">✉</span> info@kaushalassociates.com
-            </a>
-          </div>
-          <div className="flex items-center gap-4 text-white/80">
-            <Link href="/" className="hover:text-[var(--color-secondary)] transition-colors">Home</Link>
-            <span className="opacity-30">|</span>
-            <Link href="/blog" className="hover:text-[var(--color-secondary)] transition-colors">Blog</Link>
-            <span className="opacity-30">|</span>
-            <Link href="/news" className="hover:text-[var(--color-secondary)] transition-colors">News</Link>
-            <span className="opacity-30">|</span>
-            <Link href="/contact" className="hover:text-[var(--color-secondary)] transition-colors">Contact</Link>
-            <span className="opacity-30 ml-2">|</span>
-            <span>🕘 Mon – Sat: 9:00 AM – 7:00 PM</span>
-          </div>
-        </div>
-
-        {/* Main Nav */}
-        <nav className="flex items-center justify-between py-4">
+        <nav className="flex items-center justify-between py-6">
+          
+          {/* Logo Section */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-[var(--color-secondary)] rounded-lg flex items-center justify-center font-bold text-[var(--color-primary-dark)] text-xl font-[var(--font-heading)] group-hover:scale-105 transition-transform shadow-inner">
-              K
-            </div>
-            <div>
-              <span className="text-2xl font-bold text-white tracking-tight group-hover:text-[var(--color-secondary-light)] transition-colors">
-                Court Marriage Services
-              </span>
-              <span className="hidden md:block text-[10px] text-white/50 uppercase tracking-[2px] font-bold -mt-0.5">
-                Legal Consultants & Advocates
-              </span>
-            </div>
-          </Link>
-
-          <div className="hidden lg:flex items-center gap-8">
-            {/* Services Dropdown - Renamed to Marriage Registration */}
-            <div className="relative group py-2">
-              <Link href="/services" className="flex items-center gap-1 hover:text-[var(--color-secondary)] transition-colors font-semibold">
-                Marriage Registration
-                <svg className="w-4 h-4 mt-0.5 opacity-60 group-hover:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </Link>
-              
-              <div className="absolute top-[100%] left-0 w-64 bg-white text-slate-800 rounded-xl shadow-2xl opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 p-2 z-[60] border border-slate-100">
-                <div className="py-2 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-50 mb-1">
-                  Our Specializations
-                </div>
-                {navServices.map((svc: any) => (
-                  <Link 
-                    key={svc.id} 
-                    href={`/${svc.slug}`}
-                    className="flex items-center px-4 py-3 rounded-lg hover:bg-slate-50 hover:text-[var(--color-primary)] transition-all font-medium border-l-2 border-transparent hover:border-[var(--color-primary)]"
-                  >
-                    {svc.title}
-                  </Link>
-                ))}
-                {navServices.length === 0 && (
-                  <div className="px-4 py-3 text-slate-400 italic text-sm">
-                    No services featured yet.
-                  </div>
-                )}
-                <div className="mt-2 border-t border-slate-50 pt-1">
-                  <Link href="/services" className="flex items-center justify-center px-4 py-2 text-xs font-bold text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white rounded-md transition-colors uppercase tracking-wider">
-                    View All Services
-                  </Link>
-                </div>
+            <div className="relative w-10 h-10 flex items-center justify-center">
+              <div className="absolute inset-0 bg-white rounded-sm rotate-45 transform group-hover:rotate-0 transition-transform duration-500" />
+              <div className="relative z-10 text-black font-black text-xl italic flex items-center justify-center -mb-1">
+                V
               </div>
             </div>
+            <span className="text-2xl font-heading font-extrabold text-white tracking-tighter uppercase group-hover:text-[var(--color-secondary)] transition-colors">
+              VakilFirst
+            </span>
+          </Link>
 
-            <Link href="/charges" className="hover:text-[var(--color-secondary)] transition-colors font-semibold py-2">
-              Charges
-            </Link>
-            <Link href="/consultation" className="hover:text-[var(--color-secondary)] transition-colors font-semibold py-2">
-              Consultation
-            </Link>
-            <Link href="/lawyer-services" className="hover:text-[var(--color-secondary)] transition-colors font-semibold py-2">
-              Lawyer Services
-            </Link>
+          {/* Desktop Nav Links */}
+          <div className="hidden lg:flex items-center gap-10">
+            {navLinks.map((link) => (
+              <div key={link.label} className="relative group/nav py-2">
+                <Link 
+                  href={link.href} 
+                  className={`text-[13px] font-bold tracking-[0.1em] hover:text-[var(--color-secondary)] transition-all flex items-center gap-1.5 ${
+                    pathname === link.href ? 'text-[var(--color-secondary)]' : 'text-gray-300'
+                  }`}
+                >
+                  {link.label}
+                  {link.isDropdown && (
+                    <svg className="w-3 h-3 opacity-50 group-hover/nav:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  )}
+                </Link>
+
+                {/* Practice Areas Dropdown */}
+                {link.isDropdown && (
+                  <div className="absolute top-[100%] left-0 w-72 bg-[#111] border border-white/10 rounded-sm shadow-2xl opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all duration-300 p-4 z-[110]">
+                    <div className="grid gap-2">
+                      <div className="text-[10px] font-black text-gray-500 tracking-[0.2em] mb-3 uppercase">Top Expertise</div>
+                      {navServices.map((svc: any) => (
+                        <Link 
+                          key={svc.id} 
+                          href={`/${svc.slug}`}
+                          className="text-sm font-semibold py-2 px-3 hover:bg-white/5 hover:text-[var(--color-secondary)] rounded-sm transition-all border-l-2 border-transparent hover:border-[var(--color-secondary)]"
+                        >
+                          {svc.title}
+                        </Link>
+                      ))}
+                      <div className="mt-2 pt-2 border-t border-white/5">
+                        <Link href="/services" className="text-[11px] font-bold text-[var(--color-secondary)] uppercase tracking-widest hover:underline text-center block">
+                          Explore All Services →
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {/* Consult Button */}
             <Link
               href="/consultation"
-              className="bg-[var(--color-secondary)] text-[var(--color-primary-dark)] px-6 py-2.5 rounded-full font-bold text-sm shadow-lg hover:shadow-[var(--color-secondary)]/30 hover:-translate-y-0.5 transition-all"
+              className="btn-gold px-8 py-3.5 rounded-sm text-sm"
             >
-              Free Consultation
+              Consult a Lawyer
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Toggle */}
           <button
-            className="lg:hidden p-2 hover:bg-white/10 rounded-lg transition-colors border border-white/10"
-            aria-label="Open menu"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="lg:hidden p-2 text-white hover:text-[var(--color-secondary)] transition-colors"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            {isMobileMenuOpen ? (
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+            ) : (
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" /></svg>
+            )}
           </button>
         </nav>
+      </div>
+
+      {/* Mobile Nav Menu */}
+      <div className={`lg:hidden bg-black border-t border-white/10 overflow-hidden transition-all duration-500 ease-in-out ${isMobileMenuOpen ? 'max-h-[90vh] py-8' : 'max-h-0 py-0'}`}>
+        <div className="container-page flex flex-col gap-6">
+          {navLinks.map((link) => (
+            <Link 
+              key={link.label}
+              href={link.href}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-xl font-heading font-extrabold uppercase tracking-tight text-white hover:text-[var(--color-secondary)]"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <Link
+            href="/consultation"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="btn-gold w-full py-4 text-center mt-4"
+          >
+            Consult a Lawyer
+          </Link>
+        </div>
       </div>
     </header>
   )
