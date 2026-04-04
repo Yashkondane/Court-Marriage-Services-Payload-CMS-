@@ -42,6 +42,7 @@ export const Highlights: Block = {
     {
       name: 'layoutStyle',
       type: 'select',
+      dbName: 'layout_style',
       defaultValue: 'cards',
       options: [
         { label: 'Standard Cards (Vertical)', value: 'cards' },
