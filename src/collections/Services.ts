@@ -36,6 +36,16 @@ export const Services: CollectionConfig = {
       relationTo: 'media',
     },
     {
+      name: 'activeLocations',
+      type: 'relationship',
+      relationTo: 'locations',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+        description: 'Select the cities where this service is actively offered. Only selected cities will generate live landing pages.',
+      },
+    },
+    {
       name: 'showInHeader',
       type: 'checkbox',
       label: 'Show in Main Navigation Dropdown',
@@ -89,16 +99,6 @@ export const Services: CollectionConfig = {
         { label: 'Book (Education/Law Book)', value: 'book' },
         { label: 'Stamp (Certification)', value: 'stamp' },
       ],
-    },
-    {
-      name: 'supportedLocations',
-      type: 'relationship',
-      relationTo: 'locations',
-      hasMany: true,
-      admin: {
-        position: 'sidebar',
-        description: 'Select the cities where this service is actively offered. Only selected cities will generate live landing pages.',
-      },
     },
     {
       name: 'content',

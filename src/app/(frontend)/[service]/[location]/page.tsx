@@ -88,7 +88,7 @@ export default async function ServiceLocationPage({ params }: { params: Params }
     const location = locations.docs[0] as any
 
     // Ensure service supports this location
-    const isSupported = service.supportedLocations?.some((loc: any) => 
+    const isSupported = service.activeLocations?.some((loc: any) => 
       typeof loc === 'string' ? loc === location.id : loc?.id === location.id
     )
 
