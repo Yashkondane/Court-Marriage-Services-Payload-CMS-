@@ -4,10 +4,10 @@ import Image from 'next/image'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function HighlightsBlock({ block }: { block: any }) {
   const items = block.items || []
-  const layoutStyle = block.layoutStyle || 'cards'
+  const sectionStyle = block.sectionStyle || 'cards'
   const columns = block.columns || '3'
 
-  if (layoutStyle === 'statsBar') {
+  if (sectionStyle === 'statsBar') {
     return (
       <div className="relative z-40 -mt-10 md:-mt-16 container-page pb-12">
         <div className="bg-white rounded-sm shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-gray-100 flex flex-wrap lg:flex-nowrap divide-y lg:divide-y-0 lg:divide-x divide-gray-100 overflow-hidden animate-fade-in-up">

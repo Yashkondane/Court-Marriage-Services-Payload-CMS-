@@ -9,6 +9,18 @@ export const Highlights: Block = {
   },
   fields: [
     {
+      name: 'sectionStyle',
+      type: 'select',
+      defaultValue: 'cards',
+      options: [
+        { label: 'Standard Cards (Vertical)', value: 'cards' },
+        { label: 'Stats Bar (Horizontal)', value: 'statsBar' },
+      ],
+      admin: {
+        description: 'Choose if this section looks like feature cards or a trust/stats bar.',
+      },
+    },
+    {
       name: 'heading',
       type: 'text',
       defaultValue: 'Why Choose Us',
@@ -40,19 +52,6 @@ export const Highlights: Block = {
       ],
     },
     {
-      name: 'layoutStyle',
-      type: 'select',
-      dbName: 'layout_style',
-      defaultValue: 'cards',
-      options: [
-        { label: 'Standard Cards (Vertical)', value: 'cards' },
-        { label: 'Stats Bar (Horizontal)', value: 'statsBar' },
-      ],
-      admin: {
-        description: 'Choose if this section looks like feature cards or a trust/stats bar.',
-      },
-    },
-    {
       name: 'columns',
       type: 'select',
       defaultValue: '3',
@@ -62,7 +61,7 @@ export const Highlights: Block = {
         { label: '4 Columns', value: '4' },
       ],
       admin: {
-        condition: (data) => data.layoutStyle === 'cards',
+        condition: (data) => data.sectionStyle === 'cards',
       },
     },
     ...visibilityFields,
