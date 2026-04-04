@@ -35,6 +35,7 @@ export const visibilityFields: Field[] = [
       {
         name: 'targetType',
         type: 'select',
+        dbName: 'tgt', // Shorten for Postgres 63-char limit
         defaultValue: 'global',
         label: 'Show On',
         options: [
