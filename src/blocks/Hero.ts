@@ -116,6 +116,46 @@ export const Hero: Block = {
         description: 'Choose the layout style for the standard hero section.',
       },
     },
+    {
+      name: 'showStatsBar',
+      type: 'checkbox',
+      defaultValue: true,
+      label: 'Show Stats Bar',
+      admin: {
+        description: 'Display the statistics bar below the hero (e.g. 25k+ Consultations).',
+      },
+    },
+    {
+      name: 'stats',
+      type: 'array',
+      label: 'Stats Bar Items',
+      minRows: 0,
+      maxRows: 6,
+      admin: {
+        description: 'Statistics shown in the bar below the hero section.',
+        condition: (_data, siblingData) => siblingData?.showStatsBar !== false,
+      },
+      fields: [
+        {
+          name: 'icon',
+          type: 'text',
+          required: true,
+          admin: { description: 'Emoji or icon (e.g. ⚖️, ✅, 👨‍⚖️, ⏱️)' },
+        },
+        {
+          name: 'value',
+          type: 'text',
+          required: true,
+          admin: { description: 'The stat value (e.g. "25k+", "98%", "1.2k+")' },
+        },
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+          admin: { description: 'Label below the value (e.g. "Consultations", "Success Rate")' },
+        },
+      ],
+    },
     ...visibilityFields,
   ],
 }

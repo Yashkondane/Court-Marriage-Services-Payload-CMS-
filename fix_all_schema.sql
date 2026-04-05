@@ -1299,7 +1299,46 @@ DO $$ BEGIN
   END IF;
 END $$;
 
+-- Hero showStatsBar column
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='pages_blocks_hero' AND column_name='show_stats_bar') THEN
+    ALTER TABLE "pages_blocks_hero" ADD COLUMN "show_stats_bar" boolean DEFAULT true;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='_pages_v_blocks_hero' AND column_name='show_stats_bar') THEN
+    ALTER TABLE "_pages_v_blocks_hero" ADD COLUMN "show_stats_bar" boolean DEFAULT true;
+  END IF;
+END $$;
+
+-- Hero stats sub-table (array field)
+CREATE TABLE IF NOT EXISTS "pages_blocks_hero_stats" (
+  "id" varchar PRIMARY KEY NOT NULL,
+  "_order" integer NOT NULL,
+  "_parent_id" varchar NOT NULL,
+  "icon" varchar,
+  "value" varchar,
+  "label" varchar,
+  "_uuid" varchar
+);
+CREATE INDEX IF NOT EXISTS "p_blk_hero_stats_order" ON "pages_blocks_hero_stats" ("_order");
+CREATE INDEX IF NOT EXISTS "p_blk_hero_stats_parent" ON "pages_blocks_hero_stats" ("_parent_id");
+
+-- Hero stats versioning sub-table
+CREATE TABLE IF NOT EXISTS "_pages_v_blocks_hero_stats" (
+  "id" serial PRIMARY KEY,
+  "_order" integer NOT NULL,
+  "_parent_id" integer NOT NULL,
+  "icon" varchar,
+  "value" varchar,
+  "label" varchar,
+  "_uuid" varchar
+);
+CREATE INDEX IF NOT EXISTS "pv_blk_hero_stats_order" ON "_pages_v_blocks_hero_stats" ("_order");
+CREATE INDEX IF NOT EXISTS "pv_blk_hero_stats_parent" ON "_pages_v_blocks_hero_stats" ("_parent_id");
+
 -- =============================================================================
--- DONE! V3.3 - ALL block types + lawyers + hero search bar
+-- DONE! V3.4 - Hero stats bar now CMS-editable
 -- =============================================================================
-SELECT 'V3.3 COMPLETE!' AS status;
+SELECT 'V3.4 COMPLETE!' AS status;
