@@ -42,6 +42,71 @@ DO $$ BEGIN
   END IF;
 END $$;
 
+-- pages_rels: lawyers_id
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='pages_rels' AND column_name='lawyers_id') THEN
+    ALTER TABLE "pages_rels" ADD COLUMN "lawyers_id" integer;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='_pages_v_rels' AND column_name='lawyers_id') THEN
+    ALTER TABLE "_pages_v_rels" ADD COLUMN "lawyers_id" integer;
+  END IF;
+END $$;
+
+-- pages_rels: blogs_id
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='pages_rels' AND column_name='blogs_id') THEN
+    ALTER TABLE "pages_rels" ADD COLUMN "blogs_id" integer;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='_pages_v_rels' AND column_name='blogs_id') THEN
+    ALTER TABLE "_pages_v_rels" ADD COLUMN "blogs_id" integer;
+  END IF;
+END $$;
+
+-- pages_rels: news_id
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='pages_rels' AND column_name='news_id') THEN
+    ALTER TABLE "pages_rels" ADD COLUMN "news_id" integer;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='_pages_v_rels' AND column_name='news_id') THEN
+    ALTER TABLE "_pages_v_rels" ADD COLUMN "news_id" integer;
+  END IF;
+END $$;
+
+-- pages_rels: testimonials_id
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='pages_rels' AND column_name='testimonials_id') THEN
+    ALTER TABLE "pages_rels" ADD COLUMN "testimonials_id" integer;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='_pages_v_rels' AND column_name='testimonials_id') THEN
+    ALTER TABLE "_pages_v_rels" ADD COLUMN "testimonials_id" integer;
+  END IF;
+END $$;
+
+-- services_rels: lawyers_id (for LawyersCarousel block relationships)
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='pages_rels' AND column_name='gallery_id') THEN
+    ALTER TABLE "pages_rels" ADD COLUMN "gallery_id" integer;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='_pages_v_rels' AND column_name='gallery_id') THEN
+    ALTER TABLE "_pages_v_rels" ADD COLUMN "gallery_id" integer;
+  END IF;
+END $$;
+
 -- =============================================================================
 -- C. HIGHLIGHTS BLOCK - Missing columns
 -- =============================================================================
@@ -1125,6 +1190,116 @@ CREATE INDEX IF NOT EXISTS "pv_blk_consult_parent" ON "_pages_v_blocks_consultat
 CREATE INDEX IF NOT EXISTS "pv_blk_consult_path" ON "_pages_v_blocks_consultation" ("_path");
 
 -- =============================================================================
--- DONE! V3 - ALL 19 block types covered
+-- Y. LAWYERS COLLECTION - Missing columns and sub-tables
 -- =============================================================================
-SELECT 'V3 COMPLETE - All 19 block versioning tables created!' AS status;
+
+-- The lawyers table may exist but be missing newer columns
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='lawyers' AND column_name='location_text') THEN
+    ALTER TABLE "lawyers" ADD COLUMN "location_text" varchar;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='lawyers' AND column_name='is_sponsored') THEN
+    ALTER TABLE "lawyers" ADD COLUMN "is_sponsored" boolean DEFAULT false;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='lawyers' AND column_name='is_premium_partner') THEN
+    ALTER TABLE "lawyers" ADD COLUMN "is_premium_partner" boolean DEFAULT false;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='lawyers' AND column_name='rating') THEN
+    ALTER TABLE "lawyers" ADD COLUMN "rating" numeric DEFAULT 4.5;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='lawyers' AND column_name='rating_count') THEN
+    ALTER TABLE "lawyers" ADD COLUMN "rating_count" numeric DEFAULT 100;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='lawyers' AND column_name='response_time') THEN
+    ALTER TABLE "lawyers" ADD COLUMN "response_time" varchar DEFAULT 'Typically responds in 1 hour';
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='lawyers' AND column_name='email') THEN
+    ALTER TABLE "lawyers" ADD COLUMN "email" varchar;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='lawyers' AND column_name='phone') THEN
+    ALTER TABLE "lawyers" ADD COLUMN "phone" varchar;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='lawyers' AND column_name='experience') THEN
+    ALTER TABLE "lawyers" ADD COLUMN "experience" numeric;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='lawyers' AND column_name='bio') THEN
+    ALTER TABLE "lawyers" ADD COLUMN "bio" jsonb;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='lawyers' AND column_name='photo_id') THEN
+    ALTER TABLE "lawyers" ADD COLUMN "photo_id" integer;
+  END IF;
+END $$;
+
+-- Lawyers specializations sub-table
+CREATE TABLE IF NOT EXISTS "lawyers_specializations" (
+  "id" serial PRIMARY KEY,
+  "_order" integer NOT NULL,
+  "_parent_id" integer NOT NULL,
+  "specialization" varchar,
+  "_uuid" varchar
+);
+CREATE INDEX IF NOT EXISTS "lawyers_spec_order" ON "lawyers_specializations" ("_order");
+CREATE INDEX IF NOT EXISTS "lawyers_spec_parent" ON "lawyers_specializations" ("_parent_id");
+
+-- Lawyers rels table (for relationship fields like services)
+CREATE TABLE IF NOT EXISTS "lawyers_rels" (
+  "id" serial PRIMARY KEY,
+  "order" integer,
+  "parent_id" integer NOT NULL,
+  "path" varchar NOT NULL,
+  "services_id" integer
+);
+CREATE INDEX IF NOT EXISTS "lawyers_rels_order" ON "lawyers_rels" ("order");
+CREATE INDEX IF NOT EXISTS "lawyers_rels_parent" ON "lawyers_rels" ("parent_id");
+CREATE INDEX IF NOT EXISTS "lawyers_rels_path" ON "lawyers_rels" ("path");
+
+-- =============================================================================
+-- Z. HERO BLOCK - New showSearchBar column
+-- =============================================================================
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='pages_blocks_hero' AND column_name='show_search_bar') THEN
+    ALTER TABLE "pages_blocks_hero" ADD COLUMN "show_search_bar" boolean DEFAULT true;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='_pages_v_blocks_hero' AND column_name='show_search_bar') THEN
+    ALTER TABLE "_pages_v_blocks_hero" ADD COLUMN "show_search_bar" boolean DEFAULT true;
+  END IF;
+END $$;
+
+-- =============================================================================
+-- DONE! V3.3 - ALL block types + lawyers + hero search bar
+-- =============================================================================
+SELECT 'V3.3 COMPLETE!' AS status;

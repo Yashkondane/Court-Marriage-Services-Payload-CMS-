@@ -1,5 +1,5 @@
 // run_db.js - Uses the pg package bundled with @payloadcms/db-postgres
-// Run: node --env-file=.env run_db.js
+// Run: node --env-file=.env run_db.js [optional_sql_file]
 
 import { createRequire } from 'module';
 import fs from 'fs';
@@ -31,8 +31,10 @@ async function run() {
     await client.connect();
     console.log('✅ Connected to Supabase PostgreSQL');
     
-    const sql = fs.readFileSync('fix_all_schema.sql', 'utf8');
-    console.log('📄 Executing comprehensive schema fix...');
+    // Accept SQL file as CLI argument, default to fix_all_schema.sql
+    const sqlFile = process.argv[2] || 'fix_all_schema.sql';
+    const sql = fs.readFileSync(sqlFile, 'utf8');
+    console.log(`📄 Executing ${sqlFile}...`);
     
     const result = await client.query(sql);
     console.log('✅ Schema fix executed successfully!');
