@@ -1,12 +1,12 @@
 "use client"
-import React from 'react'
+import React, { useRef, useEffect, useState, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { 
   FaGavel, FaHandshake, FaBalanceScale, FaRegBuilding, 
   FaFileContract, FaShieldAlt, FaUserTie, FaUsers, 
   FaCalculator, FaHome, FaBriefcase, FaLandmark, 
-  FaMoneyBillWave, FaBook, FaStamp 
+  FaMoneyBillWave, FaBook, FaStamp, FaChevronLeft, FaChevronRight
 } from 'react-icons/fa'
 
 const IconMap: Record<string, React.ElementType> = {
@@ -30,127 +30,151 @@ const IconMap: Record<string, React.ElementType> = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function ServicesCarouselBlock({ block }: { block: any }) {
   const { heading, items } = block
-  const [activeIndex, setActiveIndex] = React.useState(0)
-  const scrollRef = React.useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [cardsPerView, setCardsPerView] = useState(4)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const validItems = (items || []).filter((item: any) => item.service && typeof item.service !== 'string')
+  const totalItems = validItems.length
 
-  if (!items || items.length === 0) return null
+  if (totalItems === 0) return null
 
-  const handleScroll = () => {
-    if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current
-      const index = Math.round(scrollLeft / clientWidth)
-      setActiveIndex(index)
+  // Responsive cards per view
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    const updateCardsPerView = () => {
+      if (window.innerWidth >= 1280) setCardsPerView(4)
+      else if (window.innerWidth >= 1024) setCardsPerView(3)
+      else if (window.innerWidth >= 640) setCardsPerView(2)
+      else setCardsPerView(1)
     }
-  }
+    updateCardsPerView()
+    window.addEventListener('resize', updateCardsPerView)
+    return () => window.removeEventListener('resize', updateCardsPerView)
+  }, [])
 
-  // Auto-scroll effect or arrow clicks
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const goToSlide = useCallback((index: number) => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    setCurrentIndex(index)
+    setTimeout(() => setIsTransitioning(false), 500)
+  }, [isTransitioning])
+
   const scrollPrev = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: -scrollRef.current.clientWidth, behavior: 'smooth' })
-    }
+    const newIndex = currentIndex <= 0 ? totalItems - 1 : currentIndex - 1
+    goToSlide(newIndex)
   }
 
   const scrollNext = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: scrollRef.current.clientWidth, behavior: 'smooth' })
-    }
+    const newIndex = currentIndex >= totalItems - 1 ? 0 : currentIndex + 1
+    goToSlide(newIndex)
   }
 
+  // Auto play
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    const timer = setInterval(scrollNext, 5000)
+    return () => clearInterval(timer)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex, isTransitioning])
+
+  // Build the visible items array (infinite loop illusion)
+  const getVisibleItems = () => {
+    const visible = []
+    for (let i = 0; i < cardsPerView; i++) {
+      const index = (currentIndex + i) % totalItems
+      visible.push({ ...validItems[index], _displayIndex: index })
+    }
+    return visible
+  }
+
+  const visibleItems = getVisibleItems()
+
   return (
-    <section className="py-24 bg-white overflow-hidden">
-      <div className="container-page relative">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-heading font-extrabold text-[#111] tracking-tight">{heading || 'Our Legal Services'}</h2>
+    <section className="svc-carousel-section">
+      <div className="container-page">
+        {/* Section Heading */}
+        <div className="svc-carousel-header">
+          <h2 className="svc-carousel-title">{heading || 'Our Legal Services'}</h2>
         </div>
 
-        <div className="relative group px-4 md:px-0 mt-8">
-          {/* Navigation Buttons */}
+        <div className="svc-carousel-wrapper">
+          {/* Prev Button */}
           <button 
             onClick={scrollPrev}
-            className="absolute left-0 top-[40%] -translate-y-1/2 -translate-x-1/2 z-10 w-14 h-14 rounded-full bg-white shadow-[0_4px_24px_rgba(0,0,0,0.15)] border border-gray-100 flex items-center justify-center text-gray-500 hover:text-[var(--color-secondary)] hover:border-[var(--color-secondary)] hover:scale-105 transition-all opacity-0 group-hover:opacity-100 md:-left-7"
+            className="svc-carousel-nav svc-carousel-nav--prev"
             aria-label="Previous"
           >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-            </svg>
+            <FaChevronLeft />
           </button>
 
-          <button 
-            onClick={scrollNext}
-            className="absolute right-0 top-[40%] -translate-y-1/2 translate-x-1/2 z-10 w-14 h-14 rounded-full bg-white shadow-[0_4px_24px_rgba(0,0,0,0.15)] border border-gray-100 flex items-center justify-center text-gray-500 hover:text-[var(--color-secondary)] hover:border-[var(--color-secondary)] hover:scale-105 transition-all opacity-0 group-hover:opacity-100 md:-right-7"
-            aria-label="Next"
-          >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-
-          {/* Horizontal scroll container with snap */}
-          <div 
-            ref={scrollRef}
-            onScroll={handleScroll}
-            className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-12 pt-4 hide-scrollbar scroll-smooth px-2"
-          >
+          {/* Cards Track */}
+          <div className="svc-carousel-track" ref={trackRef}>
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {items.map((item: any, index: number) => {
+            {visibleItems.map((item: any, idx: number) => {
               const service = item.service
-              if (!service || typeof service === 'string') return null
-
-              const selectedIconKey = service.uiIcon || 'gavel'
+              // Use overrideIcon if set, otherwise fall back to service's uiIcon
+              const selectedIconKey = item.overrideIcon || service.uiIcon || 'gavel'
               const IconComponent = IconMap[selectedIconKey] || IconMap['gavel']
+              // Use item's backgroundImage if set, otherwise fall back to service banner
+              const bgImageUrl = item.backgroundImage?.url || service.banner?.url || ''
               
-              // Fallback image if no banner exists
-              const bgImageUrl = service.banner?.url || '/fallback-law.jpg'
+              // Get highlights
+              const highlights = (item.highlights && item.highlights.length > 0)
+                ? item.highlights
+                : (service.highlights || [])
 
               return (
                 <div 
-                  key={item.id || index} 
-                  className="snap-center shrink-0 w-[85%] md:w-[calc(50%-12px)] lg:w-[calc(25%-18px)] bg-white rounded-md flex flex-col border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group/card overflow-hidden"
+                  key={`${item._displayIndex}-${idx}`} 
+                  className="svc-card"
+                  style={{ animationDelay: `${idx * 60}ms` }}
                 >
-                  {/* Top Header Image */}
-                  <div className="w-full h-40 relative bg-gray-100">
-                    <Image 
-                      src={bgImageUrl}
-                      alt={service.title}
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-black/10 group-hover/card:bg-black/0 transition-colors" />
+                  {/* Card Background Image */}
+                  <div className="svc-card-img">
+                    {bgImageUrl ? (
+                      <Image 
+                        src={bgImageUrl}
+                        alt={service.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      />
+                    ) : (
+                      <div className="svc-card-img-placeholder" />
+                    )}
+                    <div className="svc-card-img-overlay" />
                   </div>
 
-                  {/* Body Wrapper */}
-                  <div className="pt-10 pb-8 px-6 flex flex-col flex-grow relative">
-                    
-                    {/* Overlapping Icon Circle */}
-                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-20 h-20 bg-white rounded-full flex items-center justify-center p-1.5 shadow-sm">
-                      <div className="w-full h-full rounded-full border border-[var(--color-secondary)] flex items-center justify-center bg-white">
-                        <IconComponent className="w-7 h-7 text-[var(--color-secondary)]" />
+                  {/* Card Body */}
+                  <div className="svc-card-body">
+                    {/* Icon Circle - Positioned overlapping image and body */}
+                    <div className="svc-card-icon-wrap">
+                      <div className="svc-card-icon-ring">
+                        <IconComponent className="svc-card-icon" />
                       </div>
                     </div>
 
-                    {/* Title */}
-                    <h3 className="text-xl font-heading font-extrabold mb-4 text-center text-[#111]">
-                      {service.title}
-                    </h3>
+                    {/* Service Title */}
+                    <h3 className="svc-card-title">{service.title}</h3>
 
-                    {/* Highlights List */}
-                    <ul className="w-full space-y-2 mb-8 flex-grow">
+                    {/* Highlights */}
+                    <ul className="svc-card-highlights">
                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {(item.highlights && item.highlights.length > 0 ? item.highlights : (service.highlights || [])).slice(0, 4).map((hl: any, i: number) => (
-                        <li key={i} className="flex items-start text-[14px] text-gray-600 font-medium">
-                          <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-secondary)] mt-1.5 shrink-0 mr-2" />
-                          <span className="leading-snug">{hl.text || hl.title}</span>
+                      {highlights.slice(0, 4).map((hl: any, i: number) => (
+                        <li key={i} className="svc-card-highlight">
+                          <span className="svc-card-bullet" />
+                          <span>{hl.text || hl.title}</span>
                         </li>
                       ))}
                     </ul>
 
-                    {/* CTA Footer Link */}
-                    <Link 
-                      href={`/${service.slug}`}
-                      className="mt-auto block text-center font-bold text-[#111] hover:text-[var(--color-secondary)] group/btn transition-colors text-sm uppercase tracking-wider"
-                    >
-                      Learn More 
-                      <span className="inline-block transition-transform group-hover/btn:translate-x-1 ml-1">➔</span>
+                    {/* Learn More */}
+                    <Link href={`/${service.slug}`} className="svc-card-link">
+                      Learn More <span className="svc-card-arrow">→</span>
                     </Link>
                   </div>
                 </div>
@@ -158,37 +182,28 @@ export function ServicesCarouselBlock({ block }: { block: any }) {
             })}
           </div>
 
-          {/* Carousel Dots */}
-          <div className="flex justify-center gap-2 mt-2">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {items.map((_: any, i: number) => (
-              <button
-                key={i}
-                onClick={() => {
-                  if (scrollRef.current) {
-                    const width = scrollRef.current.clientWidth
-                    scrollRef.current.scrollTo({ left: i * width, behavior: 'smooth' })
-                  }
-                }}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  activeIndex === i ? 'bg-[#111] w-8' : 'bg-gray-300 w-2 hover:bg-gray-400'
-                }`}
-                aria-label={`Go to slide ${i + 1}`}
-              />
-            ))}
-          </div>
+          {/* Next Button */}
+          <button 
+            onClick={scrollNext}
+            className="svc-carousel-nav svc-carousel-nav--next"
+            aria-label="Next"
+          >
+            <FaChevronRight />
+          </button>
+        </div>
+
+        {/* Dots */}
+        <div className="svc-carousel-dots">
+          {validItems.map((_: unknown, i: number) => (
+            <button
+              key={i}
+              onClick={() => goToSlide(i)}
+              className={`svc-carousel-dot ${currentIndex === i ? 'svc-carousel-dot--active' : ''}`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
         </div>
       </div>
-      
-      <style dangerouslySetInnerHTML={{__html: `
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .hide-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}} />
     </section>
   )
 }

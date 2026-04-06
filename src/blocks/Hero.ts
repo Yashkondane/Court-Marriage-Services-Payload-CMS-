@@ -138,9 +138,20 @@ export const Hero: Block = {
       fields: [
         {
           name: 'icon',
-          type: 'text',
+          type: 'select',
           required: true,
-          admin: { description: 'Emoji or icon (e.g. ⚖️, ✅, 👨‍⚖️, ⏱️)' },
+          defaultValue: 'scale',
+          options: [
+            { label: 'Scale (Justice)', value: 'scale' },
+            { label: 'Checkmark', value: 'check' },
+            { label: 'Users/Advocates', value: 'users' },
+            { label: 'Clock/Time', value: 'clock' },
+            { label: 'Shield (Trust)', value: 'shield' },
+            { label: 'Star', value: 'star' },
+            { label: 'Document', value: 'file' },
+            { label: 'Trophy', value: 'trophy' },
+          ],
+          admin: { description: 'Select an icon to display' },
         },
         {
           name: 'value',

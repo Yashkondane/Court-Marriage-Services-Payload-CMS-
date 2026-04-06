@@ -5,6 +5,27 @@ import { LeadFormWidget } from './LeadFormWidget'
 import { SearchBar } from './SearchBar'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { 
+  FaBalanceScale, 
+  FaCheckCircle, 
+  FaUsers, 
+  FaClock, 
+  FaShieldAlt, 
+  FaStar, 
+  FaFileAlt, 
+  FaTrophy 
+} from 'react-icons/fa'
+
+const IconMap: Record<string, React.ReactNode> = {
+  scale: <FaBalanceScale />,
+  check: <FaCheckCircle />,
+  users: <FaUsers />,
+  clock: <FaClock />,
+  shield: <FaShieldAlt />,
+  star: <FaStar />,
+  file: <FaFileAlt />,
+  trophy: <FaTrophy />
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function HeroBlock({ block }: { block: any }) {
@@ -131,10 +152,10 @@ export async function HeroBlock({ block }: { block: any }) {
       {/* ===== STATS BAR (CMS-editable, with fallback defaults) ===== */}
       {block.showStatsBar !== false && (() => {
         const defaultStats = [
-          { icon: '⚖️', value: '25k+', label: 'Consultations' },
-          { icon: '✅', value: '98%', label: 'Success Rate' },
-          { icon: '👨‍⚖️', value: '1.2k+', label: 'Verified Advocates' },
-          { icon: '⏱️', value: '15m', label: 'Response Time' },
+          { icon: 'scale', value: '25k+', label: 'Consultations' },
+          { icon: 'check', value: '98%', label: 'Success Rate' },
+          { icon: 'users', value: '1.2k+', label: 'Verified Advocates' },
+          { icon: 'clock', value: '15m', label: 'Response Time' },
         ]
         const statsData = block.stats && block.stats.length > 0 ? block.stats : defaultStats
 
@@ -144,7 +165,9 @@ export async function HeroBlock({ block }: { block: any }) {
               <div className="hero-stats-grid">
                 {statsData.map((stat: { icon: string; value: string; label: string }, i: number) => (
                   <div key={i} className="hero-stat-item">
-                    <span className="hero-stat-icon">{stat.icon}</span>
+                    <span className="hero-stat-icon text-[var(--color-secondary)]">
+                      {IconMap[stat.icon] || <FaStar />}
+                    </span>
                     <div>
                       <span className="hero-stat-value">{stat.value}</span>
                       <span className="hero-stat-label">{stat.label}</span>

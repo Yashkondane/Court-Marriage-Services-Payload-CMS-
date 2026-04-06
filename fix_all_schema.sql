@@ -1339,6 +1339,34 @@ CREATE INDEX IF NOT EXISTS "pv_blk_hero_stats_order" ON "_pages_v_blocks_hero_st
 CREATE INDEX IF NOT EXISTS "pv_blk_hero_stats_parent" ON "_pages_v_blocks_hero_stats" ("_parent_id");
 
 -- =============================================================================
--- DONE! V3.4 - Hero stats bar now CMS-editable
+-- AA. SERVICES CAROUSEL - New overrideIcon + backgroundImage columns
 -- =============================================================================
-SELECT 'V3.4 COMPLETE!' AS status;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='pages_blocks_services_carousel_items' AND column_name='override_icon') THEN
+    ALTER TABLE "pages_blocks_services_carousel_items" ADD COLUMN "override_icon" varchar;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='pages_blocks_services_carousel_items' AND column_name='background_image_id') THEN
+    ALTER TABLE "pages_blocks_services_carousel_items" ADD COLUMN "background_image_id" integer;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='_pages_v_blocks_services_carousel_items' AND column_name='override_icon') THEN
+    ALTER TABLE "_pages_v_blocks_services_carousel_items" ADD COLUMN "override_icon" varchar;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='_pages_v_blocks_services_carousel_items' AND column_name='background_image_id') THEN
+    ALTER TABLE "_pages_v_blocks_services_carousel_items" ADD COLUMN "background_image_id" integer;
+  END IF;
+END $$;
+
+-- =============================================================================
+-- DONE! V3.5 - Carousel icon selector + background image per card
+-- =============================================================================
+SELECT 'V3.5 COMPLETE!' AS status;

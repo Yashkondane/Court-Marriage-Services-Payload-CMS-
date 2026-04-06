@@ -59,7 +59,7 @@ export function LeadFormWidget({ services = [], locations = [] }: { services?: a
         </div>
 
         <div className="flex items-center justify-between mb-2">
-           <h3 className="text-2xl font-heading font-black text-white uppercase tracking-tight leading-none">
+           <h3 className="text-2xl font-heading font-black !text-white uppercase tracking-tight leading-none">
              Premium Legal <br /> Consultation
            </h3>
            <div className="text-right">
