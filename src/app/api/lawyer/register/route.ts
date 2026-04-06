@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase/admin'
+import { createClient } from '@supabase/supabase-js'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 
@@ -31,18 +31,23 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // 1. Create Supabase Auth user
-    const supabase = createAdminClient()
-    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+    // 1. Create Supabase Auth user via standard signUp (this triggers the confirmation email)
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      { auth: { autoRefreshToken: false, persistSession: false } }
+    )
+
+    const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
-      email_confirm: false, // User must confirm via email
-      user_metadata: { name, role: 'lawyer' },
+      options: {
+        data: { name, role: 'lawyer' },
+      },
     })
 
     if (authError) {
-      // Handle duplicate email
-      if (authError.message?.includes('already been registered')) {
+      if (authError.message?.includes('already registered') || authError.status === 422) {
         return NextResponse.json(
           { error: 'An account with this email already exists. Please login instead.' },
           { status: 409 }
@@ -51,6 +56,13 @@ export async function POST(req: NextRequest) {
       console.error('Supabase auth error:', authError)
       return NextResponse.json(
         { error: 'Failed to create account. Please try again.' },
+        { status: 500 }
+      )
+    }
+
+    if (!authData.user) {
+      return NextResponse.json(
+        { error: 'Failed to create user.' },
         { status: 500 }
       )
     }
