@@ -14,13 +14,13 @@ type PageProps = {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const payload = await getPayload({ config: configPromise })
-  const result = await payload.find({
+  const result = await (payload.find as any)({
     collection: 'lawyers',
     where: { slug: { equals: slug }, status: { equals: 'approved' } },
     limit: 1,
   })
 
-  const lawyer = result.docs[0]
+  const lawyer = result.docs[0] as any
   if (!lawyer) return { title: 'Lawyer Not Found' }
 
   return {
@@ -33,30 +33,27 @@ export default async function LawyerProfilePage({ params }: PageProps) {
   const { slug } = await params
   const payload = await getPayload({ config: configPromise })
 
-  const result = await payload.find({
+  const result = await (payload.find as any)({
     collection: 'lawyers',
     where: { slug: { equals: slug }, status: { equals: 'approved' } },
     limit: 1,
     depth: 2,
   })
 
-  const lawyer = result.docs[0]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const lawyer = result.docs[0] as any
   if (!lawyer) notFound()
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const photo = lawyer.photo as any
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const specs = (lawyer.specializations as any[]) || []
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const education = (lawyer.education as any[]) || []
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const languages = (lawyer.languages as any[]) || []
+  const photo = lawyer.photo
+  const specs = (lawyer.specializations || []) as any[]
+  const education = (lawyer.education || []) as any[]
+  const languages = (lawyer.languages || []) as any[]
 
   // Increment profile views (fire-and-forget)
   payload.update({
     collection: 'lawyers',
     id: lawyer.id,
-    data: { profileViews: ((lawyer.profileViews as number) || 0) + 1 },
+    data: { profileViews: (lawyer.profileViews || 0) + 1 } as any,
   }).catch(() => {})
 
   return (

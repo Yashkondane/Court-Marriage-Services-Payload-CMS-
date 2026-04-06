@@ -41,7 +41,8 @@ export async function POST(req: NextRequest) {
 
     // Find the lawyer profile linked to this Supabase user
     const payload = await getPayload({ config: configPromise })
-    const result = await payload.find({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = await (payload.find as any)({
       collection: 'lawyers',
       where: { supabaseId: { equals: authData.user.id } },
       limit: 1,
@@ -55,7 +56,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const lawyer = result.docs[0]
+    const lawyer = result.docs[0] as any
 
     return NextResponse.json({
       success: true,

@@ -19,7 +19,8 @@ async function getLawyerFromToken(req: NextRequest) {
   }
 
   const payload = await getPayload({ config: configPromise })
-  const result = await payload.find({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const result = await (payload.find as any)({
     collection: 'lawyers',
     where: { supabaseId: { equals: user.id } },
     limit: 1,
@@ -79,9 +80,10 @@ export async function PATCH(req: NextRequest) {
       }
     }
 
+    const payload = await getPayload({ config: configPromise })
+
     // If name changes, regenerate slug
     if (updateData.name && updateData.name !== lawyer.name) {
-      const payload = await getPayload({ config: configPromise })
       let baseSlug = updateData.name
         .toLowerCase()
         .trim()
@@ -113,8 +115,8 @@ export async function PATCH(req: NextRequest) {
       )
     }
 
-    const payload = await getPayload({ config: configPromise })
-    const updated = await payload.update({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const updated = await (payload.update as any)({
       collection: 'lawyers',
       id: lawyer.id,
       data: updateData,

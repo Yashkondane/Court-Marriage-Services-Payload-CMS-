@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default async function LawyersDirectoryPage() {
   const payload = await getPayload({ config: configPromise })
 
-  const result = await payload.find({
+  const result = await (payload.find as any)({
     collection: 'lawyers',
     where: { status: { equals: 'approved' } },
     limit: 100,

@@ -76,7 +76,8 @@ export async function POST(req: NextRequest) {
     }
 
     // 3. Create Lawyer profile in Payload (status: pending_review)
-    const lawyer = await payload.create({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const lawyer = await (payload.create as any)({
       collection: 'lawyers',
       data: {
         name,
@@ -91,13 +92,8 @@ export async function POST(req: NextRequest) {
       },
     })
 
-    // 4. Send confirmation email via Supabase
-    // Supabase auto-sends a confirmation email when email_confirm is false
-    // We can also trigger it manually:
-    await supabase.auth.admin.generateLink({
-      type: 'signup',
-      email,
-    })
+    // 4. Supabase auto-sends a confirmation email when email_confirm is false
+    // No need to call generateLink separately
 
     return NextResponse.json({
       success: true,
