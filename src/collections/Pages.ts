@@ -41,31 +41,29 @@ export const Pages: CollectionConfig = {
   },
   hooks: {
     beforeValidate: [
-      ({ data }) => {
-        // If Payload admin UI groups IDs or sends duplicates, we force new UUIDs for every nested array item
+      ({ data, req, operation }) => {
         const { randomUUID } = require('crypto');
         if (data && data.layout && Array.isArray(data.layout)) {
           const usedIds = new Set();
           
           data.layout = data.layout.map((block: any) => {
-            // Ensure unique block ID
-            if (!block.id || usedIds.has(block.id)) {
+            // Force completely new IDs if this is a brand new page being created,
+            // OR if the React UI accidentally duplicated an ID
+            if (operation === 'create' || !block.id || usedIds.has(block.id)) {
                block.id = randomUUID();
             }
             usedIds.add(block.id);
 
-            // Ensure unique nested items ID for ServicesCarousel
             if (block.blockType === 'servicesCarousel' && Array.isArray(block.items)) {
               block.items = block.items.map((item: any) => {
-                 item.id = randomUUID();
+                 if (operation === 'create' || !item.id) item.id = randomUUID();
                  return item;
               });
             }
 
-            // Ensure unique nested items ID for RegistrationLicenses
             if (block.blockType === 'registrationLicenses' && Array.isArray(block.cards)) {
               block.cards = block.cards.map((card: any) => {
-                 card.id = randomUUID();
+                 if (operation === 'create' || !card.id) card.id = randomUUID();
                  return card;
               });
             }
