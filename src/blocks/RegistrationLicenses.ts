@@ -31,14 +31,7 @@ export const RegistrationLicenses: Block = {
       minRows: 1,
       maxRows: 12,
       fields: [
-        {
-          name: 'id',
-          type: 'text',
-          admin: { hidden: true },
-          hooks: {
-            beforeChange: [({ value }) => value || crypto.randomUUID()],
-          },
-        },
+
         {
           name: 'title',
           type: 'text',

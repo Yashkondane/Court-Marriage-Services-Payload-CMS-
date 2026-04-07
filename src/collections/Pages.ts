@@ -39,12 +39,46 @@ export const Pages: CollectionConfig = {
     update: isAdmin,
     delete: isAdmin,
   },
+  hooks: {
+    beforeValidate: [
+      ({ data }) => {
+        // If Payload admin UI groups IDs or sends duplicates, we force new UUIDs for every nested array item
+        const { randomUUID } = require('crypto');
+        if (data && data.layout && Array.isArray(data.layout)) {
+          const usedIds = new Set();
+          
+          data.layout = data.layout.map((block: any) => {
+            // Ensure unique block ID
+            if (!block.id || usedIds.has(block.id)) {
+               block.id = randomUUID();
+            }
+            usedIds.add(block.id);
+
+            // Ensure unique nested items ID for ServicesCarousel
+            if (block.blockType === 'servicesCarousel' && Array.isArray(block.items)) {
+              block.items = block.items.map((item: any) => {
+                 item.id = randomUUID();
+                 return item;
+              });
+            }
+
+            // Ensure unique nested items ID for RegistrationLicenses
+            if (block.blockType === 'registrationLicenses' && Array.isArray(block.cards)) {
+              block.cards = block.cards.map((card: any) => {
+                 card.id = randomUUID();
+                 return card;
+              });
+            }
+
+            return block;
+          });
+        }
+        return data;
+      }
+    ]
+  },
   fields: [
-    {
-      name: 'id',
-      type: 'number',
-      admin: { hidden: true },
-    },
+
     {
       type: 'tabs',
       tabs: [

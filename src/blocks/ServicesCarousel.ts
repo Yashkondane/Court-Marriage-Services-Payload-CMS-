@@ -21,14 +21,7 @@ export const ServicesCarousel: Block = {
         description: 'Add and reorder services for the carousel. You can also override the default service icon here.',
       },
       fields: [
-        {
-          name: 'id',
-          type: 'text',
-          admin: { hidden: true },
-          hooks: {
-            beforeChange: [({ value }) => value || crypto.randomUUID()],
-          },
-        },
+
         {
           name: 'service',
           type: 'relationship',
