@@ -41,6 +41,11 @@ export const Pages: CollectionConfig = {
   },
   fields: [
     {
+      name: 'id',
+      type: 'number',
+      admin: { hidden: true },
+    },
+    {
       type: 'tabs',
       tabs: [
         {
