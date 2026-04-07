@@ -1,5 +1,6 @@
-import { Block } from 'payload'
+import type { Block } from 'payload'
 import { visibilityFields } from './shared/visibilityFields'
+import { randomUUID } from 'crypto'
 
 export const ServicesCarousel: Block = {
   slug: 'servicesCarousel',
@@ -20,6 +21,14 @@ export const ServicesCarousel: Block = {
         description: 'Add and reorder services for the carousel. You can also override the default service icon here.',
       },
       fields: [
+        {
+          name: 'id',
+          type: 'text',
+          admin: { hidden: true },
+          hooks: {
+            beforeChange: [({ value }) => value || crypto.randomUUID()],
+          },
+        },
         {
           name: 'service',
           type: 'relationship',

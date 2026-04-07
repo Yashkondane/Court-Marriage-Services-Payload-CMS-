@@ -1,5 +1,6 @@
 import type { Block } from 'payload'
 import { visibilityFields } from './shared/visibilityFields'
+import { randomUUID } from 'crypto'
 
 export const RegistrationLicenses: Block = {
   slug: 'registrationLicenses',
@@ -30,6 +31,14 @@ export const RegistrationLicenses: Block = {
       minRows: 1,
       maxRows: 12,
       fields: [
+        {
+          name: 'id',
+          type: 'text',
+          admin: { hidden: true },
+          hooks: {
+            beforeChange: [({ value }) => value || crypto.randomUUID()],
+          },
+        },
         {
           name: 'title',
           type: 'text',
