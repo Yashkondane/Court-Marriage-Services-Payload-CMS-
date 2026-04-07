@@ -123,7 +123,7 @@ export const Pages: CollectionConfig = {
                 Documents,
               ],
               admin: {
-                description: '🎨 Build your webpage here! Click "Add Block" below to stack sections (like a Hero banner, then a Services Carousel). You can drag and drop them to reorder.',
+                description: '🎨 Build your webpage here! Click "Add Block" below to stack sections. ⚠️ CRITICAL WARNING: If you forget a required field, hit Save, and get an error, DO NOT hit save again. Delete the blocks and re-add them, or start a new page, otherwise it will crash the save pipeline!',
               },
             },
           ],
