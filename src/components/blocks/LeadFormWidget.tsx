@@ -53,7 +53,7 @@ export function LeadFormWidget({ services = [], locations = [] }: { services?: a
       {/* Form Header */}
       <div className="p-8 pb-4 relative overflow-hidden bg-gradient-to-b from-white/5 to-transparent">
         <div className="absolute top-0 right-0 p-4">
-           <div className="text-[10px] font-black bg-[var(--color-secondary)] text-black px-3 py-1 rounded-sm uppercase tracking-widest shadow-lg">
+           <div className="font-heading text-[10px] font-black bg-[var(--color-secondary)] text-black px-3 py-1 rounded-sm uppercase tracking-widest shadow-lg">
              Most Trusted Legal Platform
            </div>
         </div>
@@ -70,7 +70,7 @@ export function LeadFormWidget({ services = [], locations = [] }: { services?: a
                   </div>
                 ))}
               </div>
-              <span className="block text-[10px] font-black text-gray-500 uppercase tracking-widest">Top-Rated Experts</span>
+              <span className="font-heading block text-[10px] font-black text-gray-500 uppercase tracking-widest">Top-Rated Experts</span>
            </div>
         </div>
       </div>
@@ -84,7 +84,7 @@ export function LeadFormWidget({ services = [], locations = [] }: { services?: a
             name="name" 
             required 
             placeholder="Your Name" 
-            className="w-full px-5 py-4 bg-white rounded-sm text-black font-semibold placeholder:text-gray-400 focus:ring-2 focus:ring-[var(--color-secondary)] transition-all outline-none"
+            className="font-heading w-full px-5 py-4 bg-white rounded-sm text-black font-semibold placeholder:text-gray-400 focus:ring-2 focus:ring-[var(--color-secondary)] transition-all outline-none"
           />
         </div>
         
@@ -95,7 +95,7 @@ export function LeadFormWidget({ services = [], locations = [] }: { services?: a
             name="phone" 
             required 
             placeholder="Phone Number" 
-            className="w-full px-5 py-4 bg-white rounded-sm text-black font-semibold placeholder:text-gray-400 focus:ring-2 focus:ring-[var(--color-secondary)] transition-all outline-none"
+            className="font-heading w-full px-5 py-4 bg-white rounded-sm text-black font-semibold placeholder:text-gray-400 focus:ring-2 focus:ring-[var(--color-secondary)] transition-all outline-none"
           />
         </div>
 
@@ -106,7 +106,7 @@ export function LeadFormWidget({ services = [], locations = [] }: { services?: a
             name="email" 
             required 
             placeholder="Email Address" 
-            className="w-full px-5 py-4 bg-white rounded-sm text-black font-semibold placeholder:text-gray-400 focus:ring-2 focus:ring-[var(--color-secondary)] transition-all outline-none"
+            className="font-heading w-full px-5 py-4 bg-white rounded-sm text-black font-semibold placeholder:text-gray-400 focus:ring-2 focus:ring-[var(--color-secondary)] transition-all outline-none"
           />
         </div>
 
@@ -115,7 +115,7 @@ export function LeadFormWidget({ services = [], locations = [] }: { services?: a
           <select 
             name="service" 
             required 
-            className="w-full px-5 py-4 bg-white rounded-sm text-black font-bold focus:ring-2 focus:ring-[var(--color-secondary)] transition-all outline-none appearance-none cursor-pointer"
+            className="font-heading w-full px-5 py-4 bg-white rounded-sm text-black font-bold focus:ring-2 focus:ring-[var(--color-secondary)] transition-all outline-none appearance-none cursor-pointer"
           >
             <option value="">Legal Matter</option>
             {services.map((svc) => (
@@ -138,7 +138,7 @@ export function LeadFormWidget({ services = [], locations = [] }: { services?: a
                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
               </svg>
-              <span className="text-sm font-black">Request Priority Call</span>
+              <span className="font-heading text-sm font-black uppercase tracking-widest">Request Priority Call</span>
             </>
           )}
         </button>
@@ -147,7 +147,7 @@ export function LeadFormWidget({ services = [], locations = [] }: { services?: a
            <svg className="w-3.5 h-3.5 text-[var(--color-secondary)]" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
            </svg>
-           <span className="text-[11px] font-bold text-white uppercase tracking-wider">Typically responds in &lt; 5 mins</span>
+           <span className="font-heading text-[11px] font-bold text-white uppercase tracking-wider">Typically responds in &lt; 5 mins</span>
         </div>
       </form>
     </div>

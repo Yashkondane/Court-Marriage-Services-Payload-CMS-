@@ -6,16 +6,45 @@ export const Media: CollectionConfig = {
   slug: 'media',
   upload: {
     mimeTypes: ['image/*', 'video/*', 'application/pdf'],
-    formatOptions: {
-      format: 'webp',
-      options: {
-        quality: 80,
-      },
-    },
     imageSizes: [
       { name: 'thumbnail', width: 300, height: 300, position: 'centre' },
       { name: 'card', width: 768, height: 432, position: 'centre' },
       { name: 'hero', width: 1920, height: 1080, position: 'centre' },
+    ],
+  },
+  hooks: {
+    beforeOperation: [
+      async ({ args, operation }) => {
+        if ((operation === 'create' || operation === 'update') && args.req?.file) {
+          const file = args.req.file
+          // Convert if it's an image (but not already webp, svg, or gif)
+          if (
+            file.mimetype?.startsWith('image/') &&
+            !['image/webp', 'image/svg+xml', 'image/gif'].includes(file.mimetype)
+          ) {
+            try {
+              const sharp = require('sharp')
+              // Crush it to webp
+              const webpBuffer = await sharp(file.data)
+                .webp({ quality: 80 })
+                .toBuffer()
+
+              // Update the payload internal file object explicitly to webp
+              file.data = webpBuffer
+              file.mimetype = 'image/webp'
+              file.size = webpBuffer.length
+
+              // Correctly swap the string extension (.jpg / .png -> .webp)
+              const nameParts = file.name.split('.')
+              nameParts.pop()
+              file.name = `${nameParts.join('.')}.webp`
+            } catch (err) {
+              console.error('WebP conversion failed', err)
+            }
+          }
+        }
+        return args
+      },
     ],
   },
   admin: {
