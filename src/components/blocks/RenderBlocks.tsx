@@ -12,7 +12,7 @@ import { ServicesCarouselBlock } from './ServicesCarouselBlock'
 import { LawyersCarouselBlock } from './LawyersCarouselBlock'
 import { LogosBlock } from './LogosBlock'
 import { CodeSnippetBlock } from './CodeSnippetBlock'
-import { LawyerListBlock } from './LawyerListBlock'
+
 import { DocumentsBlock } from './DocumentsBlock'
 import { WhyChooseUsBlock } from '@/components/blocks/WhyChooseUsBlock'
 import { RegistrationLicensesBlock } from '@/components/blocks/RegistrationLicensesBlock'
@@ -40,7 +40,7 @@ const blockComponents: Record<string, React.FC<{ block: Block }>> = {
   lawyersCarousel: LawyersCarouselBlock,
   logos: LogosBlock,
   codeSnippet: CodeSnippetBlock,
-  lawyerList: LawyerListBlock,
+
   documents: DocumentsBlock,
 }
 

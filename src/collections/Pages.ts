@@ -18,7 +18,7 @@ import { ServicesCarousel } from '@/blocks/ServicesCarousel'
 import { LawyersCarousel } from '@/blocks/LawyersCarousel'
 import { CodeSnippet } from '@/blocks/CodeSnippet'
 import { Logos } from '@/blocks/Logos'
-import { LawyerList } from '@/blocks/LawyerList'
+
 import { Documents } from '@/blocks/Documents'
 
 export const Pages: CollectionConfig = {
@@ -33,7 +33,10 @@ export const Pages: CollectionConfig = {
     group: 'Web Pages',
   },
   versions: {
-    drafts: true,
+    drafts: {
+      autosave: false,
+    },
+    maxPerDoc: 10,
   },
   access: {
     create: isAdmin,
@@ -84,7 +87,7 @@ export const Pages: CollectionConfig = {
                 LawyersCarousel,
                 CodeSnippet,
                 Logos,
-                LawyerList,
+
                 Documents,
               ],
               admin: {

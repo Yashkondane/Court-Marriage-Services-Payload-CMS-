@@ -20,8 +20,11 @@ export const LawyersCarousel: Block = {
       relationTo: 'lawyers',
       hasMany: true,
       required: true,
+      filterOptions: {
+        status: { equals: 'approved' },
+      },
       admin: {
-        description: 'Select and reorder the lawyers you want to feature in this carousel.',
+        description: 'Select and reorder the lawyers you want to feature in this carousel. Only approved lawyers are shown.',
       },
     },
     {

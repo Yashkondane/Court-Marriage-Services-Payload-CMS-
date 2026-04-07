@@ -46,10 +46,10 @@ export function WhyChooseUsBlock({ block }: { block: any }) {
             return (
               <div 
                 key={index}
-                className="bg-white border border-gray-100 p-8 md:p-10 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 group flex items-start gap-8"
+                className="bg-white border border-gray-100 p-8 md:p-10 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 group flex items-start gap-8"
               >
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 rounded-xl bg-amber-50 flex items-center justify-center group-hover:bg-gold-gradient transition-all duration-500">
+                  <div className="w-16 h-16 rounded-xl bg-[#fdf8ed] border border-[var(--color-secondary)]/20 flex items-center justify-center group-hover:bg-[var(--color-secondary)] group-hover:border-[var(--color-secondary)] transition-all duration-500">
                     <IconComponent className="text-3xl text-[var(--color-secondary)] group-hover:text-white transition-colors duration-500" />
                   </div>
                 </div>
@@ -68,7 +68,7 @@ export function WhyChooseUsBlock({ block }: { block: any }) {
 
         {/* Trust Badges Bar */}
         {trustBadges && trustBadges.length > 0 && (
-          <div className="pt-12 border-t border-gray-100 flex flex-wrap justify-center gap-8 md:gap-16 items-center opacity-40 hover:opacity-100 transition-opacity duration-500 grayscale hover:grayscale-0">
+          <div className="pt-12 border-t border-gray-200 flex flex-wrap justify-center gap-8 md:gap-16 items-center">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {trustBadges.map((badge: any, index: number) => (
               <React.Fragment key={index}>
@@ -76,7 +76,7 @@ export function WhyChooseUsBlock({ block }: { block: any }) {
                   {badge.badgeText}
                 </span>
                 {index < trustBadges.length - 1 && (
-                  <div className="hidden md:block h-4 w-px bg-gray-300" />
+                  <div className="hidden md:block h-5 w-px bg-gold-gradient" />
                 )}
               </React.Fragment>
             ))}

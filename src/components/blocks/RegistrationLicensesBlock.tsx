@@ -53,7 +53,9 @@ export function RegistrationLicensesBlock({ block }: { block: any }) {
             const IconComponent = IconMap[card.icon] || FaFileContract
             const CardContent = (
               <div className="h-full w-full p-8 flex flex-col items-start justify-between">
-                <IconComponent className="text-3xl text-[var(--color-secondary)] group-hover:scale-110 transition-transform duration-500" />
+                <div className="w-14 h-14 rounded-xl bg-[#fdf8ed] border border-[var(--color-secondary)]/20 flex items-center justify-center group-hover:bg-[var(--color-secondary)] group-hover:border-[var(--color-secondary)] transition-all duration-500">
+                  <IconComponent className="text-2xl text-[var(--color-secondary)] group-hover:text-white group-hover:scale-110 transition-all duration-500" />
+                </div>
                 <div>
                   <h3 className="text-lg font-heading font-black text-[#111] mb-2 group-hover:text-[var(--color-secondary)] transition-colors duration-500">
                     {card.title}
@@ -109,18 +111,20 @@ export function RegistrationLicensesBlock({ block }: { block: any }) {
         )}
 
         {/* Global Trust Indicators */}
-        <div className="mt-16 pt-8 border-t border-gray-100 flex flex-wrap justify-center items-center gap-10 md:gap-16 opacity-30 grayscale hover:opacity-60 transition-all duration-500">
+        <div className="mt-16 pt-8 border-t border-gray-200 flex flex-wrap justify-center items-center gap-10 md:gap-16">
           <div className="flex items-center gap-3">
-            <FaShieldAlt className="text-xl" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Secure Filing</span>
+            <FaShieldAlt className="text-xl text-[var(--color-secondary)]" />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#111]">Secure Filing</span>
           </div>
+          <div className="hidden md:block h-5 w-px bg-gold-gradient" />
           <div className="flex items-center gap-3">
-            <FaGavel className="text-xl" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Expert Vetted</span>
+            <FaGavel className="text-xl text-[var(--color-secondary)]" />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#111]">Expert Vetted</span>
           </div>
+          <div className="hidden md:block h-5 w-px bg-gold-gradient" />
           <div className="flex items-center gap-3">
-            <FaBolt className="text-xl" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Swift Processing</span>
+            <FaBolt className="text-xl text-[var(--color-secondary)]" />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#111]">Swift Processing</span>
           </div>
         </div>
 

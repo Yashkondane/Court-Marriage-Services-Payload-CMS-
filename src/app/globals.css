@@ -447,7 +447,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Search Bar Wrap */
 .hero-search-wrap {
   width: 100%;
-  max-width: 520px;
+  max-width: 700px;
   margin-bottom: 1.75rem;
 }
 
@@ -549,10 +549,28 @@ h1, h2, h3, h4, h5, h6 {
 
 .hero-stats-bar {
   background: #ffffff;
-  border-top: 1px solid #e5e7eb;
+  border-top: none;
   padding: 1.75rem 0;
   position: relative;
   z-index: 10;
+}
+
+.hero-stats-bar::before,
+.hero-stats-bar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(135deg, #a47e1b 0%, #d4bc6e 50%, #a47e1b 100%);
+}
+
+.hero-stats-bar::before {
+  top: 0;
+}
+
+.hero-stats-bar::after {
+  bottom: 0;
 }
 
 .hero-stats-grid {

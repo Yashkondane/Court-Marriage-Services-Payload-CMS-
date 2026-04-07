@@ -68,8 +68,8 @@ export function HowItWorksBlock({ block }: { block: any }) {
               return (
                 <div key={index} className="relative flex gap-8 group">
                   <div className="relative z-10 shrink-0">
-                    <div className="w-14 h-14 bg-white border border-gray-100 rounded-xl flex items-center justify-center shadow-sm group-hover:border-[var(--color-secondary)]/50 group-hover:shadow-md transition-all duration-500">
-                      <IconComponent className="text-xl text-[var(--color-secondary)]" />
+                    <div className="w-14 h-14 bg-[#fdf8ed] border border-[var(--color-secondary)]/20 rounded-xl flex items-center justify-center group-hover:bg-[var(--color-secondary)] group-hover:border-[var(--color-secondary)] group-hover:shadow-md transition-all duration-500">
+                      <IconComponent className="text-xl text-[var(--color-secondary)] group-hover:text-white transition-colors duration-500" />
                     </div>
                   </div>
                   <div>
