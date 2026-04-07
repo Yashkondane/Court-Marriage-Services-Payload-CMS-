@@ -32,12 +32,7 @@ export const Pages: CollectionConfig = {
     defaultColumns: ['title', 'slug', 'status', 'updatedAt'],
     group: 'Web Pages',
   },
-  versions: {
-    drafts: {
-      autosave: false,
-    },
-    maxPerDoc: 10,
-  },
+  versions: false,
   access: {
     create: isAdmin,
     read: isPublic,
