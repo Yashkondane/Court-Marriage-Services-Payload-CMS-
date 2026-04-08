@@ -3,7 +3,7 @@
 
 @theme {
   --font-heading: 'Manrope', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-body: 'Manrope', sans-serif;
 
   /* Premium Black & Gold Palette */
   --color-primary: #111111;
@@ -688,25 +688,23 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* Cards Grid */
+/* Slider Track */
+.svc-carousel-wrapper {
+  position: relative;
+  overflow: hidden; /* Hide the overflow track */
+  padding: 0;
+}
+
 .svc-carousel-track {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
   gap: 1.25rem;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
 }
 
-@media (max-width: 1279px) {
-  .svc-carousel-track { grid-template-columns: repeat(3, 1fr); }
-}
-@media (max-width: 1023px) {
-  .svc-carousel-track { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 639px) {
-  .svc-carousel-track { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; }
-}
-
-/* Individual Card */
+/* Individual Card Sizing */
 .svc-card {
+  flex: 0 0 calc((100% - (var(--cards-gap) * (var(--cards-per-view) - 1))) / var(--cards-per-view));
   background: #ffffff;
   border-radius: 8px;
   overflow: hidden;
@@ -715,8 +713,17 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
   box-shadow: 0 2px 12px rgba(0,0,0,0.06);
   transition: all 0.3s ease;
-  animation: svcCardIn 0.4s ease-out both;
 }
+
+/* Variables for grid math */
+.svc-carousel-track {
+  --cards-gap: 1.25rem;
+}
+
+@media (min-width: 1280px) { .svc-carousel-track { --cards-per-view: 4; } }
+@media (max-width: 1279px) and (min-width: 1024px) { .svc-carousel-track { --cards-per-view: 3; } }
+@media (max-width: 1023px) and (min-width: 640px) { .svc-carousel-track { --cards-per-view: 2; } }
+@media (max-width: 639px) { .svc-carousel-track { --cards-per-view: 1; } }
 
 @keyframes svcCardIn {
   from { opacity: 0; transform: translateY(12px); }
