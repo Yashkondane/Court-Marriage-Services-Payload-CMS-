@@ -40,87 +40,38 @@ export const Pages: CollectionConfig = {
     delete: isAdmin,
   },
   hooks: {
-    beforeOperation: [
-      async ({ operation, req }) => {
-        // Auto-heal ALL Postgres sequences for pages + block/array sub-tables
-        // before every create/update. This prevents the "Value must be unique: id"
-        // error caused by desynchronized auto-increment counters after partial
-        // transaction rollbacks.
-        if (operation === 'create' || operation === 'update') {
-          try {
-            const pool = (req.payload.db as any).pool;
-            if (pool?.query) {
-              await pool.query(`
-                DO $$
-                DECLARE
-                  r RECORD;
-                  tbl TEXT;
-                  max_val BIGINT;
-                BEGIN
-                  FOR r IN
-                    SELECT c.relname AS seqname
-                    FROM pg_class c
-                    WHERE c.relkind = 'S'
-                      AND c.relname LIKE 'pages%'
-                  LOOP
-                    tbl := replace(r.seqname, '_id_seq', '');
-                    BEGIN
-                      EXECUTE format(
-                        'SELECT COALESCE(MAX(id), 0) FROM %I', tbl
-                      ) INTO max_val;
-                      PERFORM setval(r.seqname, max_val + 1, false);
-                    EXCEPTION WHEN OTHERS THEN
-                      NULL;
-                    END;
-                  END LOOP;
-                END $$;
-              `);
-            }
-          } catch (_e) {
-            // Non-fatal: sequence might already be correct
-          }
-        }
-      },
-    ],
     beforeValidate: [
       ({ data }) => {
         const { randomUUID } = require('crypto');
-        const seen = new Set<string>();
 
-        // Recursively walk any object/array and regenerate every `id` field
-        // that Payload uses for blocks and array items (string UUIDs).
-        function sanitize(obj: any): void {
+        // Force-regenerate EVERY string `id` in the entire layout tree.
+        // This prevents collisions when blocks are copy-pasted between pages
+        // (the pasted block carries the original page's UUID, which already
+        // exists in the database).
+        function forceNewIds(obj: any): void {
           if (!obj || typeof obj !== 'object') return;
-
           if (Array.isArray(obj)) {
             for (const item of obj) {
               if (item && typeof item === 'object') {
-                // Every Payload array-item / block has a string `id`
-                if (typeof item.id === 'string') {
-                  if (!item.id || seen.has(item.id)) {
-                    item.id = randomUUID();
-                  }
-                  seen.add(item.id);
+                if ('id' in item && typeof item.id === 'string') {
+                  item.id = randomUUID();
                 }
-                // Recurse into all nested fields
-                sanitize(item);
+                forceNewIds(item);
               }
             }
           } else {
             for (const key of Object.keys(obj)) {
-              if (key === 'id') continue; // already handled above
+              if (key === 'id') continue;
               const val = obj[key];
-              if (Array.isArray(val)) {
-                sanitize(val);
-              } else if (val && typeof val === 'object' && !Buffer.isBuffer(val)) {
-                sanitize(val);
+              if (val && typeof val === 'object' && !Buffer.isBuffer(val)) {
+                forceNewIds(val);
               }
             }
           }
         }
 
         if (data?.layout) {
-          sanitize(data.layout);
+          forceNewIds(data.layout);
         }
         return data;
       },
