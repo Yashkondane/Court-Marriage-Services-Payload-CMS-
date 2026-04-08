@@ -41,39 +41,48 @@ export const Pages: CollectionConfig = {
   },
   hooks: {
     beforeValidate: [
-      ({ data, req, operation }) => {
+      ({ data }) => {
         const { randomUUID } = require('crypto');
-        if (data && data.layout && Array.isArray(data.layout)) {
-          const usedIds = new Set();
-          
-          data.layout = data.layout.map((block: any) => {
-            // Force completely new IDs if this is a brand new page being created,
-            // OR if the React UI accidentally duplicated an ID
-            if (operation === 'create' || !block.id || usedIds.has(block.id)) {
-               block.id = randomUUID();
-            }
-            usedIds.add(block.id);
+        const seen = new Set<string>();
 
-            if (block.blockType === 'servicesCarousel' && Array.isArray(block.items)) {
-              block.items = block.items.map((item: any) => {
-                 if (operation === 'create' || !item.id) item.id = randomUUID();
-                 return item;
-              });
-            }
+        // Recursively walk any object/array and regenerate every `id` field
+        // that Payload uses for blocks and array items (string UUIDs).
+        function sanitize(obj: any): void {
+          if (!obj || typeof obj !== 'object') return;
 
-            if (block.blockType === 'registrationLicenses' && Array.isArray(block.cards)) {
-              block.cards = block.cards.map((card: any) => {
-                 if (operation === 'create' || !card.id) card.id = randomUUID();
-                 return card;
-              });
+          if (Array.isArray(obj)) {
+            for (const item of obj) {
+              if (item && typeof item === 'object') {
+                // Every Payload array-item / block has a string `id`
+                if (typeof item.id === 'string') {
+                  if (!item.id || seen.has(item.id)) {
+                    item.id = randomUUID();
+                  }
+                  seen.add(item.id);
+                }
+                // Recurse into all nested fields
+                sanitize(item);
+              }
             }
+          } else {
+            for (const key of Object.keys(obj)) {
+              if (key === 'id') continue; // already handled above
+              const val = obj[key];
+              if (Array.isArray(val)) {
+                sanitize(val);
+              } else if (val && typeof val === 'object' && !Buffer.isBuffer(val)) {
+                sanitize(val);
+              }
+            }
+          }
+        }
 
-            return block;
-          });
+        if (data?.layout) {
+          sanitize(data.layout);
         }
         return data;
-      }
-    ]
+      },
+    ],
   },
   fields: [
 
