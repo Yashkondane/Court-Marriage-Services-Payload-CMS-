@@ -40,6 +40,48 @@ export const Pages: CollectionConfig = {
     delete: isAdmin,
   },
   hooks: {
+    beforeOperation: [
+      async ({ operation, req }) => {
+        // Auto-heal ALL Postgres sequences for pages + block/array sub-tables
+        // before every create/update. This prevents the "Value must be unique: id"
+        // error caused by desynchronized auto-increment counters after partial
+        // transaction rollbacks.
+        if (operation === 'create' || operation === 'update') {
+          try {
+            const pool = (req.payload.db as any).pool;
+            if (pool?.query) {
+              await pool.query(`
+                DO $$
+                DECLARE
+                  r RECORD;
+                  tbl TEXT;
+                  max_val BIGINT;
+                BEGIN
+                  FOR r IN
+                    SELECT c.relname AS seqname
+                    FROM pg_class c
+                    WHERE c.relkind = 'S'
+                      AND c.relname LIKE 'pages%'
+                  LOOP
+                    tbl := replace(r.seqname, '_id_seq', '');
+                    BEGIN
+                      EXECUTE format(
+                        'SELECT COALESCE(MAX(id), 0) FROM %I', tbl
+                      ) INTO max_val;
+                      PERFORM setval(r.seqname, max_val + 1, false);
+                    EXCEPTION WHEN OTHERS THEN
+                      NULL;
+                    END;
+                  END LOOP;
+                END $$;
+              `);
+            }
+          } catch (_e) {
+            // Non-fatal: sequence might already be correct
+          }
+        }
+      },
+    ],
     beforeValidate: [
       ({ data }) => {
         const { randomUUID } = require('crypto');
