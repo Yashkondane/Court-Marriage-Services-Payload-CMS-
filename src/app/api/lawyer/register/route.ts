@@ -24,6 +24,22 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    const payload = await getPayload({ config: configPromise })
+
+    // 1. Check for duplicate Email in Payload FIRST
+    const existingLawyer = await payload.find({
+      collection: 'lawyers',
+      where: { email: { equals: email.toLowerCase() } },
+      limit: 1,
+    })
+
+    if (existingLawyer.docs.length > 0) {
+      return NextResponse.json(
+        { error: 'An account with this email already exists. Please login instead.' },
+        { status: 409 }
+      )
+    }
+
     if (password.length < 6) {
       return NextResponse.json(
         { error: 'Password must be at least 6 characters.' },
@@ -31,7 +47,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // 1. Create Supabase Auth user via standard signUp (this triggers the confirmation email)
+    // 2. Create Supabase Auth user via standard signUp
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -69,10 +85,9 @@ export async function POST(req: NextRequest) {
 
     const supabaseId = authData.user.id
 
-    // 2. Generate unique slug
+    // 3. Generate unique slug
     let baseSlug = slugify(name)
     let slug = baseSlug
-    const payload = await getPayload({ config: configPromise })
 
     // Check for duplicates
     let attempt = 0
@@ -88,6 +103,8 @@ export async function POST(req: NextRequest) {
     }
 
     // 3. Create Lawyer profile in Payload (status: pending_review)
+    console.log('Creating lawyer profile with data:', { name, email, slug, supabaseId });
+    
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const lawyer = await (payload.create as any)({
       collection: 'lawyers',
@@ -118,11 +135,20 @@ export async function POST(req: NextRequest) {
         status: lawyer.status,
       },
     })
-  } catch (error: unknown) {
-    console.error('Registration error:', error)
+  } catch (error: any) {
+    console.error('Registration error details:');
+    if (error.data) {
+      console.dir(error.data, { depth: null });
+    } else {
+      console.error(error);
+    }
+    
+    // Return a more descriptive error if it's a Payload validation error
+    const message = error.data?.errors?.[0]?.message || error.message || 'Something went wrong. Please try again.';
+    
     return NextResponse.json(
-      { error: 'Something went wrong. Please try again.' },
-      { status: 500 }
+      { error: message },
+      { status: error.status || 500 }
     )
   }
 }

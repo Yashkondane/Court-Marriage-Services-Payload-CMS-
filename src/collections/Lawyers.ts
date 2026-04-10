@@ -46,10 +46,13 @@ export const Lawyers: CollectionConfig = {
       fields: [
         {
           name: 'email',
-          type: 'email',
+          type: 'text',
           required: true,
           unique: true,
-          admin: { width: '50%' },
+          admin: { 
+            width: '50%',
+            description: 'Email address (must be unique)',
+          },
         },
         {
           name: 'phone',
