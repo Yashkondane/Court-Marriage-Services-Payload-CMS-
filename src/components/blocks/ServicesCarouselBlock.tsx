@@ -30,19 +30,26 @@ const IconMap: Record<string, React.ElementType> = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function ServicesCarouselBlock({ block }: { block: any }) {
   const { heading, items } = block
-  const trackRef = useRef<HTMLDivElement>(null)
+  const [cardsPerView, setCardsPerView] = useState(4)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(false)
   
   // Filter items
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const validItems = (items || []).filter((item: any) => item.service && typeof item.service !== 'string')
-  const totalItems = validItems.length
+  const baseCount = validItems.length
   
-  const [cardsPerView, setCardsPerView] = useState(4)
-  const [currentIndex, setCurrentIndex] = useState(0) // Logic index (0 to totalItems - 1)
-  const [isTransitioning, setIsTransitioning] = useState(true)
-  const [displayIndex, setDisplayIndex] = useState(0) // The actual index for the track transform
-  
-  if (totalItems === 0) return null
+  if (baseCount === 0) return null
+
+  // Create a triple-cloned array for seamless infinite looping
+  // [Set 1 (Clones), Set 2 (Actual), Set 3 (Clones)]
+  const loopItems = [...validItems, ...validItems, ...validItems]
+
+  // Start in the middle set
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    setCurrentIndex(baseCount)
+  }, [baseCount])
 
   // Responsive cards per view
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -58,46 +65,48 @@ export function ServicesCarouselBlock({ block }: { block: any }) {
     return () => window.removeEventListener('resize', updateCardsPerView)
   }, [])
 
-  // For infinite loop, we clone cardsPerView items at BOTH ends
-  // We want the initial position to be showing the first real item
-  // After initial load, we start at transform = - (cardsPerView * cardWidth)
-  useEffect(() => {
-    setDisplayIndex(currentIndex)
-  }, [currentIndex])
+  const handleTransitionEnd = () => {
+    setIsTransitioning(false)
+    
+    // Seamless jump
+    if (currentIndex >= baseCount * 2) {
+      // If we've reached the third set, jump back to the middle set
+      setCurrentIndex(currentIndex - baseCount)
+    } else if (currentIndex < baseCount) {
+      // If we've reached the first set, jump forward to the middle set
+      setCurrentIndex(currentIndex + baseCount)
+    }
+  }
 
   const scrollPrev = () => {
-    setCurrentIndex((prev) => (prev <= 0 ? totalItems - 1 : prev - 1))
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    setCurrentIndex((prev) => prev - 1)
   }
 
   const scrollNext = useCallback(() => {
-    setCurrentIndex((prev) => (prev >= totalItems - 1 ? 0 : prev + 1))
-  }, [totalItems])
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    setCurrentIndex((prev) => prev + 1)
+  }, [isTransitioning])
 
   // Auto play
   useEffect(() => {
     const timer = setInterval(scrollNext, 5000)
     return () => clearInterval(timer)
-  }, [scrollNext])
+  }, [isTransitioning, scrollNext])
 
   const goToSlide = (index: number) => {
-    setCurrentIndex(index)
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    setCurrentIndex(baseCount + index)
   }
 
-  // Calculate the transform percentage
-  // Each card width is 100% / cardsPerView
-  // Gap is 1.25rem
-  const transformX = -(currentIndex * (100 / cardsPerView))
-  
-  // However, because we have a gap, it's better to use a simple calc-based translation
-  // Or just translate by 100% / cardsPerView per item
-  // The gap is handled by the flex container gap property.
-  // The transform should be: -(index * (card_width + gap_offset))
-  // In our CSS, card width is calc((100% - gap_total) / cards_per_view)
-  // So movement is exactly index * (100% + gap) / cards_per_view ... NO.
-  // Simplify: movement is (currentIndex * (100% / cardsPerView)) + (currentIndex * gap / cardsPerView)
-  
+  // The math: Move by one card width + one gap width per index
+  // cardWidth = (100% - (cardsPerView - 1) * gap) / cardsPerView
   const trackStyle = {
     transform: `translateX(calc(-${currentIndex} * (100% + 1.25rem) / ${cardsPerView}))`,
+    transition: isTransitioning ? 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
   }
 
   return (
@@ -119,9 +128,13 @@ export function ServicesCarouselBlock({ block }: { block: any }) {
           </button>
 
           {/* Cards Track */}
-          <div className="svc-carousel-track" style={trackStyle}>
+          <div 
+            className="svc-carousel-track" 
+            style={trackStyle}
+            onTransitionEnd={handleTransitionEnd}
+          >
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {validItems.map((item: any, idx: number) => {
+            {loopItems.map((item: any, idx: number) => {
               const service = item.service
               const selectedIconKey = item.overrideIcon || service.uiIcon || 'gavel'
               const IconComponent = IconMap[selectedIconKey] || IconMap['gavel']
@@ -131,7 +144,7 @@ export function ServicesCarouselBlock({ block }: { block: any }) {
                 : (service.highlights || [])
 
               return (
-                <div key={idx} className="svc-card">
+                <div key={`${idx}`} className="svc-card">
                   {/* Card Background Image */}
                   <div className="svc-card-img">
                     {bgImageUrl ? (
@@ -190,7 +203,7 @@ export function ServicesCarouselBlock({ block }: { block: any }) {
             <button
               key={i}
               onClick={() => goToSlide(i)}
-              className={`svc-carousel-dot ${currentIndex === i ? 'svc-carousel-dot--active' : ''}`}
+              className={`svc-carousel-dot ${(currentIndex % baseCount) === i ? 'svc-carousel-dot--active' : ''}`}
               aria-label={`Go to slide ${i + 1}`}
             />
           ))}
