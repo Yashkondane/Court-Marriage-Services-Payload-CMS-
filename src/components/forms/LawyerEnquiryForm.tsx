@@ -68,13 +68,13 @@ export default function LawyerEnquiryForm({ lawyerId, lawyerName, lawyerSlug }: 
 
   if (status === 'success') {
     return (
-      <div className="enquiry-card-v2 text-center py-12">
-        <FaCheckCircle className="text-5xl text-green-500 mx-auto mb-4" />
-        <h3 className="enquiry-title-v2">Enquiry Sent!</h3>
-        <p className="text-gray-600 mb-6">Adv. {lawyerName} will get back to you shortly.</p>
+      <div className="enquiry-card-premium text-center py-20">
+        <FaCheckCircle className="text-6xl text-amber-500 mx-auto mb-6" />
+        <h3 className="enquiry-title-premium !mb-2">Enquiry Sent!</h3>
+        <p className="enquiry-sub-premium">Adv. {lawyerName} will connect with you soon.</p>
         <button 
           onClick={() => setStatus('idle')}
-          className="text-sm font-bold text-gray-400 hover:text-gray-600 underline"
+          className="mt-8 text-xs font-bold text-amber-500/60 hover:text-amber-500 underline uppercase tracking-widest"
         >
           Send another enquiry
         </button>
@@ -83,58 +83,59 @@ export default function LawyerEnquiryForm({ lawyerId, lawyerName, lawyerSlug }: 
   }
 
   return (
-    <div className="enquiry-card-v2">
-      <h3 className="enquiry-title-v2">Enquiry to Adv. {lawyerName}</h3>
+    <div className="enquiry-card-premium">
+      <h3 className="enquiry-title-premium">Enquiry to Adv. {lawyerName}</h3>
+      <p className="enquiry-sub-premium">Response time: &lt; 24 hours</p>
       
-      <form onSubmit={handleSubmit} className="enquiry-form-v2">
-        <div className="enquiry-field-v2">
-          <label>Name<span>*</span></label>
+      <form onSubmit={handleSubmit} className="enquiry-form-premium">
+        <div className="enquiry-field-premium">
+          <label>Full Name</label>
           <input 
             type="text" 
-            placeholder="Enter Name" 
+            placeholder="John Doe" 
             required 
             value={formData.name}
             onChange={e => setFormData({ ...formData, name: e.target.value })}
           />
         </div>
 
-        <div className="enquiry-field-v2">
-          <label>Email<span>*</span></label>
+        <div className="enquiry-field-premium">
+          <label>Email Address</label>
           <input 
             type="email" 
-            placeholder="Enter Email" 
+            placeholder="john@example.com" 
             required 
             value={formData.email}
             onChange={e => setFormData({ ...formData, email: e.target.value })}
           />
         </div>
 
-        <div className="enquiry-field-v2">
-          <label>Phone<span>*</span></label>
+        <div className="enquiry-field-premium">
+          <label>Phone Number</label>
           <input 
             type="tel" 
-            placeholder="Enter Phone" 
+            placeholder="+91 00000 00000" 
             required 
             value={formData.phone}
             onChange={e => setFormData({ ...formData, phone: e.target.value })}
           />
         </div>
 
-        <div className="enquiry-field-v2">
-          <label>Subject<span>*</span></label>
+        <div className="enquiry-field-premium">
+          <label>Legal Subject</label>
           <input 
             type="text" 
-            placeholder="Enter Subject" 
+            placeholder="Case Subject" 
             required 
             value={formData.subject}
             onChange={e => setFormData({ ...formData, subject: e.target.value })}
           />
         </div>
 
-        <div className="enquiry-field-v2">
-          <label>Message<span>*</span></label>
+        <div className="enquiry-field-premium">
+          <label>Case Details</label>
           <textarea 
-            placeholder="Enter Message" 
+            placeholder="Describe your legal matter..." 
             required 
             rows={4}
             value={formData.message}
@@ -143,7 +144,7 @@ export default function LawyerEnquiryForm({ lawyerId, lawyerName, lawyerSlug }: 
         </div>
 
         {status === 'error' && (
-          <div className="flex items-center gap-2 text-red-600 text-sm font-bold">
+          <div className="flex items-center gap-2 text-rose-500 text-sm font-bold bg-rose-500/10 p-3 rounded-lg border border-rose-500/20">
             <FaExclamationCircle />
             <span>{errorMsg}</span>
           </div>
@@ -152,24 +153,25 @@ export default function LawyerEnquiryForm({ lawyerId, lawyerName, lawyerSlug }: 
         <button 
           type="submit" 
           disabled={status === 'loading' || cooldown > 0} 
-          className="enquiry-submit-v2"
+          className="enquiry-submit-premium"
         >
           {status === 'loading' ? (
             <FaSpinner className="animate-spin" />
           ) : (
             <>
-              <span>Submit</span>
+              <span>Submit Case</span>
               <FaPaperPlane className="text-sm" />
             </>
           )}
         </button>
 
         {cooldown > 0 && (
-          <p className="text-[10px] text-center text-gray-400 font-bold uppercase tracking-widest mt-2">
-            Please wait {cooldown}s before sending another
-          </p>
+          <div className="text-[10px] text-center text-amber-500/40 font-bold uppercase tracking-widest mt-2 bg-amber-500/5 py-2 rounded-full border border-amber-500/10">
+            Cooldown: {cooldown}s
+          </div>
         )}
       </form>
     </div>
   )
 }
+
