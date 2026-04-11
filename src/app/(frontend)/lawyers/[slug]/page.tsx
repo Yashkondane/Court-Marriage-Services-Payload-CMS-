@@ -136,7 +136,7 @@ export default async function LawyerProfilePage({ params }: PageProps) {
             <div className="lawyer-card-premium">
               <h3 className="lawyer-card-title-premium">Practicing Courts</h3>
               <div className="lawyer-courts-list">
-                {(lawyer.courts || 'Supreme Court of India, Delhi High Court, District Courts').split(',').map((court, i) => (
+                {(lawyer.courts || 'Supreme Court of India, Delhi High Court, District Courts').split(',').map((court: string, i: number) => (
                   <div key={i} className="lawyer-court-tag">
                     <FaGavel className="mr-2 inline inline-block" />
                     {court.trim()}
