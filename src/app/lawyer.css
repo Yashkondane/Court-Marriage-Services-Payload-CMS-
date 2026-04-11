@@ -1024,3 +1024,279 @@
   padding: 4rem;
   color: #9ca3af;
 }
+
+/* ==========================================================================
+   PREMIUM ADVOCATE REDESIGN (REF screenshot)
+   ========================================================================== */
+
+.lawyer-profile-v2 {
+  background: #fdfdfd;
+  min-height: 100vh;
+}
+
+.lawyer-card-main {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.lawyer-header-title {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #1a202c;
+  margin-bottom: 2rem;
+}
+
+.lawyer-info-flex {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+}
+
+@media (max-width: 640px) {
+  .lawyer-info-flex { flex-direction: column; align-items: center; text-align: center; }
+}
+
+.lawyer-avatar-v2 {
+  width: 150px;
+  height: 150px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  border: 1px solid #edf2f7;
+}
+
+.lawyer-avatar-v2 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lawyer-verify-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  background: #10b981;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border: 2px solid #fff;
+}
+
+.lawyer-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.lawyer-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #4a5568;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.lawyer-detail-item svg {
+  color: #a0aec0;
+  font-size: 1.1rem;
+}
+
+.lawyer-rating-v2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.lawyer-rating-stars {
+  display: flex;
+  gap: 4px;
+  color: #f6ad55;
+}
+
+.lawyer-rating-count {
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.lawyer-rating-count span {
+  color: #718096;
+  font-weight: 500;
+}
+
+.lawyer-separator {
+  height: 1px;
+  background: #edf2f7;
+  margin: 2.5rem 0;
+}
+
+.lawyer-section-v2 { padding: 0; }
+
+.lawyer-section-v2 h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1a202c;
+  margin-bottom: 1rem;
+}
+
+.lawyer-section-v2 h3 span { color: #1a202c; }
+
+.lawyer-bio-v2 {
+  color: #4a5568;
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+.lawyer-see-more {
+  color: #e53e3e;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 0.75rem;
+}
+
+/* Specialization Section */
+.lawyer-specs-container {
+  margin-top: 2rem;
+}
+
+.lawyer-spec-title-main {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1a202c;
+  margin-bottom: 1.5rem;
+}
+
+.lawyer-spec-item-v2 {
+  background: #fff;
+  border: 1px solid #edf2f7;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+  transition: all 0.2s;
+}
+
+.lawyer-spec-item-v2:hover {
+  border-color: #cbd5e0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.lawyer-spec-name-v2 {
+  font-weight: 800;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.lawyer-spec-desc-v2 {
+  color: #718096;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Sidebar Enquiry Form */
+.enquiry-card-v2 {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 2rem;
+  position: sticky;
+  top: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.enquiry-title-v2 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1a202c;
+  margin-bottom: 1.5rem;
+}
+
+.enquiry-form-v2 {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.enquiry-field-v2 {
+  position: relative;
+}
+
+.enquiry-field-v2 label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+}
+
+.enquiry-field-v2 label span { color: #e53e3e; }
+
+.enquiry-field-v2 input,
+.enquiry-field-v2 textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.enquiry-field-v2 input:focus,
+.enquiry-field-v2 textarea:focus {
+  outline: none;
+  background: #fff;
+  border-color: #cbd5e0;
+  box-shadow: 0 0 0 3px rgba(160,174,192,0.1);
+}
+
+.enquiry-submit-v2 {
+  background: #e11d48; /* Premium Red */
+  color: #fff;
+  font-weight: 800;
+  padding: 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  text-transform: capitalize;
+  font-size: 1.05rem;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.2);
+}
+
+.enquiry-submit-v2:hover {
+  background: #be123c;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(225, 29, 72, 0.3);
+}
+
+.enquiry-submit-v2:active {
+  transform: translateY(0);
+}
+
+.enquiry-submit-v2:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}

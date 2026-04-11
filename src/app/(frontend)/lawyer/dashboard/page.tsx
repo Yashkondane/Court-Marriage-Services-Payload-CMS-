@@ -37,6 +37,7 @@ export default function LawyerDashboard() {
     consultationFee: '',
     availableHours: '',
     locationText: '',
+    courts: '',
     responseTime: '',
   })
 
@@ -91,6 +92,7 @@ export default function LawyerDashboard() {
           consultationFee: data.lawyer.consultationFee || '',
           availableHours: data.lawyer.availableHours || '',
           locationText: data.lawyer.locationText || '',
+          courts: data.lawyer.courts || '',
           responseTime: data.lawyer.responseTime || '',
         })
         setEducation(
@@ -182,6 +184,7 @@ export default function LawyerDashboard() {
         body: JSON.stringify({
           ...formData,
           experience: formData.experience ? parseInt(formData.experience) : undefined,
+          courts: formData.courts,
           education: education.map(e => ({
             degree: e.degree,
             college: e.college,
@@ -361,6 +364,10 @@ export default function LawyerDashboard() {
                     <div className="lawyer-auth-field">
                       <label><FaMapMarkerAlt className="mr-2" /> Location</label>
                       <input value={formData.locationText} onChange={e => setFormData({...formData, locationText: e.target.value})} placeholder="e.g., Delhi High Court" />
+                    </div>
+                    <div className="lawyer-auth-field">
+                      <label><FaPlus className="mr-2" /> Courts Practicing In</label>
+                      <textarea value={formData.courts} onChange={e => setFormData({...formData, courts: e.target.value})} placeholder="e.g., District Civil Court-1, Jamshedpur" rows={2} />
                     </div>
                   </div>
                 </div>

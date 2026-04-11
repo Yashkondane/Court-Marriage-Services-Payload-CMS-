@@ -184,6 +184,13 @@ export const Lawyers: CollectionConfig = {
       },
     },
     {
+      name: 'courts',
+      type: 'textarea',
+      admin: {
+        description: 'Courts where the lawyer practices (e.g., "District Civil Court-1, Jamshedpur")',
+      },
+    },
+    {
       name: 'location',
       type: 'relationship',
       relationTo: 'locations',

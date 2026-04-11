@@ -5,7 +5,11 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import type { Metadata } from 'next'
-import { FaStar, FaMapMarkerAlt, FaClock, FaPhone, FaEnvelope, FaGraduationCap, FaLanguage, FaMoneyBillWave, FaCalendarAlt, FaShieldAlt } from 'react-icons/fa'
+import { 
+  FaStar, FaMapMarkerAlt, FaCalendarAlt, FaLanguage, 
+  FaCheck, FaChevronDown, FaGavel
+} from 'react-icons/fa'
+import LawyerEnquiryForm from '@/components/forms/LawyerEnquiryForm'
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -24,8 +28,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!lawyer) return { title: 'Lawyer Not Found' }
 
   return {
-    title: `${lawyer.name} — ${lawyer.designation || 'Lawyer'} | VakilFirst`,
-    description: `Consult with ${lawyer.name}, an experienced ${lawyer.designation || 'lawyer'} on VakilFirst. ${lawyer.experience ? `${lawyer.experience}+ years of experience.` : ''}`,
+    title: `Advocate ${lawyer.name} — ${lawyer.designation || 'Lawyer'} | VakilFirst`,
+    description: `Consult with Advocate ${lawyer.name}, an experienced ${lawyer.designation || 'lawyer'} practicing in ${lawyer.courts || lawyer.locationText}.`,
   }
 }
 
@@ -40,16 +44,14 @@ export default async function LawyerProfilePage({ params }: PageProps) {
     depth: 2,
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lawyer = result.docs[0] as any
   if (!lawyer) notFound()
 
   const photo = lawyer.photo
   const specs = (lawyer.specializations || []) as any[]
-  const education = (lawyer.education || []) as any[]
   const languages = (lawyer.languages || []) as any[]
 
-  // Increment profile views (fire-and-forget)
+  // Increment profile views
   payload.update({
     collection: 'lawyers',
     id: lawyer.id,
@@ -57,177 +59,124 @@ export default async function LawyerProfilePage({ params }: PageProps) {
   }).catch(() => {})
 
   return (
-    <div className="lawyer-profile-page">
-      {/* Hero Section */}
-      <div className="lawyer-profile-hero">
-        <div className="container-page">
-          <div className="lawyer-profile-hero-grid">
-            {/* Photo */}
-            <div className="lawyer-profile-photo-wrap">
-              {photo?.url ? (
-                <Image
-                  src={photo.url}
-                  alt={lawyer.name as string}
-                  width={200}
-                  height={200}
-                  className="lawyer-profile-photo"
-                  quality={80}
-                />
-              ) : (
-                <div className="lawyer-profile-photo-placeholder">
-                  {(lawyer.name as string)?.charAt(0)?.toUpperCase()}
-                </div>
-              )}
-              {lawyer.isSponsored && (
-                <span className="lawyer-profile-sponsored-badge">⭐ SPONSORED</span>
-              )}
-              {lawyer.isPremiumPartner && (
-                <span className="lawyer-profile-premium-badge">💎 PREMIUM PARTNER</span>
-              )}
-            </div>
-
-            {/* Info */}
-            <div className="lawyer-profile-hero-info">
-              <h1 className="lawyer-profile-name">{lawyer.name as string}</h1>
-              {lawyer.designation && (
-                <p className="lawyer-profile-designation">{lawyer.designation as string}</p>
-              )}
-
-              <div className="lawyer-profile-meta">
-                {lawyer.experience && (
-                  <span className="lawyer-profile-meta-item">
-                    <FaCalendarAlt /> {lawyer.experience as number}+ years experience
-                  </span>
-                )}
-                {lawyer.locationText && (
-                  <span className="lawyer-profile-meta-item">
-                    <FaMapMarkerAlt /> {lawyer.locationText as string}
-                  </span>
-                )}
-                {lawyer.responseTime && (
-                  <span className="lawyer-profile-meta-item">
-                    <FaClock /> {lawyer.responseTime as string}
-                  </span>
-                )}
-              </div>
-
-              {/* Rating */}
-              <div className="lawyer-profile-rating">
-                <div className="lawyer-profile-stars">
-                  {[1, 2, 3, 4, 5].map(star => (
-                    <FaStar
-                      key={star}
-                      className={star <= Math.round(lawyer.rating as number || 0) ? 'star-filled' : 'star-empty'}
-                    />
-                  ))}
-                </div>
-                <span className="lawyer-profile-rating-text">
-                  {(lawyer.rating as number)?.toFixed(1) || '0.0'} ({lawyer.ratingCount || 0} reviews)
-                </span>
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="lawyer-profile-cta">
-                {lawyer.phone && (
-                  <a href={`tel:${lawyer.phone}`} className="lawyer-profile-btn-gold">
-                    <FaPhone /> Call Now
-                  </a>
-                )}
-                {lawyer.email && (
-                  <a href={`mailto:${lawyer.email}`} className="lawyer-profile-btn-outline">
-                    <FaEnvelope /> Send Email
-                  </a>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Body */}
-      <div className="container-page lawyer-profile-body">
+    <div className="lawyer-profile-v2">
+      <div className="container-page py-12">
         <div className="lawyer-profile-body-grid">
-          {/* Main Content */}
-          <div className="lawyer-profile-main">
-            {/* Specializations */}
-            {specs.length > 0 && (
-              <section className="lawyer-profile-section">
-                <h2 className="lawyer-profile-section-title">Practice Areas</h2>
-                <div className="lawyer-profile-specs-grid">
-                  {specs.map((spec, i) => (
-                    <div key={i} className="lawyer-profile-spec-card">
-                      <h3>{spec.title}</h3>
-                      {spec.description && <p>{spec.description}</p>}
-                      {spec.yearsInField && (
-                        <span className="lawyer-profile-spec-years">{spec.yearsInField} years in this field</span>
-                      )}
-                      {spec.service && typeof spec.service === 'object' && (
-                        <Link href={`/${spec.service.slug}`} className="lawyer-profile-spec-link">
-                          View {spec.service.title} →
-                        </Link>
-                      )}
+          {/* Main Content Column */}
+          <div className="flex flex-col gap-6">
+            <div className="lawyer-card-main">
+              <h1 className="lawyer-header-title">Advocate {lawyer.name}</h1>
+              
+              <div className="lawyer-info-flex">
+                {/* Avatar */}
+                <div className="lawyer-avatar-v2">
+                  {photo?.url ? (
+                    <Image src={photo.url} alt={lawyer.name} width={150} height={150} quality={90} />
+                  ) : (
+                    <div className="w-full h-full bg-slate-100 flex items-center justify-center text-3xl font-black text-slate-300">
+                      {lawyer.name?.charAt(0)}
                     </div>
-                  ))}
+                  )}
+                  <div className="lawyer-verify-badge">
+                    <FaCheck />
+                  </div>
                 </div>
-              </section>
-            )}
 
-            {/* Bio */}
-            {lawyer.bio && (
-              <section className="lawyer-profile-section">
-                <h2 className="lawyer-profile-section-title">About</h2>
-                <div className="rich-text">
-                  {/* Bio is richText from Payload — render as needed */}
-                  <p>Professional bio available on full profile.</p>
+                {/* Info Text */}
+                <div className="flex-1">
+                  <div className="lawyer-rating-v2">
+                    <div className="lawyer-rating-stars">
+                      {[1, 2, 3, 4, 5].map(s => (
+                        <FaStar key={s} className={s <= Math.round(lawyer.rating || 5) ? 'text-orange-400' : 'text-slate-200'} />
+                      ))}
+                    </div>
+                    <div className="lawyer-rating-count">
+                      {lawyer.rating?.toFixed(1) || '5.0'} <span>| {lawyer.ratingCount || '350'}+ Ratings</span>
+                    </div>
+                  </div>
+
+                  <div className="lawyer-detail-list">
+                    <div className="lawyer-detail-item">
+                      <FaCalendarAlt />
+                      <span>{lawyer.experience || '0'} Years Experience</span>
+                    </div>
+                    <div className="lawyer-detail-item">
+                      <FaMapMarkerAlt />
+                      <span>{lawyer.locationText || 'India'}</span>
+                    </div>
+                    <div className="lawyer-detail-item">
+                      <FaLanguage />
+                      <span>{languages.length > 0 ? languages.map(l => l.language).join(', ') : 'English, Hindi'}</span>
+                    </div>
+                  </div>
                 </div>
-              </section>
-            )}
+              </div>
+
+              <div className="lawyer-separator" />
+
+              {/* About Section */}
+              <div className="lawyer-section-v2">
+                <h3>About:</h3>
+                <div className="lawyer-bio-v2">
+                  <p>
+                    Advocate {lawyer.name} is a dedicated legal professional {lawyer.experience ? `with over ${lawyer.experience} years of experience` : ''}. 
+                    Expert at handling complex legal matters and providing strategic counsel to clients.
+                  </p>
+                </div>
+                <div className="lawyer-see-more">
+                  <span>See more</span>
+                  <FaChevronDown className="text-[10px]" />
+                </div>
+              </div>
+
+              <div className="lawyer-separator" />
+
+              {/* Courts Section */}
+              <div className="lawyer-section-v2">
+                <h3>Courts:</h3>
+                <div className="flex items-center gap-2 text-slate-600 font-medium">
+                  <span className="text-slate-400"><FaGavel /></span>
+                  <span>{lawyer.courts || 'High Court, District Courts'}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Experience & Specialization Card */}
+            <div className="lawyer-card-main">
+              <h2 className="lawyer-spec-title-main">Experience & Specialization</h2>
+              
+              <div className="flex flex-col gap-4">
+                {specs.length > 0 ? specs.map((spec, i) => (
+                  <div key={i} className="lawyer-spec-item-v2">
+                    <div className="lawyer-spec-name-v2">{spec.title}</div>
+                    <div className="lawyer-spec-desc-v2">
+                      {spec.description || `Specialized expertise in ${spec.title} matters with a proven track record of successful outcomes.`}
+                    </div>
+                  </div>
+                )) : (
+                  <div className="text-slate-400 italic py-4">No specializations listed.</div>
+                )}
+              </div>
+
+              {specs.length > 2 && (
+                <div className="flex justify-between items-center mt-6 pt-6 border-t border-slate-50">
+                  <span className="text-slate-400 font-bold text-xs uppercase tracking-widest">Total:{specs.length}</span>
+                  <div className="lawyer-see-more m-0">
+                    <span>See more</span>
+                    <FaChevronDown className="text-[10px]" />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Sidebar */}
-          <aside className="lawyer-profile-sidebar">
-            {/* Quick Info Card */}
-            <div className="lawyer-profile-sidebar-card">
-              <h3>Quick Info</h3>
-              <ul className="lawyer-profile-sidebar-list">
-                {lawyer.barCouncilId && (
-                  <li><FaShieldAlt /> <span>Bar Council: {lawyer.barCouncilId as string}</span></li>
-                )}
-                {lawyer.consultationFee && (
-                  <li><FaMoneyBillWave /> <span>Fee: {lawyer.consultationFee as string}</span></li>
-                )}
-                {lawyer.availableHours && (
-                  <li><FaClock /> <span>{lawyer.availableHours as string}</span></li>
-                )}
-                {languages.length > 0 && (
-                  <li><FaLanguage /> <span>{languages.map(l => l.language).join(', ')}</span></li>
-                )}
-              </ul>
-            </div>
-
-            {/* Education Card */}
-            {education.length > 0 && (
-              <div className="lawyer-profile-sidebar-card">
-                <h3>Education</h3>
-                <ul className="lawyer-profile-sidebar-list">
-                  {education.map((edu, i) => (
-                    <li key={i}>
-                      <FaGraduationCap />
-                      <span>{edu.degree} — {edu.college} {edu.year ? `(${edu.year})` : ''}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Lead Capture Card */}
-            <div className="lawyer-profile-sidebar-card lawyer-profile-lead-card">
-              <h3>Book a Consultation</h3>
-              <p>Get expert advice from {lawyer.name as string}</p>
-              <Link href={`/consultation?lawyer=${lawyer.slug}`} className="lawyer-profile-btn-gold" style={{ width: '100%', justifyContent: 'center' }}>
-                Book Free Consultation
-              </Link>
-            </div>
+          {/* Sidebar Column */}
+          <aside>
+            <LawyerEnquiryForm 
+              lawyerId={lawyer.id} 
+              lawyerName={lawyer.name} 
+              lawyerSlug={lawyer.slug} 
+            />
           </aside>
         </div>
       </div>
