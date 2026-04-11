@@ -8,7 +8,7 @@ import {
   FaUser, FaBriefcase, FaGraduationCap, FaChartLine, FaSignOutAlt, 
   FaCamera, FaCheckCircle, FaTimesCircle, FaExclamationCircle, 
   FaHistory, FaGlobe, FaMapMarkerAlt, FaClock, FaRupeeSign,
-  FaTrashAlt, FaPlus, FaExternalLinkAlt, FaSpinner
+  FaTrashAlt, FaPlus, FaExternalLinkAlt, FaSpinner, FaPhone
 } from 'react-icons/fa'
 
 type Tab = 'profile' | 'specializations' | 'analytics'
