@@ -93,7 +93,7 @@ export default buildConfig({
         'lawyer-media': {
           prefix: 'lawyers',
         },
-      },
+      } as any,
       bucket: process.env.S3_BUCKET || 'media',
       config: {
         forcePathStyle: true,
