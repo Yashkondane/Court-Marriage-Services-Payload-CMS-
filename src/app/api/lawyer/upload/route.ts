@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
 
-    const media = await payload.create({
+    const media = await (payload.create as any)({
       collection: 'lawyer-media',
       data: {
         alt: `Profile photo of ${lawyer.name}`,
