@@ -11,7 +11,7 @@ import {
   FaTrashAlt, FaPlus, FaExternalLinkAlt, FaSpinner, FaPhone
 } from 'react-icons/fa'
 
-type Tab = 'profile' | 'specializations' | 'analytics'
+type Tab = 'profile' | 'specializations' | 'messages' | 'analytics'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type LawyerProfile = any
@@ -57,6 +57,11 @@ export default function LawyerDashboard() {
 
   // Available services for specialization select
   const [availableServices, setAvailableServices] = useState<{ id: string; title: string; slug: string }[]>([])
+  
+  // Leads state
+  const [leads, setLeads] = useState<any[]>([])
+  const [leadsLoading, setLeadsLoading] = useState(false)
+  const [selectedLead, setSelectedLead] = useState<any>(null)
 
   const getToken = () => localStorage.getItem('lawyer_token')
 
@@ -117,6 +122,26 @@ export default function LawyerDashboard() {
     }
   }, [router])
 
+  const fetchLeads = useCallback(async () => {
+    const token = getToken()
+    if (!token) return
+
+    setLeadsLoading(true)
+    try {
+      const res = await fetch('/api/lawyer/leads', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setLeads(data.leads || [])
+      }
+    } catch {
+      setError('Failed to load messages.')
+    } finally {
+      setLeadsLoading(false)
+    }
+  }, [])
+
   const fetchServices = useCallback(async () => {
     try {
       const res = await fetch('/api/services')
@@ -133,6 +158,12 @@ export default function LawyerDashboard() {
     fetchProfile()
     fetchServices()
   }, [fetchProfile, fetchServices])
+
+  useEffect(() => {
+    if (activeTab === 'messages') {
+      fetchLeads()
+    }
+  }, [activeTab, fetchLeads])
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -192,7 +223,7 @@ export default function LawyerDashboard() {
           })),
           languages,
           specializations: specializations.map(s => ({
-            service: s.service,
+            service: s.service ? parseInt(s.service) : undefined,
             title: s.title,
             description: s.description,
             yearsInField: s.yearsInField ? parseInt(s.yearsInField) : undefined,
@@ -294,6 +325,7 @@ export default function LawyerDashboard() {
           {([
             { key: 'profile', label: 'Profile', icon: FaUser },
             { key: 'specializations', label: 'Specializations', icon: FaBriefcase },
+            { key: 'messages', label: 'Messages', icon: FaHistory },
             { key: 'analytics', label: 'Analytics', icon: FaChartLine },
           ] as { key: Tab; label: string; icon: any }[]).map(tab => (
             <button
@@ -541,6 +573,145 @@ export default function LawyerDashboard() {
                 {saving ? 'Processing...' : 'Save Specializations'}
               </button>
             </div>
+          </div>
+        )}
+
+        {/* ===== MESSAGES TAB ===== */}
+        {activeTab === 'messages' && (
+          <div className="lawyer-dash-section">
+            <div className="lawyer-dash-card">
+              <div className="lawyer-dash-card-header">
+                <div className="flex items-center gap-2">
+                  <FaHistory className="text-gold" />
+                  <h3 className="lawyer-dash-card-title m-0">Inbound Enquiries</h3>
+                </div>
+                <div className="text-xs font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full">
+                  {leads.length} TOTAL
+                </div>
+              </div>
+
+              <div className="pt-6">
+                {leadsLoading ? (
+                  <div className="py-20 text-center">
+                    <FaSpinner className="animate-spin text-3xl text-gold mx-auto mb-4" />
+                    <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Fetching your messages...</p>
+                  </div>
+                ) : leads.length > 0 ? (
+                  <div className="overflow-x-auto">
+                    <table className="lawyer-dash-table">
+                      <thead>
+                        <tr>
+                          <th>Client</th>
+                          <th>Contact</th>
+                          <th>Subject/Preview</th>
+                          <th>Date</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {leads.map((lead) => (
+                          <tr key={lead.id} className="hover:bg-gray-50/50 transition-colors">
+                            <td className="font-bold text-gray-900">{lead.name}</td>
+                            <td>
+                              <div className="text-xs space-y-1">
+                                <div className="flex items-center gap-1 text-gray-600">
+                                  <FaPhone className="text-[10px]" /> {lead.phone}
+                                </div>
+                                {lead.email && (
+                                  <div className="flex items-center gap-1 text-gray-400">
+                                    <FaGlobe className="text-[10px]" /> {lead.email}
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                            <td>
+                              <div className="max-w-[200px] truncate text-sm text-gray-600">
+                                {lead.message?.split('\n')[0] || 'No subject'}
+                              </div>
+                            </td>
+                            <td className="text-xs text-gray-400">
+                              {new Date(lead.createdAt).toLocaleDateString()}
+                            </td>
+                            <td>
+                              <button 
+                                onClick={() => setSelectedLead(lead)}
+                                className="text-gold font-bold text-xs uppercase hover:underline"
+                              >
+                                View Details
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="lawyer-dash-empty-state py-20">
+                    <FaHistory className="text-4xl text-gray-200 mx-auto mb-4" />
+                    <p className="font-bold text-gray-400 uppercase tracking-widest text-xs">No enquiries yet.</p>
+                    <p className="text-sm text-gray-400 mt-2">When clients enquire via your profile, they will appear here.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Lead Detail Modal Backdrop */}
+            {selectedLead && (
+              <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+                <div className="bg-white rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+                  <div className="p-6 border-b flex justify-between items-center bg-gray-50">
+                    <div>
+                      <h3 className="text-lg font-black text-gray-900">Enquiry Details</h3>
+                      <p className="text-xs text-gray-400 mt-1 uppercase tracking-widest font-bold">
+                        Received on {new Date(selectedLead.createdAt).toLocaleString()}
+                      </p>
+                    </div>
+                    <button onClick={() => setSelectedLead(null)} className="p-2 hover:bg-white rounded-full transition-colors text-gray-400">
+                      <FaTimesCircle className="text-2xl" />
+                    </button>
+                  </div>
+                  <div className="p-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                      <div>
+                        <span className="block text-[10px] font-black uppercase text-gold tracking-widest mb-2">Client Info</span>
+                        <h4 className="text-xl font-bold text-gray-900 mb-2">{selectedLead.name}</h4>
+                        <div className="space-y-2">
+                          <a href={`tel:${selectedLead.phone}`} className="flex items-center gap-2 text-sm text-gray-600 hover:text-gold transition-colors">
+                            <FaPhone className="text-gold" /> {selectedLead.phone}
+                          </a>
+                          {selectedLead.email && (
+                            <a href={`mailto:${selectedLead.email}`} className="flex items-center gap-2 text-sm text-gray-600 hover:text-gold transition-colors">
+                              <FaGlobe className="text-gold" /> {selectedLead.email}
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                      <div>
+                        <span className="block text-[10px] font-black uppercase text-gold tracking-widest mb-2">Lead Source</span>
+                        <div className="bg-gray-50 p-3 rounded-lg border text-xs text-gray-500 break-all">
+                          {selectedLead.sourceUrl || 'Profile Form'}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-navy/5 rounded-xl border-l-4 border-gold p-6">
+                      <span className="block text-[10px] font-black uppercase text-gold tracking-widest mb-3">Client Message</span>
+                      <p className="text-gray-800 whitespace-pre-wrap leading-relaxed">
+                        {selectedLead.message}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="p-6 bg-gray-50 border-t flex flex-wrap gap-3">
+                    <a href={`tel:${selectedLead.phone}`} className="flex-1 btn-gold py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg hover:translate-y-[-2px] transition-all">
+                      <FaPhone /> Call Now
+                    </a>
+                    <a href={`mailto:${selectedLead.email}`} className="flex-1 bg-black text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg hover:translate-y-[-2px] transition-all">
+                      <FaGlobe /> Send Email
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 

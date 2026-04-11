@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
         phone,
         message: `Subject: ${subject}\n\n${message}`,
         sourceUrl: sourceUrl || 'Direct Profile Enquiry',
-        // Optional: link to lawyer if the Leads schema ever adds a relationship
+        lawyer: lawyerId, // Link to the lawyer
       },
     })
 

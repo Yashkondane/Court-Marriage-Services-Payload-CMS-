@@ -6,7 +6,7 @@ export const Leads: CollectionConfig = {
   slug: 'leads',
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'phone', 'service', 'location', 'createdAt'],
+    defaultColumns: ['name', 'phone', 'lawyer', 'createdAt'],
     group: 'Submissions',
   },
   access: {
@@ -49,6 +49,15 @@ export const Leads: CollectionConfig = {
     {
       name: 'message',
       type: 'textarea',
+    },
+    {
+      name: 'lawyer',
+      type: 'relationship',
+      relationTo: 'lawyers',
+      required: true,
+      admin: {
+        description: 'The lawyer this enquiry is for',
+      },
     },
     {
       name: 'sourceUrl',

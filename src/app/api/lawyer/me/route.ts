@@ -4,7 +4,7 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 
 // Helper: verify Supabase JWT and get the lawyer profile
-async function getLawyerFromToken(req: NextRequest) {
+export async function getLawyerFromToken(req: NextRequest) {
   const authHeader = req.headers.get('authorization')
   if (!authHeader?.startsWith('Bearer ')) {
     return { error: 'Missing or invalid authorization header.', status: 401 }
