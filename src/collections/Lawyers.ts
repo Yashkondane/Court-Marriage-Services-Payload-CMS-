@@ -126,7 +126,7 @@ export const Lawyers: CollectionConfig = {
     {
       name: 'photo',
       type: 'upload',
-      relationTo: 'lawyer-media',
+      relationTo: 'lawyer-media' as any,
     },
     {
       name: 'designation',
