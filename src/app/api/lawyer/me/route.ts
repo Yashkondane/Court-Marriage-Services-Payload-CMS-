@@ -36,7 +36,7 @@ export async function PATCH(req: NextRequest) {
     const allowedFields = [
       'name', 'designation', 'bio', 'phone', 'photo',
       'barCouncilId', 'experience', 'consultationFee', 'availableHours',
-      'locationText', 'location', 'languages', 'education', 'specializations',
+      'locationText', 'courts', 'location', 'languages', 'education', 'specializations',
       'responseTime',
     ]
 

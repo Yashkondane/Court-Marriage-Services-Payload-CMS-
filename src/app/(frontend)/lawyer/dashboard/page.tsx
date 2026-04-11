@@ -416,30 +416,40 @@ export default function LawyerDashboard() {
                     <FaUser className="text-gold" />
                     <h3 className="lawyer-dash-card-title m-0">Professional Profile</h3>
                   </div>
-                  <div className="lawyer-dash-form-grid">
-                    <div className="lawyer-auth-field">
-                      <label>Full Name</label>
-                      <input value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                  <div className="lawyer-dash-grid">
+                    <div className="lawyer-dash-grid-full">
+                       <label className="lawyer-dash-label">Professional Bio / About Me</label>
+                       <textarea 
+                         className="lawyer-dash-input min-h-[140px]" 
+                         placeholder="Tell clients about your expertise, experience, and success stories..."
+                         value={formData.bio}
+                         onChange={e => setFormData({...formData, bio: e.target.value})}
+                       />
+                       <p className="text-[10px] text-gray-400 mt-1 italic">This will appear in the 'About' section of your public profile.</p>
                     </div>
                     <div className="lawyer-auth-field">
-                      <label>Designation</label>
-                      <input value={formData.designation} onChange={e => setFormData({...formData, designation: e.target.value})} placeholder="e.g., Senior Advocate" />
+                      <label className="lawyer-dash-label">Full Name</label>
+                      <input className="lawyer-dash-input" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
                     </div>
                     <div className="lawyer-auth-field">
-                      <label>Bar Council No.</label>
-                      <input value={formData.barCouncilId} onChange={e => setFormData({...formData, barCouncilId: e.target.value})} />
+                      <label className="lawyer-dash-label">Designation</label>
+                      <input className="lawyer-dash-input" value={formData.designation} onChange={e => setFormData({...formData, designation: e.target.value})} placeholder="e.g. Senior Advocate" />
                     </div>
                     <div className="lawyer-auth-field">
-                      <label>Experience (years)</label>
-                      <input type="number" value={formData.experience} onChange={e => setFormData({...formData, experience: e.target.value})} />
+                      <label className="lawyer-dash-label">Bar Council No.</label>
+                      <input className="lawyer-dash-input" value={formData.barCouncilId} onChange={e => setFormData({...formData, barCouncilId: e.target.value})} />
                     </div>
                     <div className="lawyer-auth-field">
-                      <label><FaRupeeSign className="mr-1" /> Consultation Fee</label>
-                      <input value={formData.consultationFee} onChange={e => setFormData({...formData, consultationFee: e.target.value})} placeholder="e.g., ₹500 - ₹2000" />
+                      <label className="lawyer-dash-label">Experience (years)</label>
+                      <input type="number" className="lawyer-dash-input" value={formData.experience} onChange={e => setFormData({...formData, experience: e.target.value})} />
                     </div>
                     <div className="lawyer-auth-field">
-                      <label><FaClock className="mr-2" /> Available Hours</label>
-                      <input value={formData.availableHours} onChange={e => setFormData({...formData, availableHours: e.target.value})} placeholder="e.g., Mon-Fri, 9AM-6PM" />
+                      <label className="lawyer-dash-label"><FaRupeeSign className="mr-1" /> Consultation Fee</label>
+                      <input className="lawyer-dash-input" value={formData.consultationFee} onChange={e => setFormData({...formData, consultationFee: e.target.value})} placeholder="e.g. ₹500 - ₹2000" />
+                    </div>
+                    <div className="lawyer-auth-field">
+                      <label className="lawyer-dash-label"><FaClock className="mr-2" /> Available Hours</label>
+                      <input className="lawyer-dash-input" value={formData.availableHours} onChange={e => setFormData({...formData, availableHours: e.target.value})} placeholder="Mon-Fri, 9AM-6PM" />
                     </div>
                   </div>
                 </div>

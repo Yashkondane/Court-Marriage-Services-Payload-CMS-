@@ -121,7 +121,9 @@ export default async function LawyerProfilePage({ params }: PageProps) {
               <h3 className="lawyer-card-title-premium">About Advocate</h3>
               <div className="lawyer-bio-premium">
                 <p className="whitespace-pre-wrap leading-relaxed">
-                  {lawyer.bio || `Advocate ${lawyer.name} is a dedicated legal professional specializing in ${lawyer.designation || 'legal matters'}. With a client-focused approach and a track record of success, they provide strategic counsel across various complex jurisdictions.`}
+                  {typeof lawyer.bio === 'string' ? lawyer.bio : 
+                   (lawyer.bio?.root ? "Professional bio being updated..." : 
+                   (lawyer.bio || `Advocate ${lawyer.name} is a dedicated legal professional specializing in ${lawyer.designation || 'legal matters'}. With a client-focused approach and a track record of success, they provide strategic counsel across various complex jurisdictions.`))}
                 </p>
                 {!lawyer.bio && (
                   <p className="mt-4 opacity-50 italic text-sm">
@@ -130,6 +132,27 @@ export default async function LawyerProfilePage({ params }: PageProps) {
                 )}
               </div>
             </div>
+
+            {/* Education Card */}
+            {lawyer.education && lawyer.education.length > 0 && (
+              <div className="lawyer-card-premium">
+                <h3 className="lawyer-card-title-premium">Education & Qualifications</h3>
+                <div className="space-y-4 pt-2">
+                  {lawyer.education.map((edu: any, i: number) => (
+                    <div key={i} className="flex items-start">
+                      <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center mr-4 shrink-0">
+                        <FaGraduationCap className="text-gold" />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-white">{edu.degree}</div>
+                        <div className="text-gray-400 text-sm">{edu.college}</div>
+                        {edu.year && <div className="text-gold/60 text-xs mt-1">Class of {edu.year}</div>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Courts Card */}
             <div className="lawyer-card-premium">
@@ -152,7 +175,7 @@ export default async function LawyerProfilePage({ params }: PageProps) {
                   <div key={i} className="lawyer-spec-item-premium">
                     <div className="lawyer-spec-name-premium">{spec.title}</div>
                     <div className="lawyer-spec-desc-premium">
-                      {spec.description || `Extensive success in handling ${spec.title} matters with top-tier legal strategy and representation.`}
+                      {spec.description && !spec.description.includes('lorem') ? spec.description : `Expert legal representation and strategic counsel in ${spec.title} matters.`}
                     </div>
                   </div>
                 )) : (
