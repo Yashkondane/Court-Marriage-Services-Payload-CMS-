@@ -120,12 +120,11 @@ export default async function LawyerProfilePage({ params }: PageProps) {
             <div className="lawyer-card-premium">
               <h3 className="lawyer-card-title-premium">About Advocate</h3>
               <div className="lawyer-bio-premium">
-                <p>
-                  Advocate {lawyer.name} is a high-profile legal expert specializing in complex corporate and civil litigation. 
-                  Renowned for achieving landmark judgments and providing strategic counsel to Fortune 500 companies and individual high-net-worth clients.
+                <p className="whitespace-pre-wrap leading-relaxed">
+                  {lawyer.bio || `Advocate ${lawyer.name} is a dedicated legal professional specializing in ${lawyer.designation || 'legal matters'}. With a client-focused approach and a track record of success, they provide strategic counsel across various complex jurisdictions.`}
                 </p>
-                {lawyer.bio && (
-                  <p className="mt-4 opacity-80 italic text-sm">
+                {!lawyer.bio && (
+                  <p className="mt-4 opacity-50 italic text-sm">
                     Detailed credentials and case history available upon verified request.
                   </p>
                 )}
@@ -136,7 +135,7 @@ export default async function LawyerProfilePage({ params }: PageProps) {
             <div className="lawyer-card-premium">
               <h3 className="lawyer-card-title-premium">Practicing Courts</h3>
               <div className="lawyer-courts-list">
-                {(lawyer.courts || 'Supreme Court of India, Delhi High Court, District Courts').split(',').map((court: string, i: number) => (
+                {(lawyer.courts || 'Supreme Court of India, Delhi High Court').split(',').map((court: string, i: number) => (
                   <div key={i} className="lawyer-court-tag">
                     <FaGavel className="mr-2 inline inline-block" />
                     {court.trim()}
@@ -153,7 +152,7 @@ export default async function LawyerProfilePage({ params }: PageProps) {
                   <div key={i} className="lawyer-spec-item-premium">
                     <div className="lawyer-spec-name-premium">{spec.title}</div>
                     <div className="lawyer-spec-desc-premium">
-                      {spec.description || `Extensive success in handling ${spec.title} matters with top-tier legal strategy.`}
+                      {spec.description || `Extensive success in handling ${spec.title} matters with top-tier legal strategy and representation.`}
                     </div>
                   </div>
                 )) : (

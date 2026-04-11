@@ -137,7 +137,10 @@ export const Lawyers: CollectionConfig = {
     },
     {
       name: 'bio',
-      type: 'richText',
+      type: 'textarea',
+      admin: {
+        description: 'Tell clients about your expertise, background, and approach.',
+      },
     },
     {
       name: 'barCouncilId',

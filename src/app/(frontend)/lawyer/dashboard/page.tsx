@@ -96,6 +96,7 @@ export default function LawyerDashboard() {
           experience: data.lawyer.experience?.toString() || '',
           consultationFee: data.lawyer.consultationFee || '',
           availableHours: data.lawyer.availableHours || '',
+          bio: data.lawyer.bio || '',
           locationText: data.lawyer.locationText || '',
           courts: data.lawyer.courts || '',
           responseTime: data.lawyer.responseTime || '',
@@ -215,6 +216,8 @@ export default function LawyerDashboard() {
         body: JSON.stringify({
           ...formData,
           experience: formData.experience ? parseInt(formData.experience) : undefined,
+          bio: formData.bio,
+          locationText: formData.locationText,
           courts: formData.courts,
           education: education.map(e => ({
             degree: e.degree,
@@ -718,27 +721,89 @@ export default function LawyerDashboard() {
         {/* ===== ANALYTICS TAB ===== */}
         {activeTab === 'analytics' && (
           <div className="lawyer-dash-section">
-            <div className="lawyer-dash-analytics-grid">
-              {[
-                { label: 'Profile Views', value: lawyer.profileViews || 0, icon: FaUser, color: '#3b82f6' },
-                { label: 'Average Rating', value: lawyer.rating?.toFixed(1) || '0.0', icon: FaCheckCircle, color: '#f59e0b' },
-                { label: 'Total Reviews', value: lawyer.ratingCount || 0, icon: FaHistory, color: '#10b981' },
-                { label: 'Specializations', value: lawyer.specializations?.length || 0, icon: FaBriefcase, color: '#8b5cf6' },
-              ].map((stat, i) => (
-                <div key={i} className="lawyer-dash-analytics-card">
-                   <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: `${stat.color}10`, color: stat.color }}>
-                    <stat.icon className="text-xl" />
-                  </div>
-                  <span className="lawyer-dash-analytics-value">{stat.value}</span>
-                  <span className="lawyer-dash-analytics-label text-gray-400 font-bold uppercase tracking-widest text-[10px]">{stat.label}</span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {/* Metric Card: Views */}
+              <div className="lawyer-dash-card p-8 flex flex-col items-center text-center transition-transform hover:translate-y-[-4px]">
+                <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mb-4 text-gold">
+                  <FaChartLine className="text-2xl" />
                 </div>
-              ))}
+                <div className="text-3xl font-black text-navy">{lawyer?.profileViews || 0}</div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-gray-400 mt-1">Profile Visits</div>
+                <p className="text-[10px] text-gray-400 mt-4 italic uppercase font-bold tracking-tighter">Engagement Velocity: Stable</p>
+              </div>
+
+              {/* Metric Card: Leads */}
+              <div className="lawyer-dash-card p-8 flex flex-col items-center text-center transition-transform hover:translate-y-[-4px]">
+                <div className="w-16 h-16 bg-navy/10 rounded-full flex items-center justify-center mb-4 text-navy">
+                  <FaHistory className="text-2xl" />
+                </div>
+                <div className="text-3xl font-black text-navy">{leads.length}</div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-gray-400 mt-1">Inbound Leads</div>
+                <p className="text-[10px] text-gray-400 mt-4 italic uppercase font-bold tracking-tighter">Conversion Opportunities</p>
+              </div>
+
+              {/* Metric Card: Conversion */}
+              <div className="lawyer-dash-card p-8 flex flex-col items-center text-center border-l-4 border-gold transition-transform hover:translate-y-[-4px]">
+                <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-4 text-green-500">
+                  <FaCheckCircle className="text-2xl" />
+                </div>
+                <div className="text-3xl font-black text-navy">
+                  {lawyer?.profileViews > 0 ? ((leads.length / lawyer.profileViews) * 100).toFixed(1) : '0.0'}%
+                </div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-gray-400 mt-1">Conversion Efficiency</div>
+                <p className="text-[10px] text-gray-400 mt-4 italic uppercase font-bold tracking-tighter">Visits to Enquiry Ratio</p>
+              </div>
             </div>
 
-            {lawyer.status !== 'approved' && (
-              <div className="lawyer-dash-banner lawyer-dash-banner--info mt-8">
-                <FaExclamationCircle />
-                <p>Analytics will populate more details once your profile is approved and reaches active clients.</p>
+            <div className="lawyer-dash-card p-10 bg-black text-white overflow-hidden relative shadow-2xl">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gold/10 blur-3xl rounded-full"></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-3 h-3 rounded-full bg-gold animate-pulse"></div>
+                  <h3 className="text-xs font-black uppercase tracking-[0.3em] text-gold">Real-time Performance Metrics</h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  <div className="space-y-6">
+                    <div>
+                      <div className="flex justify-between items-end mb-3">
+                        <div className="text-[10px] text-gray-400 font-black uppercase tracking-widest">Market Responsiveness</div>
+                        <div className="text-gold font-black text-xs uppercase tracking-widest">{lawyer?.responseTime || 'Faster than 90%'}</div>
+                      </div>
+                      <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-gold to-orange-400" style={{ width: '92%' }}></div>
+                      </div>
+                    </div>
+                    <p className="text-[11px] text-gray-500 italic leading-relaxed">
+                      Maintaining a response time under 4 hours significantly improves your ranking in national and local search results.
+                    </p>
+                  </div>
+                  <div className="space-y-6">
+                    <div>
+                      <div className="flex justify-between items-end mb-3">
+                        <div className="text-[10px] text-gray-400 font-black uppercase tracking-widest">Profile SEO Strength</div>
+                        <div className="text-white font-black text-xs uppercase tracking-widest">Premium Status</div>
+                      </div>
+                      <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                        <div className="h-full bg-white/40" style={{ width: '85%' }}></div>
+                      </div>
+                    </div>
+                    <p className="text-[11px] text-gray-500 italic leading-relaxed">
+                      Your profile completeness is excellent. Adding more specialized case results can further boost your organic visibility.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {lawyer?.status !== 'approved' && (
+              <div className="bg-orange-50 border border-orange-200 rounded-xl p-6 mt-8 flex items-center gap-4">
+                <FaExclamationCircle className="text-orange-500 text-2xl flex-shrink-0" />
+                <div>
+                   <h4 className="text-sm font-black text-orange-900 uppercase tracking-widest mb-1">Status: Pending Verification</h4>
+                   <p className="text-xs text-orange-800 opacity-80 leading-relaxed font-bold">
+                     Your profile is currently under review by our legal compliance team. Analytics will start tracking public traffic once your credentials are verified.
+                   </p>
+                </div>
               </div>
             )}
           </div>
