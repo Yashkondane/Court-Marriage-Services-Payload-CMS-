@@ -141,9 +141,9 @@ export function LawyersCarouselBlock({ block }: { block: any }) {
                       <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400">
                         <FaBalanceScale className="text-sm" />
                       </div>
-                      <p className="text-sm font-medium text-gray-500 line-clamp-1">
-                        {specializations?.map((s: any) => s.specialization).join(', ') || 'General Law'}
-                        <span className="text-[var(--color-secondary)] font-bold ml-1">, +more</span>
+                      <p className="text-sm font-bold text-gray-700 line-clamp-1">
+                        {specializations?.map((s: any) => s.title || (typeof s.service === 'object' ? s.service.title : 'General Law')).slice(0, 2).join(', ') || 'General Practice'}
+                        {specializations?.length > 2 && <span className="text-[var(--color-secondary)] font-bold ml-1">, +more</span>}
                       </p>
                     </div>
                   </div>

@@ -1,8 +1,15 @@
 'use client'
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
+import { 
+  FaUser, FaBriefcase, FaGraduationCap, FaChartLine, FaSignOutAlt, 
+  FaCamera, FaCheckCircle, FaTimesCircle, FaExclamationCircle, 
+  FaHistory, FaGlobe, FaMapMarkerAlt, FaClock, FaRupeeSign,
+  FaTrashAlt, FaPlus, FaExternalLinkAlt, FaSpinner
+} from 'react-icons/fa'
 
 type Tab = 'profile' | 'specializations' | 'analytics'
 
@@ -15,8 +22,10 @@ export default function LawyerDashboard() {
   const [lawyer, setLawyer] = useState<LawyerProfile>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Profile form state
   const [formData, setFormData] = useState({
@@ -106,7 +115,6 @@ export default function LawyerDashboard() {
     }
   }, [router])
 
-  // Fetch services list for specialization dropdown
   const fetchServices = useCallback(async () => {
     try {
       const res = await fetch('/api/services')
@@ -115,7 +123,7 @@ export default function LawyerDashboard() {
         setAvailableServices(data.docs || [])
       }
     } catch {
-      // Silently fail - services might not be available via API
+      // Silently fail
     }
   }, [])
 
@@ -123,6 +131,40 @@ export default function LawyerDashboard() {
     fetchProfile()
     fetchServices()
   }, [fetchProfile, fetchServices])
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploading(true)
+    setError('')
+    setMessage('')
+
+    try {
+      const token = getToken()
+      const fd = new FormData()
+      fd.append('file', file)
+
+      const res = await fetch('/api/lawyer/upload', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd
+      })
+
+      const data = await res.json()
+      if (data.success) {
+        setMessage('Profile photo updated successfully!')
+        // Refresh profile to get the new photo URL
+        await fetchProfile()
+      } else {
+        setError(data.error || 'Failed to upload photo.')
+      }
+    } catch {
+      setError('Network error during upload.')
+    } finally {
+      setUploading(false)
+    }
+  }
 
   async function saveProfile() {
     setSaving(true)
@@ -187,19 +229,14 @@ export default function LawyerDashboard() {
 
   if (!lawyer) return null
 
-  const statusColors: Record<string, string> = {
-    pending_review: '#f59e0b',
-    approved: '#10b981',
-    rejected: '#ef4444',
-    suspended: '#6b7280',
+  const statusConfig: Record<string, { color: string; label: string; icon: any }> = {
+    pending_review: { color: '#f59e0b', label: 'Pending Review', icon: FaHistory },
+    approved: { color: '#10b981', label: 'Approved', icon: FaCheckCircle },
+    rejected: { color: '#ef4444', label: 'Rejected', icon: FaTimesCircle },
+    suspended: { color: '#6b7280', label: 'Suspended', icon: FaExclamationCircle },
   }
 
-  const statusLabels: Record<string, string> = {
-    pending_review: '⏳ Pending Review',
-    approved: '✅ Approved',
-    rejected: '❌ Rejected',
-    suspended: '🚫 Suspended',
-  }
+  const currentStatus = statusConfig[lawyer.status] || { color: '#6b7280', label: lawyer.status, icon: FaExclamationCircle }
 
   return (
     <div className="lawyer-dash">
@@ -208,35 +245,43 @@ export default function LawyerDashboard() {
         <div className="container-page lawyer-dash-topbar-inner">
           <div className="lawyer-dash-topbar-left">
             <h1 className="lawyer-dash-title">Lawyer Dashboard</h1>
-            <span
-              className="lawyer-dash-status-badge"
-              style={{ background: statusColors[lawyer.status] || '#6b7280' }}
-            >
-              {statusLabels[lawyer.status] || lawyer.status}
-            </span>
+            <div className="lawyer-dash-status-pill" style={{ borderColor: currentStatus.color, color: currentStatus.color }}>
+              <currentStatus.icon className="text-sm" />
+              <span>{currentStatus.label}</span>
+            </div>
           </div>
           <div className="lawyer-dash-topbar-right">
             {lawyer.status === 'approved' && (
               <Link href={`/lawyers/${lawyer.slug}`} className="lawyer-dash-view-profile" target="_blank">
-                View Public Profile ↗
+                <span>View Public Profile</span>
+                <FaExternalLinkAlt className="text-xs" />
               </Link>
             )}
-            <button onClick={logout} className="lawyer-dash-logout">Logout</button>
+            <button onClick={logout} className="lawyer-dash-logout">
+              <FaSignOutAlt />
+              <span>Logout</span>
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Status Banner */}
+      {/* Status Banners (Clean) */}
       {lawyer.status === 'pending_review' && (
         <div className="lawyer-dash-banner lawyer-dash-banner--warning">
-          <strong>Profile Under Review</strong> — Our team is verifying your details. This usually takes less than 24 hours. 
-          Complete your profile below to speed up the process.
+          <FaHistory className="text-xl" />
+          <p>
+            <strong>Profile Under Review</strong> — Our team is verifying your details. This usually takes less than 24 hours. 
+            Complete your profile below to speed up the process.
+          </p>
         </div>
       )}
 
       {lawyer.status === 'rejected' && (
         <div className="lawyer-dash-banner lawyer-dash-banner--error">
-          <strong>Profile Rejected</strong> — {lawyer.statusNote || 'Please contact support for more details.'}
+          <FaTimesCircle className="text-xl" />
+          <p>
+            <strong>Profile Rejected</strong> — {lawyer.statusNote || 'Please contact support for more details.'}
+          </p>
         </div>
       )}
 
@@ -244,104 +289,177 @@ export default function LawyerDashboard() {
         {/* Tabs */}
         <div className="lawyer-dash-tabs">
           {([
-            { key: 'profile', label: 'Profile' },
-            { key: 'specializations', label: 'Specializations' },
-            { key: 'analytics', label: 'Analytics' },
-          ] as { key: Tab; label: string }[]).map(tab => (
+            { key: 'profile', label: 'Profile', icon: FaUser },
+            { key: 'specializations', label: 'Specializations', icon: FaBriefcase },
+            { key: 'analytics', label: 'Analytics', icon: FaChartLine },
+          ] as { key: Tab; label: string; icon: any }[]).map(tab => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
               className={`lawyer-dash-tab ${activeTab === tab.key ? 'lawyer-dash-tab--active' : ''}`}
             >
-              {tab.label}
+              <tab.icon className="text-base" />
+              <span>{tab.label}</span>
             </button>
           ))}
         </div>
 
-        {/* Messages */}
-        {message && <div className="lawyer-dash-msg lawyer-dash-msg--success">{message}</div>}
-        {error && <div className="lawyer-dash-msg lawyer-dash-msg--error">{error}</div>}
+        {/* Global Messages */}
+        <div className="lawyer-dash-msgs">
+          {message && <div className="lawyer-dash-msg lawyer-dash-msg--success"><FaCheckCircle /> {message}</div>}
+          {error && <div className="lawyer-dash-msg lawyer-dash-msg--error"><FaExclamationCircle /> {error}</div>}
+        </div>
 
         {/* ===== PROFILE TAB ===== */}
         {activeTab === 'profile' && (
           <div className="lawyer-dash-section">
-            <div className="lawyer-dash-card">
-              <h3 className="lawyer-dash-card-title">Basic Information</h3>
-              <div className="lawyer-dash-grid">
-                <div className="lawyer-auth-field">
-                  <label>Full Name</label>
-                  <input value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
-                </div>
-                <div className="lawyer-auth-field">
-                  <label>Designation</label>
-                  <input value={formData.designation} onChange={e => setFormData({...formData, designation: e.target.value})} placeholder="e.g., Senior Advocate" />
-                </div>
-                <div className="lawyer-auth-field">
-                  <label>Phone</label>
-                  <input value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} placeholder="+91 XXXXX XXXXX" />
-                </div>
-                <div className="lawyer-auth-field">
-                  <label>Bar Council No.</label>
-                  <input value={formData.barCouncilId} onChange={e => setFormData({...formData, barCouncilId: e.target.value})} />
-                </div>
-                <div className="lawyer-auth-field">
-                  <label>Experience (years)</label>
-                  <input type="number" value={formData.experience} onChange={e => setFormData({...formData, experience: e.target.value})} />
-                </div>
-                <div className="lawyer-auth-field">
-                  <label>Location</label>
-                  <input value={formData.locationText} onChange={e => setFormData({...formData, locationText: e.target.value})} placeholder="e.g., Connaught Place, Delhi" />
-                </div>
-                <div className="lawyer-auth-field">
-                  <label>Consultation Fee</label>
-                  <input value={formData.consultationFee} onChange={e => setFormData({...formData, consultationFee: e.target.value})} placeholder="e.g., ₹500 - ₹2000" />
-                </div>
-                <div className="lawyer-auth-field">
-                  <label>Available Hours</label>
-                  <input value={formData.availableHours} onChange={e => setFormData({...formData, availableHours: e.target.value})} placeholder="e.g., Mon-Fri, 9AM-6PM" />
-                </div>
-              </div>
-            </div>
-
-            {/* Education */}
-            <div className="lawyer-dash-card">
-              <div className="lawyer-dash-card-header">
-                <h3 className="lawyer-dash-card-title">Education</h3>
-                <button className="lawyer-dash-add-btn" onClick={() => setEducation([...education, { degree: '', college: '', year: '' }])}>+ Add</button>
-              </div>
-              {education.map((edu, i) => (
-                <div key={i} className="lawyer-dash-array-item">
-                  <div className="lawyer-dash-grid lawyer-dash-grid--3">
-                    <input placeholder="Degree (e.g., LLB)" value={edu.degree} onChange={e => { const arr = [...education]; arr[i].degree = e.target.value; setEducation(arr) }} />
-                    <input placeholder="College" value={edu.college} onChange={e => { const arr = [...education]; arr[i].college = e.target.value; setEducation(arr) }} />
-                    <input type="number" placeholder="Year" value={edu.year} onChange={e => { const arr = [...education]; arr[i].year = e.target.value; setEducation(arr) }} />
+            <div className="lawyer-dash-grid-main">
+              {/* Left Column: Photo & Basic */}
+              <div className="lawyer-dash-col-left">
+                <div className="lawyer-dash-card lawyer-dash-card--center">
+                  <div className="lawyer-dash-photo-wrap">
+                    <div className="lawyer-dash-photo shadow-lg">
+                      {lawyer.photo?.url ? (
+                        <Image src={lawyer.photo.url} alt={lawyer.name} fill className="object-cover" />
+                      ) : (
+                        <div className="lawyer-dash-photo-placeholder">
+                          <FaUser className="text-4xl text-gray-300" />
+                        </div>
+                      )}
+                      {uploading && (
+                        <div className="lawyer-dash-photo-overlay">
+                          <FaSpinner className="animate-spin text-white text-2xl" />
+                        </div>
+                      )}
+                    </div>
+                    <button 
+                      className="lawyer-dash-upload-btn"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={uploading}
+                    >
+                      <FaCamera />
+                    </button>
+                    <input 
+                      type="file" 
+                      ref={fileInputRef} 
+                      onChange={handleImageUpload} 
+                      accept="image/*" 
+                      className="hidden" 
+                    />
                   </div>
-                  <button className="lawyer-dash-remove-btn" onClick={() => setEducation(education.filter((_, idx) => idx !== i))}>✕</button>
+                  <h3 className="lawyer-dash-user-name">{lawyer.name}</h3>
+                  <p className="lawyer-dash-user-sub">{lawyer.designation || 'No designation set'}</p>
                 </div>
-              ))}
-              {education.length === 0 && <p className="lawyer-dash-empty">No education added yet.</p>}
-            </div>
 
-            {/* Languages */}
-            <div className="lawyer-dash-card">
-              <div className="lawyer-dash-card-header">
-                <h3 className="lawyer-dash-card-title">Languages</h3>
-                <button className="lawyer-dash-add-btn" onClick={() => setLanguages([...languages, { language: '' }])}>+ Add</button>
-              </div>
-              <div className="lawyer-dash-tags">
-                {languages.map((lang, i) => (
-                  <div key={i} className="lawyer-dash-tag">
-                    <input placeholder="e.g., Hindi" value={lang.language} onChange={e => { const arr = [...languages]; arr[i].language = e.target.value; setLanguages(arr) }} />
-                    <button onClick={() => setLanguages(languages.filter((_, idx) => idx !== i))}>✕</button>
+                <div className="lawyer-dash-card">
+                  <h3 className="lawyer-dash-card-title">Practice Info</h3>
+                  <div className="space-y-4 pt-4">
+                    <div className="lawyer-auth-field">
+                      <label><FaPhone className="mr-2" /> Phone</label>
+                      <input value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} placeholder="+91 XXXXX XXXXX" />
+                    </div>
+                    <div className="lawyer-auth-field">
+                      <label><FaMapMarkerAlt className="mr-2" /> Location</label>
+                      <input value={formData.locationText} onChange={e => setFormData({...formData, locationText: e.target.value})} placeholder="e.g., Delhi High Court" />
+                    </div>
                   </div>
-                ))}
+                </div>
               </div>
-              {languages.length === 0 && <p className="lawyer-dash-empty">No languages added yet.</p>}
-            </div>
 
-            <button className="lawyer-auth-btn" onClick={saveProfile} disabled={saving}>
-              {saving ? 'Saving...' : 'Save Profile'}
-            </button>
+              {/* Right Column: Extended Details */}
+              <div className="lawyer-dash-col-right">
+                <div className="lawyer-dash-card">
+                  <div className="flex items-center gap-2 mb-6 border-b pb-4">
+                    <FaUser className="text-gold" />
+                    <h3 className="lawyer-dash-card-title m-0">Professional Profile</h3>
+                  </div>
+                  <div className="lawyer-dash-form-grid">
+                    <div className="lawyer-auth-field">
+                      <label>Full Name</label>
+                      <input value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                    </div>
+                    <div className="lawyer-auth-field">
+                      <label>Designation</label>
+                      <input value={formData.designation} onChange={e => setFormData({...formData, designation: e.target.value})} placeholder="e.g., Senior Advocate" />
+                    </div>
+                    <div className="lawyer-auth-field">
+                      <label>Bar Council No.</label>
+                      <input value={formData.barCouncilId} onChange={e => setFormData({...formData, barCouncilId: e.target.value})} />
+                    </div>
+                    <div className="lawyer-auth-field">
+                      <label>Experience (years)</label>
+                      <input type="number" value={formData.experience} onChange={e => setFormData({...formData, experience: e.target.value})} />
+                    </div>
+                    <div className="lawyer-auth-field">
+                      <label><FaRupeeSign className="mr-1" /> Consultation Fee</label>
+                      <input value={formData.consultationFee} onChange={e => setFormData({...formData, consultationFee: e.target.value})} placeholder="e.g., ₹500 - ₹2000" />
+                    </div>
+                    <div className="lawyer-auth-field">
+                      <label><FaClock className="mr-2" /> Available Hours</label>
+                      <input value={formData.availableHours} onChange={e => setFormData({...formData, availableHours: e.target.value})} placeholder="e.g., Mon-Fri, 9AM-6PM" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Education Section */}
+                <div className="lawyer-dash-card">
+                  <div className="lawyer-dash-card-header">
+                    <div className="flex items-center gap-2">
+                      <FaGraduationCap className="text-gold" />
+                      <h3 className="lawyer-dash-card-title m-0">Education</h3>
+                    </div>
+                    <button className="lawyer-dash-add-btn" onClick={() => setEducation([...education, { degree: '', college: '', year: '' }])}>
+                      <FaPlus /> <span>Add Degree</span>
+                    </button>
+                  </div>
+                  <div className="space-y-4 pt-4">
+                    {education.map((edu, i) => (
+                      <div key={i} className="lawyer-dash-array-item border rounded-lg p-4 bg-gray-50/50">
+                        <div className="lawyer-dash-grid lawyer-dash-grid--3">
+                          <input placeholder="Degree (e.g., LLB)" value={edu.degree} onChange={e => { const arr = [...education]; arr[i].degree = e.target.value; setEducation(arr) }} />
+                          <input placeholder="College/University" value={edu.college} onChange={e => { const arr = [...education]; arr[i].college = e.target.value; setEducation(arr) }} />
+                          <input type="number" placeholder="Year" value={edu.year} onChange={e => { const arr = [...education]; arr[i].year = e.target.value; setEducation(arr) }} />
+                        </div>
+                        <button className="lawyer-dash-remove-btn text-red-500 hover:bg-red-50" onClick={() => setEducation(education.filter((_, idx) => idx !== i))}>
+                          <FaTrashAlt />
+                        </button>
+                      </div>
+                    ))}
+                    {education.length === 0 && <p className="lawyer-dash-empty">No qualifications added.</p>}
+                  </div>
+                </div>
+
+                {/* Languages Section */}
+                <div className="lawyer-dash-card">
+                  <div className="lawyer-dash-card-header">
+                    <div className="flex items-center gap-2">
+                      <FaGlobe className="text-gold" />
+                      <h3 className="lawyer-dash-card-title m-0">Languages</h3>
+                    </div>
+                    <button className="lawyer-dash-add-btn" onClick={() => setLanguages([...languages, { language: '' }])}>
+                      <FaPlus /> <span>Add Language</span>
+                    </button>
+                  </div>
+                  <div className="lawyer-dash-tags pt-4">
+                    {languages.map((lang, i) => (
+                      <div key={i} className="lawyer-dash-tag bg-white border">
+                        <input placeholder="e.g., English" value={lang.language} onChange={e => { const arr = [...languages]; arr[i].language = e.target.value; setLanguages(arr) }} />
+                        <button onClick={() => setLanguages(languages.filter((_, idx) => idx !== i))} className="text-gray-400 hover:text-red-500">
+                          <FaTimesCircle />
+                        </button>
+                      </div>
+                    ))}
+                    {languages.length === 0 && <p className="lawyer-dash-empty">No languages added.</p>}
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-4 mt-8">
+                   <button className="btn-gold px-12 py-4 rounded-xl font-bold shadow-lg active:scale-95 transition-all" onClick={saveProfile} disabled={saving}>
+                    {saving ? <div className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-black border-t-transparent animate-spin rounded-full" /> Saving...</div> : 'Save Profile Changes'}
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
@@ -349,61 +467,73 @@ export default function LawyerDashboard() {
         {activeTab === 'specializations' && (
           <div className="lawyer-dash-section">
             <div className="lawyer-dash-card">
-              <div className="lawyer-dash-card-header">
-                <div>
-                  <h3 className="lawyer-dash-card-title">Your Practice Areas</h3>
-                  <p className="lawyer-dash-card-desc">
-                    Add your specializations. Each one links to a service so clients can find you on the right pages.
+              <div className="lawyer-dash-card-header flex-col md:flex-row items-start md:items-center gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <FaBriefcase className="text-gold" />
+                    <h3 className="lawyer-dash-card-title m-0">Your Practice Areas</h3>
+                  </div>
+                  <p className="text-sm text-gray-500">
+                    Connect your profile to relevant legal services to be discovered by clients.
                   </p>
                 </div>
-                <button className="lawyer-dash-add-btn" onClick={() => setSpecializations([...specializations, { service: '', title: '', description: '', yearsInField: '' }])}>
-                  + Add Specialization
+                <button className="btn-gold !bg-black !text-white px-6 py-3 rounded-lg text-sm font-bold flex items-center gap-2" onClick={() => setSpecializations([...specializations, { service: '', title: '', description: '', yearsInField: '' }])}>
+                  <FaPlus /> Add Specialization
                 </button>
               </div>
 
-              {specializations.map((spec, i) => (
-                <div key={i} className="lawyer-dash-spec-card">
-                  <div className="lawyer-dash-spec-header">
-                    <span className="lawyer-dash-spec-num">#{i + 1}</span>
-                    <button className="lawyer-dash-remove-btn" onClick={() => setSpecializations(specializations.filter((_, idx) => idx !== i))}>Remove</button>
-                  </div>
-                  <div className="lawyer-dash-grid">
-                    <div className="lawyer-auth-field">
-                      <label>Service Area</label>
-                      <select value={spec.service} onChange={e => { const arr = [...specializations]; arr[i].service = e.target.value; setSpecializations(arr) }}>
-                        <option value="">Select a service...</option>
-                        {availableServices.map(svc => (
-                          <option key={svc.id} value={svc.id}>{svc.title}</option>
-                        ))}
-                      </select>
+              <div className="space-y-6 pt-6">
+                {specializations.map((spec, i) => (
+                  <div key={i} className="lawyer-dash-spec-card border-l-4 border-gold shadow-sm hover:shadow-md transition-shadow">
+                    <div className="lawyer-dash-spec-header border-b bg-gray-50/50">
+                      <span className="font-black text-xs uppercase tracking-widest text-gray-400">Specialization #{i + 1}</span>
+                      <button className="text-red-500 p-2 hover:bg-red-50 rounded" onClick={() => setSpecializations(specializations.filter((_, idx) => idx !== i))}>
+                        <FaTrashAlt />
+                      </button>
                     </div>
-                    <div className="lawyer-auth-field">
-                      <label>Your Title</label>
-                      <input placeholder="e.g., Divorce Lawyer" value={spec.title} onChange={e => { const arr = [...specializations]; arr[i].title = e.target.value; setSpecializations(arr) }} />
+                    <div className="p-6">
+                      <div className="lawyer-dash-grid">
+                        <div className="lawyer-auth-field">
+                          <label>Service Category</label>
+                          <select value={spec.service} onChange={e => { const arr = [...specializations]; arr[i].service = e.target.value; setSpecializations(arr) }}>
+                            <option value="">Select a service category...</option>
+                            {availableServices.map(svc => (
+                              <option key={svc.id} value={svc.id}>{svc.title}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="lawyer-auth-field">
+                          <label>Display Title</label>
+                          <input placeholder="e.g., Corporate Lease Expert" value={spec.title} onChange={e => { const arr = [...specializations]; arr[i].title = e.target.value; setSpecializations(arr) }} />
+                        </div>
+                      </div>
+                      <div className="lawyer-auth-field mt-4">
+                        <label>Brief Expertise Summary</label>
+                        <textarea placeholder="Tell clients about your specific experience in this area..." value={spec.description} onChange={e => { const arr = [...specializations]; arr[i].description = e.target.value; setSpecializations(arr) }} rows={3} />
+                      </div>
+                      <div className="lawyer-auth-field mt-4" style={{ maxWidth: '240px' }}>
+                        <label>Years of Practice in this Area</label>
+                        <input type="number" value={spec.yearsInField} onChange={e => { const arr = [...specializations]; arr[i].yearsInField = e.target.value; setSpecializations(arr) }} />
+                      </div>
                     </div>
                   </div>
-                  <div className="lawyer-auth-field">
-                    <label>Description</label>
-                    <textarea placeholder="Describe your expertise in this area..." value={spec.description} onChange={e => { const arr = [...specializations]; arr[i].description = e.target.value; setSpecializations(arr) }} rows={3} />
-                  </div>
-                  <div className="lawyer-auth-field" style={{ maxWidth: '200px' }}>
-                    <label>Years in this field</label>
-                    <input type="number" value={spec.yearsInField} onChange={e => { const arr = [...specializations]; arr[i].yearsInField = e.target.value; setSpecializations(arr) }} />
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
 
               {specializations.length === 0 && (
-                <div className="lawyer-dash-empty-state">
-                  <p>No specializations added yet.</p>
-                  <p>Add your practice areas so clients can find you on relevant service pages.</p>
+                <div className="lawyer-dash-empty-state py-12 text-center bg-gray-50 rounded-xl border border-dashed mt-6">
+                  <FaBriefcase className="text-4xl text-gray-200 mx-auto mb-4" />
+                  <p className="font-bold text-gray-400">No practice areas listed.</p>
+                  <p className="text-sm text-gray-400">Add specializations to appear on service search results.</p>
                 </div>
               )}
             </div>
 
-            <button className="lawyer-auth-btn" onClick={saveProfile} disabled={saving}>
-              {saving ? 'Saving...' : 'Save Specializations'}
-            </button>
+            <div className="flex justify-end mt-8">
+              <button className="btn-gold px-12 py-4 rounded-xl font-bold shadow-lg" onClick={saveProfile} disabled={saving}>
+                {saving ? 'Processing...' : 'Save Specializations'}
+              </button>
+            </div>
           </div>
         )}
 
@@ -411,27 +541,26 @@ export default function LawyerDashboard() {
         {activeTab === 'analytics' && (
           <div className="lawyer-dash-section">
             <div className="lawyer-dash-analytics-grid">
-              <div className="lawyer-dash-analytics-card">
-                <span className="lawyer-dash-analytics-value">{lawyer.profileViews || 0}</span>
-                <span className="lawyer-dash-analytics-label">Profile Views</span>
-              </div>
-              <div className="lawyer-dash-analytics-card">
-                <span className="lawyer-dash-analytics-value">{lawyer.rating?.toFixed(1) || '0.0'}</span>
-                <span className="lawyer-dash-analytics-label">Average Rating</span>
-              </div>
-              <div className="lawyer-dash-analytics-card">
-                <span className="lawyer-dash-analytics-value">{lawyer.ratingCount || 0}</span>
-                <span className="lawyer-dash-analytics-label">Total Reviews</span>
-              </div>
-              <div className="lawyer-dash-analytics-card">
-                <span className="lawyer-dash-analytics-value">{lawyer.specializations?.length || 0}</span>
-                <span className="lawyer-dash-analytics-label">Specializations</span>
-              </div>
+              {[
+                { label: 'Profile Views', value: lawyer.profileViews || 0, icon: FaUser, color: '#3b82f6' },
+                { label: 'Average Rating', value: lawyer.rating?.toFixed(1) || '0.0', icon: FaCheckCircle, color: '#f59e0b' },
+                { label: 'Total Reviews', value: lawyer.ratingCount || 0, icon: FaHistory, color: '#10b981' },
+                { label: 'Specializations', value: lawyer.specializations?.length || 0, icon: FaBriefcase, color: '#8b5cf6' },
+              ].map((stat, i) => (
+                <div key={i} className="lawyer-dash-analytics-card">
+                   <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: `${stat.color}10`, color: stat.color }}>
+                    <stat.icon className="text-xl" />
+                  </div>
+                  <span className="lawyer-dash-analytics-value">{stat.value}</span>
+                  <span className="lawyer-dash-analytics-label text-gray-400 font-bold uppercase tracking-widest text-[10px]">{stat.label}</span>
+                </div>
+              ))}
             </div>
 
             {lawyer.status !== 'approved' && (
-              <div className="lawyer-dash-banner lawyer-dash-banner--info">
-                Analytics will be more detailed once your profile is approved and live.
+              <div className="lawyer-dash-banner lawyer-dash-banner--info mt-8">
+                <FaExclamationCircle />
+                <p>Analytics will populate more details once your profile is approved and reaches active clients.</p>
               </div>
             )}
           </div>

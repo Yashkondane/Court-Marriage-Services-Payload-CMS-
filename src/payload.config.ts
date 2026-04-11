@@ -24,6 +24,7 @@ import { FAQs } from '@/collections/FAQs'
 import { Testimonials } from '@/collections/Testimonials'
 import { Gallery } from '@/collections/Gallery'
 import { Lawyers } from '@/collections/Lawyers'
+import { LawyerMedia } from '@/collections/LawyerMedia'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -52,6 +53,7 @@ export default buildConfig({
     Testimonials,
     Gallery,
     Lawyers,
+    LawyerMedia,
   ],
 
   editor: lexicalEditor({
@@ -87,6 +89,9 @@ export default buildConfig({
       collections: {
         media: {
           prefix: 'media',
+        },
+        'lawyer-media': {
+          prefix: 'lawyers',
         },
       },
       bucket: process.env.S3_BUCKET || 'media',

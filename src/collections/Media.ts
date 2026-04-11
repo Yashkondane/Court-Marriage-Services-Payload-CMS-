@@ -17,29 +17,41 @@ export const Media: CollectionConfig = {
       async ({ args, operation }) => {
         if ((operation === 'create' || operation === 'update') && args.req?.file) {
           const file = args.req.file
-          // Convert if it's an image (but not already webp, svg, or gif)
+          // Convert if it's an image (but not already svg or gif)
           if (
             file.mimetype?.startsWith('image/') &&
-            !['image/webp', 'image/svg+xml', 'image/gif'].includes(file.mimetype)
+            !['image/svg+xml', 'image/gif'].includes(file.mimetype)
           ) {
             try {
               const sharp = require('sharp')
-              // Crush it to webp
-              const webpBuffer = await sharp(file.data)
-                .webp({ quality: 80 })
+              
+              // Process image: Resize, Sharpen, and Crush to WebP
+              // 1440px is perfect for modern desktops without being excessively large
+              const processedBuffer = await sharp(file.data)
+                .resize({ 
+                  width: 1440, 
+                  withoutEnlargement: true,
+                  fit: 'inside' 
+                })
+                .sharpen({ sigma: 0.5 }) // Subtle sharpen to keep details crisp
+                .webp({ 
+                  quality: 78, // High-quality sweet spot
+                  effort: 6,   // Maximum computational compression
+                  smartSubsample: true 
+                })
                 .toBuffer()
 
-              // Update the payload internal file object explicitly to webp
-              file.data = webpBuffer
+              // Update the payload internal file object
+              file.data = processedBuffer
               file.mimetype = 'image/webp'
-              file.size = webpBuffer.length
+              file.size = processedBuffer.length
 
-              // Correctly swap the string extension (.jpg / .png -> .webp)
+              // Correctly swap the extension to .webp
               const nameParts = file.name.split('.')
               nameParts.pop()
               file.name = `${nameParts.join('.')}.webp`
             } catch (err) {
-              console.error('WebP conversion failed', err)
+              console.error('Pro Media conversion failed', err)
             }
           }
         }

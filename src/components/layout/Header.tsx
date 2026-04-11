@@ -101,22 +101,55 @@ export function Header({ navServices = [] }: { navServices?: any[] }) {
       </div>
 
       {/* Mobile Nav Menu */}
-      <div className={`lg:hidden bg-black border-t border-white/10 overflow-hidden transition-all duration-500 ease-in-out ${isMobileMenuOpen ? 'max-h-[90vh] py-8' : 'max-h-0 py-0'}`}>
-        <div className="container-page flex flex-col gap-6">
+      <div className={`lg:hidden bg-black border-t border-white/10 overflow-hidden transition-all duration-500 ease-in-out ${isMobileMenuOpen ? 'max-h-[100vh] py-8' : 'max-h-0 py-0'}`}>
+        <div className="container-page flex flex-col gap-5">
           {navLinks.map((link) => (
-            <Link 
-              key={link.label}
-              href={link.href}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-xl font-heading font-extrabold uppercase tracking-tight text-white hover:text-[var(--color-secondary)]"
-            >
-              {link.label}
-            </Link>
+            <div key={link.label} className="border-b border-white/5 pb-4 last:border-0">
+              {link.isDropdown ? (
+                <div className="flex flex-col gap-4">
+                  <div className="text-xl font-heading font-extrabold uppercase tracking-tight text-[var(--color-secondary)] flex items-center justify-between">
+                    {link.label}
+                    <svg className="w-5 h-5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                  <div className="flex flex-col gap-3 pl-4 border-l border-white/10">
+                    {navServices.slice(0, 6).map((svc: any) => (
+                      <Link 
+                        key={svc.id} 
+                        href={`/${svc.slug}`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="text-base font-bold text-gray-400 hover:text-[var(--color-secondary)] transition-colors"
+                      >
+                        {svc.title}
+                      </Link>
+                    ))}
+                    <Link 
+                      href="/services"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="text-sm font-black text-white/50 uppercase tracking-widest pt-2"
+                    >
+                      View All Services →
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <Link 
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`text-xl font-heading font-extrabold uppercase tracking-tight transition-colors ${
+                    pathname === link.href ? 'text-[var(--color-secondary)]' : 'text-white'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              )}
+            </div>
           ))}
           <Link
             href="/consultation"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="btn-gold w-full py-4 text-center mt-4"
+            className="btn-gold w-full py-5 text-center mt-4 text-base tracking-widest"
           >
             Consult a Lawyer
           </Link>

@@ -597,301 +597,354 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 1.5rem;
 }
 
-.hero-stat-value {
-  display: block;
-  font-family: var(--font-heading);
-  font-size: 1.75rem;
-  font-weight: 900;
-  color: #111111;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-.hero-stat-label {
-  display: block;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  color: #6b7280;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
 /* ==========================================================================
-   SERVICES CAROUSEL — VakilFirst Card Design
+   LAWYER DASHBOARD — Premium UI
    ========================================================================== */
 
-.svc-carousel-section {
-  padding: 5rem 0;
-  background: #f9f9f9;
-  overflow: hidden;
+.lawyer-dash {
+  min-height: 100vh;
+  background: #fcfcfc;
+  padding-bottom: 5rem;
 }
 
-.svc-carousel-header {
-  text-align: center;
-  margin-bottom: 3.5rem;
+.lawyer-dash-topbar {
+  background: #ffffff;
+  border-bottom: 1px solid #f1f1f1;
+  padding: 1.5rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
 }
 
-.svc-carousel-title {
+.lawyer-dash-topbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lawyer-dash-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.lawyer-dash-title {
   font-family: var(--font-heading);
-  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-size: 1.5rem;
   font-weight: 900;
-  color: #111 !important;
+  color: #111;
+  margin: 0;
   letter-spacing: -0.02em;
 }
 
-.svc-carousel-wrapper {
-  position: relative;
-  padding: 0 2rem;
-}
-
-/* Navigation Arrows */
-.svc-carousel-nav {
-  position: absolute;
-  top: 45%;
-  transform: translateY(-50%);
-  z-index: 10;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+.lawyer-dash-status-pill {
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: #6b7280;
+  gap: 0.5rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 99px;
+  border: 1px solid;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: #ffffff;
+}
+
+.lawyer-dash-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.lawyer-dash-view-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #111;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.lawyer-dash-view-profile:hover {
+  background: #f9f9f9;
+  color: var(--color-secondary);
+}
+
+.lawyer-dash-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #ef4444;
+  background: #fef2f2;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.svc-carousel-nav:hover {
-  color: var(--color-secondary);
-  border-color: var(--color-secondary);
-  transform: translateY(-50%) scale(1.05);
-  box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+.lawyer-dash-logout:hover {
+  background: #fee2e2;
 }
 
-.svc-carousel-nav--prev {
-  left: -8px;
-}
-
-.svc-carousel-nav--next {
-  right: -8px;
-}
-
-@media (max-width: 768px) {
-  .svc-carousel-wrapper {
-    padding: 0;
-  }
-  .svc-carousel-nav {
-    display: none;
-  }
-}
-
-/* Slider Track */
-.svc-carousel-wrapper {
-  position: relative;
-  overflow: hidden; /* Hide the overflow track */
-  padding: 0;
-}
-
-.svc-carousel-track {
-  display: flex;
-  gap: 1.25rem;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  width: 100%;
-}
-
-/* Individual Card Sizing */
-.svc-card {
-  flex: 0 0 calc((100% - (var(--cards-gap) * (var(--cards-per-view) - 1))) / var(--cards-per-view));
-  background: #ffffff;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid #e5e7eb;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  transition: all 0.3s ease;
-}
-
-/* Variables for grid math */
-.svc-carousel-track {
-  --cards-gap: 1.25rem;
-}
-
-@media (min-width: 1280px) { .svc-carousel-track { --cards-per-view: 4; } }
-@media (max-width: 1279px) and (min-width: 1024px) { .svc-carousel-track { --cards-per-view: 3; } }
-@media (max-width: 1023px) and (min-width: 640px) { .svc-carousel-track { --cards-per-view: 2; } }
-@media (max-width: 639px) { .svc-carousel-track { --cards-per-view: 1; } }
-
-@keyframes svcCardIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.svc-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
-  border-color: #d1d5db;
-}
-
-/* Card Image */
-.svc-card-img {
-  position: relative;
-  width: 100%;
-  height: 160px;
-  background: #f3f4f6;
-  overflow: hidden;
-}
-
-.svc-card-img-placeholder {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #e5e7eb, #d1d5db);
-}
-
-.svc-card-img-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.08) 100%);
-  transition: background 0.3s ease;
-}
-
-.svc-card:hover .svc-card-img-overlay {
-  background: transparent;
-}
-
-/* Card Body */
-.svc-card-body {
-  padding: 2.5rem 1.5rem 1.75rem;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  position: relative;
-}
-
-/* Icon Circle */
-.svc-card-icon-wrap {
-  position: absolute;
-  top: -2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 64px;
-  height: 64px;
-  background: #ffffff;
-  border-radius: 50%;
-  padding: 3px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-}
-
-.svc-card-icon-ring {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 1.5px solid var(--color-secondary);
+/* Banners */
+.lawyer-dash-banner {
+  margin: 1.5rem auto;
+  max-width: var(--container-width);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.lawyer-dash-banner--warning {
+  background: #fffbeb;
+  border: 1px solid #fef3c7;
+  color: #92400e;
+}
+
+.lawyer-dash-banner--error {
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  color: #991b1b;
+}
+
+.lawyer-dash-banner--info {
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  color: #1e40af;
+}
+
+/* Tabs */
+.lawyer-dash-tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: #f1f1f1;
+  padding: 0.375rem;
+  border-radius: 12px;
+  margin: 2rem 0;
+  width: fit-content;
+}
+
+.lawyer-dash-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #6b7280;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lawyer-dash-tab--active {
   background: #ffffff;
+  color: #111;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
-.svc-card-icon {
-  width: 24px;
-  height: 24px;
-  color: var(--color-secondary);
+/* Grid Layout */
+.lawyer-dash-grid-main {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 2rem;
+  align-items: start;
 }
 
-/* Card Title */
-.svc-card-title {
+@media (max-width: 1024px) {
+  .lawyer-dash-grid-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lawyer-dash-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #f1f1f1;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.02);
+}
+
+.lawyer-dash-card--center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lawyer-dash-card-title {
   font-family: var(--font-heading);
   font-size: 1.125rem;
-  font-weight: 800;
-  text-align: center;
-  color: #111 !important;
-  margin-bottom: 0.875rem;
-  line-height: 1.3;
+  font-weight: 900;
+  color: #111;
+  margin-bottom: 1.5rem;
 }
 
-/* Highlights List */
-.svc-card-highlights {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 1.25rem 0;
-  flex-grow: 1;
+/* Photo Upload */
+.lawyer-dash-photo-wrap {
+  position: relative;
+  margin-bottom: 1.5rem;
 }
 
-.svc-card-highlight {
+.lawyer-dash-photo {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #f3f4f6;
+  position: relative;
+  border: 4px solid #ffffff;
+}
+
+.lawyer-dash-photo-placeholder {
+  width: 100%;
+  height: 100%;
   display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  font-size: 0.8125rem;
-  color: #4b5563;
-  font-weight: 500;
-  line-height: 1.4;
-  margin-bottom: 0.5rem;
+  align-items: center;
+  justify-content: center;
 }
 
-.svc-card-bullet {
-  width: 5px;
-  height: 5px;
-  min-width: 5px;
+.lawyer-dash-photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lawyer-dash-upload-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: var(--color-secondary);
-  margin-top: 0.375rem;
-}
-
-/* Learn More Link */
-.svc-card-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.8125rem;
-  font-weight: 700;
   color: #111;
-  text-decoration: none;
-  transition: color 0.2s ease;
-  margin-top: auto;
-}
-
-.svc-card-link:hover {
-  color: var(--color-secondary);
-}
-
-.svc-card-arrow {
-  display: inline-block;
-  transition: transform 0.2s ease;
-}
-
-.svc-card-link:hover .svc-card-arrow {
-  transform: translateX(4px);
-}
-
-/* Carousel Dots */
-.svc-carousel-dots {
+  border: 3px solid #ffffff;
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  margin-top: 2rem;
-}
-
-.svc-carousel-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #d1d5db;
-  border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0;
+  transition: transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.svc-carousel-dot:hover {
-  background: #9ca3af;
+.lawyer-dash-upload-btn:hover {
+  transform: scale(1.1);
 }
 
-.svc-carousel-dot--active {
-  width: 28px;
-  border-radius: 4px;
-  background: #111;
+/* Forms */
+.lawyer-dash-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
 }
+
+@media (max-width: 640px) {
+  .lawyer-dash-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lawyer-dash-array-item {
+  position: relative;
+  padding-right: 3rem !important;
+}
+
+.lawyer-dash-remove-btn {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lawyer-dash-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  background: transparent;
+  border: 1px dashed var(--color-secondary);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lawyer-dash-add-btn:hover {
+  background: var(--color-secondary);
+  color: #111;
+}
+
+/* Analytics */
+.lawyer-dash-analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.lawyer-dash-analytics-card {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 20px;
+  border: 1px solid #f1f1f1;
+  display: flex;
+  flex-direction: column;
+}
+
+.lawyer-dash-analytics-value {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 900;
+  color: #111;
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.04em;
+}
+
+/* Mobile Nav Refinement */
+@media (max-width: 768px) {
+  .lawyer-dash-topbar-inner {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .lawyer-dash-topbar-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .lawyer-dash-tabs {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
