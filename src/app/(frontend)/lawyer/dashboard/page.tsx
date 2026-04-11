@@ -36,6 +36,7 @@ export default function LawyerDashboard() {
     experience: '',
     consultationFee: '',
     availableHours: '',
+    bio: '',
     locationText: '',
     courts: '',
     responseTime: '',
