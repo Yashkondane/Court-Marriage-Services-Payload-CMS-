@@ -93,7 +93,7 @@ export function RegistrationLicensesBlock({ block }: { block: any }) {
             <div className="absolute bottom-0 left-0 w-40 h-40 bg-[var(--color-secondary)]/5 blur-[80px] rounded-full pointer-events-none" />
             
             <div className="relative z-10 text-center md:text-left max-w-xl">
-              <h2 className="text-3xl md:text-4xl font-heading font-black text-white mb-4 leading-tight">
+              <h2 className="text-3xl md:text-4xl font-heading font-black mb-4 leading-tight" style={{ color: '#ffffff' }}>
                 {ctaSection.ctaHeading}
               </h2>
               <p className="text-white/70 font-medium md:text-lg">

@@ -79,6 +79,8 @@ export default buildConfig({
       ssl: process.env.DATABASE_URI?.includes('localhost') ? false : {
         rejectUnauthorized: false,
       },
+      statement_timeout: 30000,       // 30s — prevents Supabase pooler timeouts
+      idle_in_transaction_session_timeout: 60000, // 60s
     },
   }),
 

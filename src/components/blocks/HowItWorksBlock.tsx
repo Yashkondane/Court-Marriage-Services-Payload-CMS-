@@ -55,7 +55,7 @@ export function HowItWorksBlock({ block }: { block: any }) {
             <span className="text-[var(--color-secondary)] text-[10px] font-black tracking-[0.4em] uppercase block mb-4">
               {processLabel || 'The Roadmap'}
             </span>
-            <h2 className="text-4xl md:text-6xl font-heading font-black text-white tracking-tight leading-tight">
+            <h2 className="text-4xl md:text-6xl font-heading font-black tracking-tight leading-tight" style={{ color: '#ffffff' }}>
               {heading}
             </h2>
             <div className="w-20 h-1 bg-gold-gradient mt-8 rounded-full" />
@@ -77,7 +77,7 @@ export function HowItWorksBlock({ block }: { block: any }) {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-xl font-heading font-black text-white mb-2 tracking-tight group-hover:text-[var(--color-secondary)] transition-colors duration-500">
+                    <h3 className="text-xl font-heading font-black mb-2 tracking-tight group-hover:text-[var(--color-secondary)] transition-colors duration-500" style={{ color: '#ffffff' }}>
                       {step.title}
                     </h3>
                     <p className="text-gray-400 font-medium leading-relaxed max-w-md text-sm md:text-base">
