@@ -7,7 +7,7 @@ import configPromise from '@payload-config'
 import type { Metadata } from 'next'
 import { 
   FaStar, FaMapMarkerAlt, FaCalendarAlt, FaLanguage, 
-  FaCheck, FaChevronDown, FaGavel
+  FaCheck, FaChevronDown, FaGavel, FaGraduationCap
 } from 'react-icons/fa'
 import LawyerEnquiryForm from '@/components/forms/LawyerEnquiryForm'
 
