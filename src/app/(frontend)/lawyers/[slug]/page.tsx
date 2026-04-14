@@ -10,6 +10,7 @@ import {
   FaCheck, FaChevronDown, FaGavel, FaGraduationCap
 } from 'react-icons/fa'
 import LawyerEnquiryForm from '@/components/forms/LawyerEnquiryForm'
+import LawyerRatingForm from '@/components/forms/LawyerRatingForm'
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -85,7 +86,7 @@ export default async function LawyerProfilePage({ params }: PageProps) {
                   ))}
                 </div>
                 <div className="text-white/60 font-bold text-sm">
-                  {lawyer.rating?.toFixed(1) || '5.0'} | {lawyer.ratingCount || '350'}+ Verified Ratings
+                  {lawyer.rating?.toFixed(1) || '0.0'} | {lawyer.ratingCount || 0} Verified Ratings
                 </div>
               </div>
 
@@ -144,9 +145,9 @@ export default async function LawyerProfilePage({ params }: PageProps) {
                         <FaGraduationCap className="text-gold" />
                       </div>
                       <div>
-                        <div className="font-semibold text-white">{edu.degree}</div>
-                        <div className="text-gray-400 text-sm">{edu.college}</div>
-                        {edu.year && <div className="text-gold/60 text-xs mt-1">Class of {edu.year}</div>}
+                        <div className="font-semibold text-gray-900">{edu.degree}</div>
+                        <div className="text-gray-500 text-sm font-medium">{edu.college}</div>
+                        {edu.year && <div className="text-gold font-bold text-xs mt-1">Class of {edu.year}</div>}
                       </div>
                     </div>
                   ))}
@@ -157,11 +158,11 @@ export default async function LawyerProfilePage({ params }: PageProps) {
             {/* Courts Card */}
             <div className="lawyer-card-premium">
               <h3 className="lawyer-card-title-premium">Practicing Courts</h3>
-              <div className="lawyer-courts-list">
+              <div className="space-y-3 pt-2">
                 {(lawyer.courts || 'Supreme Court of India, Delhi High Court').split(',').map((court: string, i: number) => (
-                  <div key={i} className="lawyer-court-tag">
-                    <FaGavel className="mr-2 inline inline-block" />
-                    {court.trim()}
+                  <div key={i} className="flex items-center gap-3 text-gray-700">
+                    <div className="w-1.5 h-1.5 rounded-full bg-gold shrink-0" />
+                    <span className="font-medium">{court.trim()}</span>
                   </div>
                 ))}
               </div>
@@ -170,12 +171,15 @@ export default async function LawyerProfilePage({ params }: PageProps) {
             {/* Specialization Card */}
             <div className="lawyer-card-premium">
               <h3 className="lawyer-card-title-premium">Experience & Specialization</h3>
-              <div className="lawyer-spec-grid-premium pt-4">
+              <div className="space-y-6 pt-4">
                 {specs.length > 0 ? specs.map((spec, i) => (
-                  <div key={i} className="lawyer-spec-item-premium">
-                    <div className="lawyer-spec-name-premium">{spec.title}</div>
-                    <div className="lawyer-spec-desc-premium">
-                      {spec.description && !spec.description.includes('lorem') ? spec.description : `Expert legal representation and strategic counsel in ${spec.title} matters.`}
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="w-2 h-2 rounded-full bg-gold mt-2 shrink-0" />
+                    <div>
+                      <div className="font-bold text-gray-900 text-lg">{spec.title}</div>
+                      <div className="text-gray-600 leading-relaxed mt-1">
+                        {spec.description && !spec.description.includes('lorem') ? spec.description : `Expert legal representation and strategic counsel in ${spec.title} matters.`}
+                      </div>
                     </div>
                   </div>
                 )) : (
@@ -186,12 +190,14 @@ export default async function LawyerProfilePage({ params }: PageProps) {
           </main>
 
           {/* RIGHT: Enquiry Sticky */}
-          <aside>
+          <aside className="space-y-8">
             <LawyerEnquiryForm 
               lawyerId={lawyer.id} 
               lawyerName={lawyer.name} 
               lawyerSlug={lawyer.slug} 
             />
+            
+            <LawyerRatingForm lawyerId={lawyer.id} />
           </aside>
         </div>
       </div>
