@@ -34,6 +34,7 @@ export const Leads: CollectionConfig = {
       name: 'service',
       type: 'relationship',
       relationTo: 'services',
+      dbName: 'service',
       admin: {
         description: 'The service they are inquiring about',
       },
@@ -42,6 +43,7 @@ export const Leads: CollectionConfig = {
       name: 'location',
       type: 'relationship',
       relationTo: 'locations',
+      dbName: 'location',
       admin: {
         description: 'The city/location they searched from',
       },
@@ -55,6 +57,7 @@ export const Leads: CollectionConfig = {
       type: 'relationship',
       relationTo: 'lawyers',
       required: true,
+      dbName: 'lawyer',
       admin: {
         description: 'The lawyer this enquiry is for',
       },

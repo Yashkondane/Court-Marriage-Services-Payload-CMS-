@@ -28,7 +28,7 @@ export async function getLawyerFromToken(req: NextRequest) {
     collection: 'lawyers',
     where: { supabaseId: { equals: user.id } },
     limit: 1,
-    depth: 2,
+    depth: 0,
   })
 
   if (result.docs.length === 0) {

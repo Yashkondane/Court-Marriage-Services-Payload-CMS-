@@ -69,6 +69,7 @@ export async function PATCH(req: NextRequest) {
             id: { not_equals: lawyer.id },
           },
           limit: 1,
+          depth: 0,
         })
         if (existing.docs.length === 0) break
         attempt++
@@ -89,7 +90,7 @@ export async function PATCH(req: NextRequest) {
       collection: 'lawyers',
       id: lawyer.id,
       data: updateData,
-      depth: 2,
+      depth: 1,
     })
 
     return NextResponse.json({
