@@ -30,7 +30,7 @@ export const Leads: CollectionConfig = {
       name: 'email',
       type: 'email',
     },
-    {
+    ({
       name: 'service',
       type: 'relationship',
       relationTo: 'services',
@@ -38,8 +38,8 @@ export const Leads: CollectionConfig = {
       admin: {
         description: 'The service they are inquiring about',
       },
-    },
-    {
+    } as any),
+    ({
       name: 'location',
       type: 'relationship',
       relationTo: 'locations',
@@ -47,12 +47,12 @@ export const Leads: CollectionConfig = {
       admin: {
         description: 'The city/location they searched from',
       },
-    },
+    } as any),
     {
       name: 'message',
       type: 'textarea',
     },
-    {
+    ({
       name: 'lawyer',
       type: 'relationship',
       relationTo: 'lawyers',
@@ -61,7 +61,7 @@ export const Leads: CollectionConfig = {
       admin: {
         description: 'The lawyer this enquiry is for',
       },
-    },
+    } as any),
     {
       name: 'sourceUrl',
       type: 'text',
