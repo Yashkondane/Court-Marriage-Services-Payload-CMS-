@@ -80,13 +80,19 @@ export default async function LawyerProfilePage({ params }: PageProps) {
 
             <div>
               <div className="flex items-center gap-4 mb-4">
-                <div className="lawyer-rating-stars">
-                  {[1, 2, 3, 4, 5].map(s => (
-                    <FaStar key={s} className={s <= Math.round(lawyer.rating || 5) ? 'text-orange-400' : 'text-slate-600'} />
+                <div className="flex text-gold mb-1">
+                  {[...Array(5)].map((_, i) => (
+                    <FaStar 
+                      key={i} 
+                      className={i < Math.round(lawyer.rating || 0) ? 'text-gold' : 'text-white/20'} 
+                    />
                   ))}
                 </div>
                 <div className="text-white/60 font-bold text-sm">
                   {lawyer.rating?.toFixed(1) || '0.0'} | {lawyer.ratingCount || 0} Verified Ratings
+                  <a href="#rate-lawyer" className="ml-3 text-gold/80 hover:text-gold text-xs underline decoration-dotted">
+                    Rate Now
+                  </a>
                 </div>
               </div>
 
@@ -197,7 +203,9 @@ export default async function LawyerProfilePage({ params }: PageProps) {
               lawyerSlug={lawyer.slug} 
             />
             
-            <LawyerRatingForm lawyerId={lawyer.id} />
+            <div id="rate-lawyer">
+              <LawyerRatingForm lawyerId={lawyer.id} />
+            </div>
           </aside>
         </div>
       </div>
