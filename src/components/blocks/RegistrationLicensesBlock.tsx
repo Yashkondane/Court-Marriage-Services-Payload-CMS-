@@ -96,7 +96,7 @@ export function RegistrationLicensesBlock({ block }: { block: any }) {
               <h2 className="text-3xl md:text-4xl font-heading font-black text-white mb-4 leading-tight">
                 {ctaSection.ctaHeading}
               </h2>
-              <p className="text-gray-400 font-medium md:text-lg">
+              <p className="text-white/70 font-medium md:text-lg">
                 {ctaSection.ctaSubheading}
               </p>
             </div>

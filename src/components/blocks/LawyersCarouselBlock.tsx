@@ -158,7 +158,7 @@ export function LawyersCarouselBlock({ block }: { block: any }) {
 
                   {/* CTA Button */}
                   <Link 
-                    href={`/lawyer/${data.slug || ''}`}
+                    href={`/lawyers/${data.slug || ''}`}
                     className="btn-gold w-full py-4 text-center rounded-lg text-sm font-black active:scale-[0.98] transition-transform"
                   >
                     View Profile

@@ -26,16 +26,16 @@ export const Media: CollectionConfig = {
               const sharp = require('sharp')
               
               // Process image: Resize, Sharpen, and Crush to WebP
-              // 1440px is perfect for modern desktops without being excessively large
+              // 1920px is Full HD - perfect for modern high-res displays
               const processedBuffer = await sharp(file.data)
                 .resize({ 
-                  width: 1440, 
+                  width: 1920, 
                   withoutEnlargement: true,
                   fit: 'inside' 
                 })
                 .sharpen({ sigma: 0.5 }) // Subtle sharpen to keep details crisp
                 .webp({ 
-                  quality: 78, // High-quality sweet spot
+                  quality: 90, // Premium high-quality setting
                   effort: 6,   // Maximum computational compression
                   smartSubsample: true 
                 })
