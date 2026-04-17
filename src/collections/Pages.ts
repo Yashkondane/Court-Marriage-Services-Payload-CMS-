@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin } from '@/access/isAdmin'
 import { isPublic } from '@/access/index'
+import { randomUUID } from 'crypto'
 import { Hero } from '@/blocks/Hero'
 import { RichContent } from '@/blocks/RichContent'
 import { FAQ } from '@/blocks/FAQ'
@@ -42,8 +43,6 @@ export const Pages: CollectionConfig = {
   hooks: {
     beforeValidate: [
       ({ data }) => {
-        const { randomUUID } = require('crypto');
-
         // Force-regenerate EVERY string `id` in the entire layout tree.
         // This prevents collisions when blocks are copy-pasted between pages
         // (the pasted block carries the original page's UUID, which already

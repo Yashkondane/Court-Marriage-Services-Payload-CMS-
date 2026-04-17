@@ -54,7 +54,7 @@ export const Leads: CollectionConfig = {
       name: 'lawyer',
       type: 'relationship',
       relationTo: 'lawyers',
-      required: true,
+      required: false,
       admin: {
         description: 'The lawyer this enquiry is for',
       },

@@ -10,7 +10,8 @@
     "generate:types": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload generate:types",
     "generate:importmap": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload generate:importmap",
     "payload": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload",
-    "seed": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts tsx --env-file=.env src/scripts/seed-pages.ts"
+    "seed": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts tsx --env-file=.env src/scripts/seed-pages.ts",
+    "seed:labour-law": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts tsx --env-file=.env seed-labour-law.mjs"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.81.0",

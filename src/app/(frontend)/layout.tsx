@@ -28,8 +28,35 @@ export const metadata: Metadata = {
   },
 }
 
+type NavGroup = {
+  category: string
+  order: number
+  items: { id: string; label: string; slug: string }[]
+}
+
+function groupServices(docs: any[], dropdown: string): NavGroup[] {
+  const filtered = docs.filter((s: any) => s.navDropdown === dropdown)
+  const groupMap: Record<string, NavGroup> = {}
+
+  for (const svc of filtered) {
+    const cat = svc.navCategory || 'General'
+    if (!groupMap[cat]) {
+      groupMap[cat] = { category: cat, order: svc.navCategoryOrder ?? 99, items: [] }
+    }
+    groupMap[cat].items.push({
+      id: svc.id,
+      label: svc.navLabel || svc.title,
+      slug: svc.slug,
+    })
+  }
+
+  return Object.values(groupMap).sort((a, b) => a.order - b.order)
+}
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  let navServices: any[] = []
+  let findALawyerGroups: NavGroup[] = []
+  let legalMatterGroups: NavGroup[] = []
+  let navServices: any[] = [] // keep for backward compat
   
   try {
     const payload = await getPayload()
@@ -39,9 +66,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         showInHeader: { equals: true },
       },
       sort: 'menuOrder',
-      limit: 100,
+      limit: 200,
+      depth: 0,
     })
     navServices = result.docs
+    findALawyerGroups = groupServices(result.docs, 'find-a-lawyer')
+    legalMatterGroups = groupServices(result.docs, 'legal-matter')
   } catch (error) {
     console.error('Error fetching nav services:', error)
   }
@@ -54,7 +84,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Manrope:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className="min-h-screen flex flex-col">
-        <Header navServices={navServices} />
+        <Header 
+          navServices={navServices}
+          findALawyerGroups={findALawyerGroups}
+          legalMatterGroups={legalMatterGroups}
+        />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

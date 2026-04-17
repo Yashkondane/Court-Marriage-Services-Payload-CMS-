@@ -63,6 +63,9 @@ export function RegistrationLicensesBlock({ block }: { block: any }) {
                   <p className="text-xs text-gray-500 font-medium leading-relaxed">
                     {card.description}
                   </p>
+                  <span className="inline-block mt-3 text-[10px] font-black uppercase tracking-[0.15em] text-[var(--color-secondary)] group-hover:underline underline-offset-4 transition-all duration-300">
+                    Know More →
+                  </span>
                 </div>
               </div>
             )

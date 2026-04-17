@@ -67,6 +67,52 @@ export const Services: CollectionConfig = {
       },
     },
     {
+      name: 'navDropdown',
+      type: 'select',
+      label: 'Dropdown Menu',
+      admin: {
+        position: 'sidebar',
+        description: 'Which mega-dropdown should this appear in?',
+        condition: (data) => data.showInHeader,
+      },
+      options: [
+        { label: 'Find A Lawyer', value: 'find-a-lawyer' },
+        { label: 'Legal Matter', value: 'legal-matter' },
+        { label: 'None (simple link)', value: 'none' },
+      ],
+    },
+    {
+      name: 'navCategory',
+      type: 'text',
+      label: 'Category Heading',
+      admin: {
+        position: 'sidebar',
+        description: 'Group heading inside the dropdown (e.g. "Family / Personal", "Criminal / Writ"). Items with the same heading are grouped together.',
+        condition: (data) => data.showInHeader && data.navDropdown && data.navDropdown !== 'none',
+      },
+    },
+    {
+      name: 'navCategoryOrder',
+      type: 'number',
+      label: 'Category Sort Order',
+      defaultValue: 0,
+      admin: {
+        position: 'sidebar',
+        description: 'Controls the order of categories in the dropdown. Lower = first.',
+        condition: (data) => data.showInHeader && data.navDropdown && data.navDropdown !== 'none',
+      },
+    },
+    {
+      name: 'navLabel',
+      type: 'text',
+      label: 'Custom Nav Label',
+      admin: {
+        position: 'sidebar',
+        description: 'Custom label shown in the dropdown (leave blank to use the service title).',
+        condition: (data) => data.showInHeader,
+      },
+    },
+    {
       name: 'icon',
       type: 'upload',
       relationTo: 'media',

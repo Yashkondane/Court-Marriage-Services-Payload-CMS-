@@ -79,6 +79,7 @@ export interface Config {
     testimonials: Testimonial;
     gallery: Gallery;
     lawyers: Lawyer;
+    'lawyer-media': LawyerMedia;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -98,6 +99,7 @@ export interface Config {
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     gallery: GallerySelect<false> | GallerySelect<true>;
     lawyers: LawyersSelect<false> | LawyersSelect<true>;
+    'lawyer-media': LawyerMediaSelect<false> | LawyerMediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -237,7 +239,7 @@ export interface Page {
    */
   slug: string;
   /**
-   * 🎨 Build your webpage here! Click "Add Block" below to stack sections (like a Hero banner, then a Services Carousel). You can drag and drop them to reorder.
+   * 🎨 Build your webpage here! Click "Add Block" below to stack sections. ⚠️ CRITICAL WARNING: If you forget a required field, hit Save, and get an error, DO NOT hit save again. Delete the blocks and re-add them, or start a new page, otherwise it will crash the save pipeline!
    */
   layout: (
     | {
@@ -251,9 +253,16 @@ export interface Page {
          */
         subheading?: string | null;
         backgroundType?: ('image' | 'color') | null;
+        /**
+         * Upload a background image for the hero section.
+         */
+        backgroundImage?: (number | null) | Media;
         backgroundColor?: ('white' | 'black' | 'gold') | null;
         textColorTheme?: ('auto' | 'light' | 'dark') | null;
-        backgroundImage?: (number | null) | Media;
+        /**
+         * Display the City + Legal Matter search bar below the hero text.
+         */
+        showSearchBar?: boolean | null;
         /**
          * e.g., "Book a Consultation"
          */
@@ -267,6 +276,30 @@ export interface Page {
          * Choose the layout style for the standard hero section.
          */
         style?: ('fullWidth' | 'split' | 'centered') | null;
+        /**
+         * Display the statistics bar below the hero (e.g. 25k+ Consultations).
+         */
+        showStatsBar?: boolean | null;
+        /**
+         * Statistics shown in the bar below the hero section.
+         */
+        stats?:
+          | {
+              /**
+               * Select an icon to display
+               */
+              icon: 'scale' | 'check' | 'users' | 'clock' | 'shield' | 'star' | 'file' | 'trophy';
+              /**
+               * The stat value (e.g. "25k+", "98%", "1.2k+")
+               */
+              value: string;
+              /**
+               * Label below the value (e.g. "Consultations", "Success Rate")
+               */
+              label: string;
+              id?: string | null;
+            }[]
+          | null;
         /**
          * Control where and on which devices this block appears.
          */
@@ -346,6 +379,10 @@ export interface Page {
         blockType: 'faq';
       }
     | {
+        /**
+         * Choose if this section looks like feature cards or a trust/stats bar.
+         */
+        sectionStyle?: ('cards' | 'statsBar') | null;
         heading?: string | null;
         description?: string | null;
         items: {
@@ -369,6 +406,154 @@ export interface Page {
         id?: string | null;
         blockName?: string | null;
         blockType: 'highlights';
+      }
+    | {
+        heading: string;
+        subheading?: string | null;
+        /**
+         * Add or manage the benefit cards in this section.
+         */
+        benefits?:
+          | {
+              title: string;
+              description: string;
+              icon?: ('phone' | 'strategy' | 'gavel' | 'trending' | 'laptop' | 'payments' | 'shield' | 'users') | null;
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Subtle trust indicators shown at the bottom of the section.
+         */
+        trustBadges?:
+          | {
+              badgeText: string;
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Control where and on which devices this block appears.
+         */
+        visibility?: {
+          showOnDesktop?: boolean | null;
+          showOnMobile?: boolean | null;
+          targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+          targetPages?: (number | Page)[] | null;
+          targetServices?: (number | Service)[] | null;
+          targetLocations?: (number | Location)[] | null;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'whyChooseUs';
+      }
+    | {
+        badge?: string | null;
+        heading: string;
+        subheading?: string | null;
+        /**
+         * Dynamic grid of registration service cards.
+         */
+        cards?:
+          | {
+              title: string;
+              description: string;
+              icon?:
+                | (
+                    | 'wallet'
+                    | 'corporate'
+                    | 'restaurant'
+                    | 'business'
+                    | 'public'
+                    | 'verified'
+                    | 'premium'
+                    | 'policy'
+                    | 'shield'
+                    | 'gavel'
+                    | 'speed'
+                  )
+                | null;
+              /**
+               * URL or path to redirect when clicked (e.g., /services/gst-registration)
+               */
+              link?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        ctaSection?: {
+          ctaHeading?: string | null;
+          ctaSubheading?: string | null;
+          ctaButtonText?: string | null;
+          ctaLink?: string | null;
+        };
+        /**
+         * Control where and on which devices this block appears.
+         */
+        visibility?: {
+          showOnDesktop?: boolean | null;
+          showOnMobile?: boolean | null;
+          targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+          targetPages?: (number | Page)[] | null;
+          targetServices?: (number | Service)[] | null;
+          targetLocations?: (number | Location)[] | null;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'registrationLicenses';
+      }
+    | {
+        processLabel?: string | null;
+        heading: string;
+        backgroundImage: number | Media;
+        quoteText?: string | null;
+        /**
+         * Manage exactly 3 steps to guide the user through the process.
+         */
+        steps?:
+          | {
+              title: string;
+              description: string;
+              icon?: ('document' | 'handshake' | 'gavel' | 'scale' | 'shield') | null;
+              id?: string | null;
+            }[]
+          | null;
+        ctaText?: string | null;
+        ctaLink?: string | null;
+        /**
+         * Control where and on which devices this block appears.
+         */
+        visibility?: {
+          showOnDesktop?: boolean | null;
+          showOnMobile?: boolean | null;
+          targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+          targetPages?: (number | Page)[] | null;
+          targetServices?: (number | Service)[] | null;
+          targetLocations?: (number | Location)[] | null;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'howItWorks';
+      }
+    | {
+        formHeading?: string | null;
+        formSubheading?: string | null;
+        image: number | Media;
+        imageHeading?: string | null;
+        imageSubheading?: string | null;
+        trustText?: string | null;
+        ctaButtonText?: string | null;
+        /**
+         * Control where and on which devices this block appears.
+         */
+        visibility?: {
+          showOnDesktop?: boolean | null;
+          showOnMobile?: boolean | null;
+          targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+          targetPages?: (number | Page)[] | null;
+          targetServices?: (number | Service)[] | null;
+          targetLocations?: (number | Location)[] | null;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'consultation';
       }
     | {
         heading: string;
@@ -505,20 +690,17 @@ export interface Page {
         blockType: 'testimonialsBlock';
       }
     | ServicesCarouselBlockType
-    | CodeSnippetBlockType
-    | LogosBlockType
     | {
         heading: string;
         /**
-         * Brief description of the legal team
+         * Select and reorder the lawyers you want to feature in this carousel. Only approved lawyers are shown.
          */
-        subheading?: string | null;
+        lawyers: (number | Lawyer)[];
+        autoplay?: boolean | null;
         /**
-         * Maximum number of auto-fetched lawyers to show
+         * Transition interval in milliseconds (e.g., 5000 for 5 seconds)
          */
-        limit?: number | null;
-        showBio?: boolean | null;
-        showContact?: boolean | null;
+        interval?: number | null;
         /**
          * Control where and on which devices this block appears.
          */
@@ -532,8 +714,10 @@ export interface Page {
         };
         id?: string | null;
         blockName?: string | null;
-        blockType: 'lawyerList';
+        blockType: 'lawyersCarousel';
       }
+    | CodeSnippetBlockType
+    | LogosBlockType
     | {
         heading?: string | null;
         description?: string | null;
@@ -624,7 +808,6 @@ export interface Page {
   publishedDate?: string | null;
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -639,6 +822,10 @@ export interface Service {
   slug: string;
   banner?: (number | null) | Media;
   /**
+   * Select the cities where this service is actively offered. Only selected cities will generate live landing pages.
+   */
+  activeLocations?: (number | Location)[] | null;
+  /**
    * If enabled, this service will appear in the "Services" menu in the header.
    */
   showInHeader?: boolean | null;
@@ -646,7 +833,48 @@ export interface Service {
    * Lower numbers appear first in the dropdown.
    */
   menuOrder?: number | null;
+  /**
+   * Which mega-dropdown should this appear in?
+   */
+  navDropdown?: ('find-a-lawyer' | 'legal-matter' | 'none') | null;
+  /**
+   * Group heading inside the dropdown (e.g. "Family / Personal", "Criminal / Writ"). Items with the same heading are grouped together.
+   */
+  navCategory?: string | null;
+  /**
+   * Controls the order of categories in the dropdown. Lower = first.
+   */
+  navCategoryOrder?: number | null;
+  /**
+   * Custom label shown in the dropdown (leave blank to use the service title).
+   */
+  navLabel?: string | null;
+  /**
+   * Legacy icon upload (optional). Prefer using the Native Legal Icon below.
+   */
   icon?: (number | null) | Media;
+  /**
+   * Select a highly optimized SVG icon to use for standard layout cards.
+   */
+  uiIcon?:
+    | (
+        | 'gavel'
+        | 'handshake'
+        | 'scale'
+        | 'building'
+        | 'file-contract'
+        | 'shield'
+        | 'user-tie'
+        | 'users'
+        | 'calculator'
+        | 'home'
+        | 'briefcase'
+        | 'landmark'
+        | 'money-bill'
+        | 'book'
+        | 'stamp'
+      )
+    | null;
   content?: {
     root: {
       type: string;
@@ -702,6 +930,25 @@ export interface Service {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locations".
+ */
+export interface Location {
+  id: number;
+  name: string;
+  /**
+   * URL-friendly name (e.g., "delhi", "saket")
+   */
+  slug: string;
+  type: 'country' | 'state' | 'city' | 'area';
+  /**
+   * Parent location (e.g., City → State, Area → City)
+   */
+  parent?: (number | null) | Location;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faqs".
  */
 export interface Faq {
@@ -742,25 +989,6 @@ export interface Faq {
    * Lower numbers appear first
    */
   sortOrder?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "locations".
- */
-export interface Location {
-  id: number;
-  name: string;
-  /**
-   * URL-friendly name (e.g., "delhi", "saket")
-   */
-  slug: string;
-  type: 'country' | 'state' | 'city' | 'area';
-  /**
-   * Parent location (e.g., City → State, Area → City)
-   */
-  parent?: (number | null) | Location;
   updatedAt: string;
   createdAt: string;
 }
@@ -954,9 +1182,32 @@ export interface ServicesCarouselBlockType {
   items: {
     service: number | Service;
     /**
-     * Optional: Override the default service icon.
+     * Pick a React icon for this card. Leave empty to use the service's default icon.
      */
-    customIcon?: (number | null) | Media;
+    overrideIcon?:
+      | (
+          | ''
+          | 'gavel'
+          | 'handshake'
+          | 'scale'
+          | 'building'
+          | 'file-contract'
+          | 'shield'
+          | 'user-tie'
+          | 'users'
+          | 'calculator'
+          | 'home'
+          | 'briefcase'
+          | 'landmark'
+          | 'money-bill'
+          | 'book'
+          | 'stamp'
+        )
+      | null;
+    /**
+     * Optional: Override the default service banner for this card.
+     */
+    backgroundImage?: (number | null) | Media;
     /**
      * Optional: Override the default highlights. If left empty, highlights from the service will be used.
      */
@@ -982,6 +1233,185 @@ export interface ServicesCarouselBlockType {
   id?: string | null;
   blockName?: string | null;
   blockType: 'servicesCarousel';
+}
+/**
+ * Manage lawyer profiles, approvals, and sponsored status.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lawyers".
+ */
+export interface Lawyer {
+  id: number;
+  name: string;
+  /**
+   * URL-friendly name (auto-generated from name)
+   */
+  slug: string;
+  /**
+   * Email address (must be unique)
+   */
+  email: string;
+  phone?: string | null;
+  /**
+   * Supabase Auth user ID (auto-linked)
+   */
+  supabaseId?: string | null;
+  /**
+   * Only approved lawyers appear on the public site.
+   */
+  status: 'pending_review' | 'approved' | 'rejected' | 'suspended';
+  /**
+   * Internal note (e.g., rejection reason). Not shown to public.
+   */
+  statusNote?: string | null;
+  /**
+   * Sponsored lawyers get premium placement and a gold badge.
+   */
+  isSponsored?: boolean | null;
+  /**
+   * Premium partners get additional visibility & branding.
+   */
+  isPremiumPartner?: boolean | null;
+  photo?: (number | null) | LawyerMedia;
+  /**
+   * e.g., "Senior Advocate", "Family Law Expert"
+   */
+  designation?: string | null;
+  /**
+   * Tell clients about your expertise, background, and approach.
+   */
+  bio?: string | null;
+  /**
+   * Bar Council registration/enrollment number for verification.
+   */
+  barCouncilId?: string | null;
+  /**
+   * Years of experience
+   */
+  experience?: number | null;
+  /**
+   * e.g., "₹500 - ₹2000"
+   */
+  consultationFee?: string | null;
+  /**
+   * e.g., "Mon-Fri, 9AM-6PM"
+   */
+  availableHours?: string | null;
+  /**
+   * Display location (e.g., "Connaught Place, New Delhi")
+   */
+  locationText?: string | null;
+  /**
+   * Courts where the lawyer practices (e.g., "District Civil Court-1, Jamshedpur")
+   */
+  courts?: string | null;
+  /**
+   * Link to a city/location for filtering.
+   */
+  location?: (number | null) | Location;
+  /**
+   * Languages this lawyer can communicate in.
+   */
+  languages?:
+    | {
+        language: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Law degrees and qualifications.
+   */
+  education?:
+    | {
+        /**
+         * e.g., "LLB", "LLM", "BA LLB"
+         */
+        degree: string;
+        college: string;
+        /**
+         * Year of graduation
+         */
+        year?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Each specialization links to a service. This determines which service pages show this lawyer.
+   */
+  specializations?:
+    | {
+        /**
+         * Link to a service (e.g., Divorce, Property, Criminal Law)
+         */
+        service: number | Service;
+        /**
+         * Custom title (e.g., "Divorce Lawyer", "Property Dispute Expert")
+         */
+        title: string;
+        /**
+         * Describe your expertise in this area.
+         */
+        description?: string | null;
+        /**
+         * Years specializing in this area.
+         */
+        yearsInField?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Average rating (0-5)
+   */
+  rating?: number | null;
+  /**
+   * Total number of reviews
+   */
+  ratingCount?: number | null;
+  /**
+   * Total profile page views
+   */
+  profileViews?: number | null;
+  responseTime?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lawyer-media".
+ */
+export interface LawyerMedia {
+  id: number;
+  alt: string;
+  prefix?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1061,56 +1491,13 @@ export interface Lead {
   location?: (number | null) | Location;
   message?: string | null;
   /**
+   * The lawyer this enquiry is for
+   */
+  lawyer?: (number | null) | Lawyer;
+  /**
    * The URL from which this lead was generated
    */
   sourceUrl?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "lawyers".
- */
-export interface Lawyer {
-  id: number;
-  name: string;
-  slug: string;
-  /**
-   * e.g., "Senior Advocate", "Family Law Expert"
-   */
-  designation?: string | null;
-  bio?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  photo?: (number | null) | Media;
-  specializations?:
-    | {
-        specialization: string;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Services this lawyer specializes in
-   */
-  services?: (number | Service)[] | null;
-  /**
-   * Years of experience
-   */
-  experience?: number | null;
-  email?: string | null;
-  phone?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1185,6 +1572,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'lawyers';
         value: number | Lawyer;
+      } | null)
+    | ({
+        relationTo: 'lawyer-media';
+        value: number | LawyerMedia;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1325,9 +1716,10 @@ export interface PagesSelect<T extends boolean = true> {
               heading?: T;
               subheading?: T;
               backgroundType?: T;
+              backgroundImage?: T;
               backgroundColor?: T;
               textColorTheme?: T;
-              backgroundImage?: T;
+              showSearchBar?: T;
               ctaText?: T;
               ctaLink?: T;
               secondaryCta?:
@@ -1337,6 +1729,15 @@ export interface PagesSelect<T extends boolean = true> {
                     link?: T;
                   };
               style?: T;
+              showStatsBar?: T;
+              stats?:
+                | T
+                | {
+                    icon?: T;
+                    value?: T;
+                    label?: T;
+                    id?: T;
+                  };
               visibility?:
                 | T
                 | {
@@ -1393,6 +1794,7 @@ export interface PagesSelect<T extends boolean = true> {
         highlights?:
           | T
           | {
+              sectionStyle?: T;
               heading?: T;
               description?: T;
               items?:
@@ -1404,6 +1806,127 @@ export interface PagesSelect<T extends boolean = true> {
                     id?: T;
                   };
               columns?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        whyChooseUs?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              benefits?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    id?: T;
+                  };
+              trustBadges?:
+                | T
+                | {
+                    badgeText?: T;
+                    id?: T;
+                  };
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        registrationLicenses?:
+          | T
+          | {
+              badge?: T;
+              heading?: T;
+              subheading?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    link?: T;
+                    id?: T;
+                  };
+              ctaSection?:
+                | T
+                | {
+                    ctaHeading?: T;
+                    ctaSubheading?: T;
+                    ctaButtonText?: T;
+                    ctaLink?: T;
+                  };
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        howItWorks?:
+          | T
+          | {
+              processLabel?: T;
+              heading?: T;
+              backgroundImage?: T;
+              quoteText?: T;
+              steps?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    id?: T;
+                  };
+              ctaText?: T;
+              ctaLink?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        consultation?:
+          | T
+          | {
+              formHeading?: T;
+              formSubheading?: T;
+              image?: T;
+              imageHeading?: T;
+              imageSubheading?: T;
+              trustText?: T;
+              ctaButtonText?: T;
               visibility?:
                 | T
                 | {
@@ -1547,16 +2070,13 @@ export interface PagesSelect<T extends boolean = true> {
               blockName?: T;
             };
         servicesCarousel?: T | ServicesCarouselBlockTypeSelect<T>;
-        codeSnippet?: T | CodeSnippetBlockTypeSelect<T>;
-        logos?: T | LogosBlockTypeSelect<T>;
-        lawyerList?:
+        lawyersCarousel?:
           | T
           | {
               heading?: T;
-              subheading?: T;
-              limit?: T;
-              showBio?: T;
-              showContact?: T;
+              lawyers?: T;
+              autoplay?: T;
+              interval?: T;
               visibility?:
                 | T
                 | {
@@ -1570,6 +2090,8 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        codeSnippet?: T | CodeSnippetBlockTypeSelect<T>;
+        logos?: T | LogosBlockTypeSelect<T>;
         documents?:
           | T
           | {
@@ -1619,7 +2141,6 @@ export interface PagesSelect<T extends boolean = true> {
   publishedDate?: T;
   updatedAt?: T;
   createdAt?: T;
-  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1631,7 +2152,8 @@ export interface ServicesCarouselBlockTypeSelect<T extends boolean = true> {
     | T
     | {
         service?: T;
-        customIcon?: T;
+        overrideIcon?: T;
+        backgroundImage?: T;
         highlights?:
           | T
           | {
@@ -1707,9 +2229,15 @@ export interface ServicesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   banner?: T;
+  activeLocations?: T;
   showInHeader?: T;
   menuOrder?: T;
+  navDropdown?: T;
+  navCategory?: T;
+  navCategoryOrder?: T;
+  navLabel?: T;
   icon?: T;
+  uiIcon?: T;
   content?: T;
   highlights?:
     | T
@@ -1757,6 +2285,7 @@ export interface LeadsSelect<T extends boolean = true> {
   service?: T;
   location?: T;
   message?: T;
+  lawyer?: T;
   sourceUrl?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1898,21 +2427,95 @@ export interface GallerySelect<T extends boolean = true> {
 export interface LawyersSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
+  email?: T;
+  phone?: T;
+  supabaseId?: T;
+  status?: T;
+  statusNote?: T;
+  isSponsored?: T;
+  isPremiumPartner?: T;
+  photo?: T;
   designation?: T;
   bio?: T;
-  photo?: T;
+  barCouncilId?: T;
+  experience?: T;
+  consultationFee?: T;
+  availableHours?: T;
+  locationText?: T;
+  courts?: T;
+  location?: T;
+  languages?:
+    | T
+    | {
+        language?: T;
+        id?: T;
+      };
+  education?:
+    | T
+    | {
+        degree?: T;
+        college?: T;
+        year?: T;
+        id?: T;
+      };
   specializations?:
     | T
     | {
-        specialization?: T;
+        service?: T;
+        title?: T;
+        description?: T;
+        yearsInField?: T;
         id?: T;
       };
-  services?: T;
-  experience?: T;
-  email?: T;
-  phone?: T;
+  rating?: T;
+  ratingCount?: T;
+  profileViews?: T;
+  responseTime?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lawyer-media_select".
+ */
+export interface LawyerMediaSelect<T extends boolean = true> {
+  alt?: T;
+  prefix?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
