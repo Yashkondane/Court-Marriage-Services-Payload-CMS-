@@ -1,6 +1,25 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin } from '@/access/isAdmin'
 import { isPublic } from '@/access/index'
+import { randomUUID } from 'crypto'
+import { Hero } from '@/blocks/Hero'
+import { RichContent } from '@/blocks/RichContent'
+import { FAQ } from '@/blocks/FAQ'
+import { Highlights } from '@/blocks/Highlights'
+import { WhyChooseUs } from '@/blocks/WhyChooseUs'
+import { RegistrationLicenses } from '@/blocks/RegistrationLicenses'
+import { HowItWorks } from '@/blocks/HowItWorks'
+import { Consultation } from '@/blocks/Consultation'
+import { CTA } from '@/blocks/CTA'
+import { BlogFeed } from '@/blocks/BlogFeed'
+import { NewsFeed } from '@/blocks/NewsFeed'
+import { GalleryBlock } from '@/blocks/GalleryBlock'
+import { TestimonialsBlock } from '@/blocks/TestimonialsBlock'
+import { ServicesCarousel } from '@/blocks/ServicesCarousel'
+import { LawyersCarousel } from '@/blocks/LawyersCarousel'
+import { CodeSnippet } from '@/blocks/CodeSnippet'
+import { Logos } from '@/blocks/Logos'
+import { Documents } from '@/blocks/Documents'
 
 export const Services: CollectionConfig = {
   slug: 'services',
@@ -15,6 +34,38 @@ export const Services: CollectionConfig = {
     update: isAdmin,
     delete: isAdmin,
   },
+  hooks: {
+    beforeValidate: [
+      ({ data }) => {
+        function forceNewIds(obj: any): void {
+          if (!obj || typeof obj !== 'object') return;
+          if (Array.isArray(obj)) {
+            for (const item of obj) {
+              if (item && typeof item === 'object') {
+                if ('id' in item && typeof item.id === 'string') {
+                  item.id = randomUUID();
+                }
+                forceNewIds(item);
+              }
+            }
+          } else {
+            for (const key of Object.keys(obj)) {
+              if (key === 'id') continue;
+              const val = obj[key];
+              if (val && typeof val === 'object' && !Buffer.isBuffer(val)) {
+                forceNewIds(val);
+              }
+            }
+          }
+        }
+
+        if (data?.layout) {
+          forceNewIds(data.layout);
+        }
+        return data;
+      },
+    ],
+  },
   fields: [
     {
       name: 'title',
@@ -28,6 +79,33 @@ export const Services: CollectionConfig = {
       unique: true,
       admin: {
         description: 'URL-friendly identifier (e.g., "court-marriage-lawyer")',
+      },
+    },
+    {
+      name: 'layout',
+      type: 'blocks',
+      blocks: [
+        Hero,
+        RichContent,
+        FAQ,
+        Highlights,
+        WhyChooseUs,
+        RegistrationLicenses,
+        HowItWorks,
+        Consultation,
+        CTA,
+        BlogFeed,
+        NewsFeed,
+        GalleryBlock,
+        TestimonialsBlock,
+        ServicesCarousel,
+        LawyersCarousel,
+        CodeSnippet,
+        Logos,
+        Documents,
+      ],
+      admin: {
+        description: '🎨 Using Blocks will OVERRIDE the legacy fixed fields below (banner, content, highlights) on the frontend. Use this to design flexible service pages!',
       },
     },
     {

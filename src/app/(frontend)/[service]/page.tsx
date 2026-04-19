@@ -79,6 +79,10 @@ export default async function ServicePage({ params }: { params: Params }) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const service = services.docs[0] as any
 
+    if (service.layout && service.layout.length > 0) {
+      return <RenderBlocks blocks={service.layout} />
+    }
+
     return (
       <div className="bg-white min-h-screen">
         <section className="relative bg-[var(--color-primary)] text-white py-20 md:py-32 overflow-hidden shadow-inner">
