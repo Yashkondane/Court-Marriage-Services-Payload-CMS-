@@ -820,6 +820,535 @@ export interface Service {
    * URL-friendly identifier (e.g., "court-marriage-lawyer")
    */
   slug: string;
+  /**
+   * 🎨 Using Blocks will OVERRIDE the legacy fixed fields below (banner, content, highlights) on the frontend. Use this to design flexible service pages!
+   */
+  layout?:
+    | (
+        | {
+            layoutStyle: 'standard' | 'withLeadForm';
+            /**
+             * Main headline
+             */
+            heading: string;
+            /**
+             * Supporting text below the headline
+             */
+            subheading?: string | null;
+            backgroundType?: ('image' | 'color') | null;
+            /**
+             * Upload a background image for the hero section.
+             */
+            backgroundImage?: (number | null) | Media;
+            backgroundColor?: ('white' | 'black' | 'gold') | null;
+            textColorTheme?: ('auto' | 'light' | 'dark') | null;
+            /**
+             * Display the City + Legal Matter search bar below the hero text.
+             */
+            showSearchBar?: boolean | null;
+            /**
+             * e.g., "Book a Consultation"
+             */
+            ctaText?: string | null;
+            ctaLink?: string | null;
+            secondaryCta?: {
+              text?: string | null;
+              link?: string | null;
+            };
+            /**
+             * Choose the layout style for the standard hero section.
+             */
+            style?: ('fullWidth' | 'split' | 'centered') | null;
+            /**
+             * Display the statistics bar below the hero (e.g. 25k+ Consultations).
+             */
+            showStatsBar?: boolean | null;
+            /**
+             * Statistics shown in the bar below the hero section.
+             */
+            stats?:
+              | {
+                  /**
+                   * Select an icon to display
+                   */
+                  icon: 'scale' | 'check' | 'users' | 'clock' | 'shield' | 'star' | 'file' | 'trophy';
+                  /**
+                   * The stat value (e.g. "25k+", "98%", "1.2k+")
+                   */
+                  value: string;
+                  /**
+                   * Label below the value (e.g. "Consultations", "Success Rate")
+                   */
+                  label: string;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Control where and on which devices this block appears.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnMobile?: boolean | null;
+              targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+              targetPages?: (number | Page)[] | null;
+              targetServices?: (number | Service)[] | null;
+              targetLocations?: (number | Location)[] | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            /**
+             * Full-featured editor supporting headings, lists, formatting, links, and inline images.
+             */
+            content: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            maxWidth?: ('narrow' | 'default' | 'wide' | 'full') | null;
+            /**
+             * Control where and on which devices this block appears.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnMobile?: boolean | null;
+              targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+              targetPages?: (number | Page)[] | null;
+              targetServices?: (number | Service)[] | null;
+              targetLocations?: (number | Location)[] | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'richContent';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            source?: ('manual' | 'auto') | null;
+            /**
+             * Manually select which FAQs to display
+             */
+            faqs?: (number | Faq)[] | null;
+            /**
+             * Auto-fetch FAQs matching this scope
+             */
+            autoScope?: ('global' | 'service' | 'location' | 'page') | null;
+            style?: ('accordion' | 'list') | null;
+            /**
+             * Control where and on which devices this block appears.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnMobile?: boolean | null;
+              targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+              targetPages?: (number | Page)[] | null;
+              targetServices?: (number | Service)[] | null;
+              targetLocations?: (number | Location)[] | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
+          }
+        | {
+            /**
+             * Choose if this section looks like feature cards or a trust/stats bar.
+             */
+            sectionStyle?: ('cards' | 'statsBar') | null;
+            heading?: string | null;
+            description?: string | null;
+            items: {
+              title: string;
+              description?: string | null;
+              icon?: (number | null) | Media;
+              id?: string | null;
+            }[];
+            columns?: ('2' | '3' | '4') | null;
+            /**
+             * Control where and on which devices this block appears.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnMobile?: boolean | null;
+              targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+              targetPages?: (number | Page)[] | null;
+              targetServices?: (number | Service)[] | null;
+              targetLocations?: (number | Location)[] | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'highlights';
+          }
+        | {
+            heading: string;
+            subheading?: string | null;
+            /**
+             * Add or manage the benefit cards in this section.
+             */
+            benefits?:
+              | {
+                  title: string;
+                  description: string;
+                  icon?:
+                    | ('phone' | 'strategy' | 'gavel' | 'trending' | 'laptop' | 'payments' | 'shield' | 'users')
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Subtle trust indicators shown at the bottom of the section.
+             */
+            trustBadges?:
+              | {
+                  badgeText: string;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Control where and on which devices this block appears.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnMobile?: boolean | null;
+              targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+              targetPages?: (number | Page)[] | null;
+              targetServices?: (number | Service)[] | null;
+              targetLocations?: (number | Location)[] | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'whyChooseUs';
+          }
+        | {
+            badge?: string | null;
+            heading: string;
+            subheading?: string | null;
+            /**
+             * Dynamic grid of registration service cards.
+             */
+            cards?:
+              | {
+                  title: string;
+                  description: string;
+                  icon?:
+                    | (
+                        | 'wallet'
+                        | 'corporate'
+                        | 'restaurant'
+                        | 'business'
+                        | 'public'
+                        | 'verified'
+                        | 'premium'
+                        | 'policy'
+                        | 'shield'
+                        | 'gavel'
+                        | 'speed'
+                      )
+                    | null;
+                  /**
+                   * URL or path to redirect when clicked (e.g., /services/gst-registration)
+                   */
+                  link?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            ctaSection?: {
+              ctaHeading?: string | null;
+              ctaSubheading?: string | null;
+              ctaButtonText?: string | null;
+              ctaLink?: string | null;
+            };
+            /**
+             * Control where and on which devices this block appears.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnMobile?: boolean | null;
+              targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+              targetPages?: (number | Page)[] | null;
+              targetServices?: (number | Service)[] | null;
+              targetLocations?: (number | Location)[] | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'registrationLicenses';
+          }
+        | {
+            processLabel?: string | null;
+            heading: string;
+            backgroundImage: number | Media;
+            quoteText?: string | null;
+            /**
+             * Manage exactly 3 steps to guide the user through the process.
+             */
+            steps?:
+              | {
+                  title: string;
+                  description: string;
+                  icon?: ('document' | 'handshake' | 'gavel' | 'scale' | 'shield') | null;
+                  id?: string | null;
+                }[]
+              | null;
+            ctaText?: string | null;
+            ctaLink?: string | null;
+            /**
+             * Control where and on which devices this block appears.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnMobile?: boolean | null;
+              targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+              targetPages?: (number | Page)[] | null;
+              targetServices?: (number | Service)[] | null;
+              targetLocations?: (number | Location)[] | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'howItWorks';
+          }
+        | {
+            formHeading?: string | null;
+            formSubheading?: string | null;
+            image: number | Media;
+            imageHeading?: string | null;
+            imageSubheading?: string | null;
+            trustText?: string | null;
+            ctaButtonText?: string | null;
+            /**
+             * Control where and on which devices this block appears.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnMobile?: boolean | null;
+              targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+              targetPages?: (number | Page)[] | null;
+              targetServices?: (number | Service)[] | null;
+              targetLocations?: (number | Location)[] | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'consultation';
+          }
+        | {
+            heading: string;
+            description?: string | null;
+            primaryButton: {
+              text: string;
+              link: string;
+            };
+            secondaryButton?: {
+              text?: string | null;
+              link?: string | null;
+            };
+            backgroundImage?: (number | null) | Media;
+            style?: ('default' | 'banner' | 'card') | null;
+            /**
+             * Control where and on which devices this block appears.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnMobile?: boolean | null;
+              targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+              targetPages?: (number | Page)[] | null;
+              targetServices?: (number | Service)[] | null;
+              targetLocations?: (number | Location)[] | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+        | {
+            heading?: string | null;
+            source?: ('latest' | 'byService' | 'byLocation' | 'byCategory' | 'manual') | null;
+            service?: (number | null) | Service;
+            location?: (number | null) | Location;
+            category?: string | null;
+            selectedBlogs?: (number | Blog)[] | null;
+            limit?: number | null;
+            layout?: ('grid' | 'list' | 'carousel') | null;
+            /**
+             * Control where and on which devices this block appears.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnMobile?: boolean | null;
+              targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+              targetPages?: (number | Page)[] | null;
+              targetServices?: (number | Service)[] | null;
+              targetLocations?: (number | Location)[] | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'blogFeed';
+          }
+        | {
+            heading?: string | null;
+            source?: ('latest' | 'byService' | 'byLocation' | 'byCategory' | 'manual') | null;
+            service?: (number | null) | Service;
+            location?: (number | null) | Location;
+            category?: string | null;
+            selectedNews?: (number | News)[] | null;
+            limit?: number | null;
+            layout?: ('grid' | 'list' | 'carousel') | null;
+            /**
+             * Control where and on which devices this block appears.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnMobile?: boolean | null;
+              targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+              targetPages?: (number | Page)[] | null;
+              targetServices?: (number | Service)[] | null;
+              targetLocations?: (number | Location)[] | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'newsFeed';
+          }
+        | {
+            heading?: string | null;
+            source?: ('manual' | 'collection') | null;
+            images?:
+              | {
+                  image: number | Media;
+                  caption?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Select a gallery from the Gallery collection
+             */
+            gallery?: (number | null) | Gallery;
+            layout?: ('grid' | 'masonry' | 'carousel') | null;
+            columns?: ('2' | '3' | '4') | null;
+            /**
+             * Control where and on which devices this block appears.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnMobile?: boolean | null;
+              targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+              targetPages?: (number | Page)[] | null;
+              targetServices?: (number | Service)[] | null;
+              targetLocations?: (number | Location)[] | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'galleryBlock';
+          }
+        | {
+            heading?: string | null;
+            description?: string | null;
+            /**
+             * Select testimonials to display
+             */
+            testimonials?: (number | Testimonial)[] | null;
+            /**
+             * Max testimonials to show (if none selected manually, fetches latest)
+             */
+            limit?: number | null;
+            layout?: ('grid' | 'carousel') | null;
+            /**
+             * Control where and on which devices this block appears.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnMobile?: boolean | null;
+              targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+              targetPages?: (number | Page)[] | null;
+              targetServices?: (number | Service)[] | null;
+              targetLocations?: (number | Location)[] | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'testimonialsBlock';
+          }
+        | ServicesCarouselBlockType
+        | {
+            heading: string;
+            /**
+             * Select and reorder the lawyers you want to feature in this carousel. Only approved lawyers are shown.
+             */
+            lawyers: (number | Lawyer)[];
+            autoplay?: boolean | null;
+            /**
+             * Transition interval in milliseconds (e.g., 5000 for 5 seconds)
+             */
+            interval?: number | null;
+            /**
+             * Control where and on which devices this block appears.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnMobile?: boolean | null;
+              targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+              targetPages?: (number | Page)[] | null;
+              targetServices?: (number | Service)[] | null;
+              targetLocations?: (number | Location)[] | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'lawyersCarousel';
+          }
+        | CodeSnippetBlockType
+        | LogosBlockType
+        | {
+            heading?: string | null;
+            description?: string | null;
+            items?:
+              | {
+                  title: string;
+                  icon?: ('document' | 'location' | 'calendar' | 'camera' | 'users' | 'shield') | null;
+                  content: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  };
+                  /**
+                   * Optional small note at the bottom (e.g., "Important: ...")
+                   */
+                  note?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Control where and on which devices this block appears.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnMobile?: boolean | null;
+              targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+              targetPages?: (number | Page)[] | null;
+              targetServices?: (number | Service)[] | null;
+              targetLocations?: (number | Location)[] | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'documents';
+          }
+      )[]
+    | null;
   banner?: (number | null) | Media;
   /**
    * Select the cities where this service is actively offered. Only selected cities will generate live landing pages.
@@ -2228,6 +2757,420 @@ export interface LogosBlockTypeSelect<T extends boolean = true> {
 export interface ServicesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  layout?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              layoutStyle?: T;
+              heading?: T;
+              subheading?: T;
+              backgroundType?: T;
+              backgroundImage?: T;
+              backgroundColor?: T;
+              textColorTheme?: T;
+              showSearchBar?: T;
+              ctaText?: T;
+              ctaLink?: T;
+              secondaryCta?:
+                | T
+                | {
+                    text?: T;
+                    link?: T;
+                  };
+              style?: T;
+              showStatsBar?: T;
+              stats?:
+                | T
+                | {
+                    icon?: T;
+                    value?: T;
+                    label?: T;
+                    id?: T;
+                  };
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        richContent?:
+          | T
+          | {
+              content?: T;
+              maxWidth?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              source?: T;
+              faqs?: T;
+              autoScope?: T;
+              style?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        highlights?:
+          | T
+          | {
+              sectionStyle?: T;
+              heading?: T;
+              description?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    id?: T;
+                  };
+              columns?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        whyChooseUs?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              benefits?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    id?: T;
+                  };
+              trustBadges?:
+                | T
+                | {
+                    badgeText?: T;
+                    id?: T;
+                  };
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        registrationLicenses?:
+          | T
+          | {
+              badge?: T;
+              heading?: T;
+              subheading?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    link?: T;
+                    id?: T;
+                  };
+              ctaSection?:
+                | T
+                | {
+                    ctaHeading?: T;
+                    ctaSubheading?: T;
+                    ctaButtonText?: T;
+                    ctaLink?: T;
+                  };
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        howItWorks?:
+          | T
+          | {
+              processLabel?: T;
+              heading?: T;
+              backgroundImage?: T;
+              quoteText?: T;
+              steps?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    id?: T;
+                  };
+              ctaText?: T;
+              ctaLink?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        consultation?:
+          | T
+          | {
+              formHeading?: T;
+              formSubheading?: T;
+              image?: T;
+              imageHeading?: T;
+              imageSubheading?: T;
+              trustText?: T;
+              ctaButtonText?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              primaryButton?:
+                | T
+                | {
+                    text?: T;
+                    link?: T;
+                  };
+              secondaryButton?:
+                | T
+                | {
+                    text?: T;
+                    link?: T;
+                  };
+              backgroundImage?: T;
+              style?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        blogFeed?:
+          | T
+          | {
+              heading?: T;
+              source?: T;
+              service?: T;
+              location?: T;
+              category?: T;
+              selectedBlogs?: T;
+              limit?: T;
+              layout?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        newsFeed?:
+          | T
+          | {
+              heading?: T;
+              source?: T;
+              service?: T;
+              location?: T;
+              category?: T;
+              selectedNews?: T;
+              limit?: T;
+              layout?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        galleryBlock?:
+          | T
+          | {
+              heading?: T;
+              source?: T;
+              images?:
+                | T
+                | {
+                    image?: T;
+                    caption?: T;
+                    id?: T;
+                  };
+              gallery?: T;
+              layout?: T;
+              columns?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        testimonialsBlock?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              testimonials?: T;
+              limit?: T;
+              layout?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        servicesCarousel?: T | ServicesCarouselBlockTypeSelect<T>;
+        lawyersCarousel?:
+          | T
+          | {
+              heading?: T;
+              lawyers?: T;
+              autoplay?: T;
+              interval?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        codeSnippet?: T | CodeSnippetBlockTypeSelect<T>;
+        logos?: T | LogosBlockTypeSelect<T>;
+        documents?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    icon?: T;
+                    content?: T;
+                    note?: T;
+                    id?: T;
+                  };
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+      };
   banner?: T;
   activeLocations?: T;
   showInHeader?: T;

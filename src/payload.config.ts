@@ -82,7 +82,7 @@ export default buildConfig({
       statement_timeout: 30000,       // 30s — prevents Supabase pooler timeouts
       idle_in_transaction_session_timeout: 60000, // 60s
     },
-    push: true, // Force Drizzle to push new schema on Vercel build
+    migrationDir: path.resolve(dirname, 'migrations'),
   }),
 
   sharp,
