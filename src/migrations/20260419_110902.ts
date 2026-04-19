@@ -465,20 +465,15 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
       "block_name" varchar
     );
 
-    CREATE TABLE IF NOT EXISTS "services_rels" (
-      "id" serial PRIMARY KEY NOT NULL,
-      "order" integer,
-      "parent_id" integer NOT NULL,
-      "path" varchar NOT NULL,
-      "pages_id" integer,
-      "services_id" integer,
-      "locations_id" integer,
-      "faqs_id" integer,
-      "blogs_id" integer,
-      "news_id" integer,
-      "testimonials_id" integer,
-      "lawyers_id" integer
-    );
+    -- services_rels already exists; just add the missing columns from the new layout blocks
+    ALTER TABLE "services_rels" ADD COLUMN IF NOT EXISTS "pages_id" integer;
+    ALTER TABLE "services_rels" ADD COLUMN IF NOT EXISTS "services_id" integer;
+    ALTER TABLE "services_rels" ADD COLUMN IF NOT EXISTS "locations_id" integer;
+    ALTER TABLE "services_rels" ADD COLUMN IF NOT EXISTS "faqs_id" integer;
+    ALTER TABLE "services_rels" ADD COLUMN IF NOT EXISTS "blogs_id" integer;
+    ALTER TABLE "services_rels" ADD COLUMN IF NOT EXISTS "news_id" integer;
+    ALTER TABLE "services_rels" ADD COLUMN IF NOT EXISTS "testimonials_id" integer;
+    ALTER TABLE "services_rels" ADD COLUMN IF NOT EXISTS "lawyers_id" integer;
   `)
 
   // Indexes for services_blocks_* tables — idempotent
