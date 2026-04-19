@@ -23,6 +23,10 @@ import { Documents } from '@/blocks/Documents'
 
 export const Services: CollectionConfig = {
   slug: 'services',
+  labels: {
+    singular: 'Service',
+    plural: 'Services',
+  },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'updatedAt'],
@@ -67,52 +71,145 @@ export const Services: CollectionConfig = {
     ],
   },
   fields: [
+    // ── Tabs ────────────────────────────────────────────────────────────────
     {
-      name: 'title',
-      type: 'text',
-      required: true,
-    },
-    {
-      name: 'slug',
-      type: 'text',
-      required: true,
-      unique: true,
-      admin: {
-        description: 'URL-friendly identifier (e.g., "court-marriage-lawyer")',
-      },
-    },
-    {
-      name: 'layout',
-      type: 'blocks',
-      blocks: [
-        Hero,
-        RichContent,
-        FAQ,
-        Highlights,
-        WhyChooseUs,
-        RegistrationLicenses,
-        HowItWorks,
-        Consultation,
-        CTA,
-        BlogFeed,
-        NewsFeed,
-        GalleryBlock,
-        TestimonialsBlock,
-        ServicesCarousel,
-        LawyersCarousel,
-        CodeSnippet,
-        Logos,
-        Documents,
+      type: 'tabs',
+      tabs: [
+        // ── Content Tab ─────────────────────────────────────────────────────
+        {
+          label: 'Content',
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'slug',
+              type: 'text',
+              required: true,
+              unique: true,
+              admin: {
+                description: 'URL-friendly identifier (e.g., "court-marriage-lawyer")',
+              },
+            },
+            {
+              name: 'layout',
+              type: 'blocks',
+              blocks: [
+                Hero,
+                RichContent,
+                FAQ,
+                Highlights,
+                WhyChooseUs,
+                RegistrationLicenses,
+                HowItWorks,
+                Consultation,
+                CTA,
+                BlogFeed,
+                NewsFeed,
+                GalleryBlock,
+                TestimonialsBlock,
+                ServicesCarousel,
+                LawyersCarousel,
+                CodeSnippet,
+                Logos,
+                Documents,
+              ],
+              admin: {
+                description: '🎨 Build this service page using flexible blocks — just like Pages.',
+              },
+            },
+          ],
+        },
+
+        // ── Relations Tab ───────────────────────────────────────────────────
+        {
+          label: 'Relations',
+          fields: [
+            {
+              name: 'assignedFAQs',
+              type: 'relationship',
+              relationTo: 'faqs',
+              hasMany: true,
+              admin: {
+                description: '📋 Assign FAQs to show on this service page (used by the FAQ block in auto mode).',
+              },
+            },
+            {
+              name: 'assignedBlogs',
+              type: 'relationship',
+              relationTo: 'blogs',
+              hasMany: true,
+              admin: {
+                description: '📰 Manually assign blog posts to feature on this service page.',
+              },
+            },
+            {
+              name: 'assignedNews',
+              type: 'relationship',
+              relationTo: 'news',
+              hasMany: true,
+              admin: {
+                description: '📣 Manually assign news articles to feature on this service page.',
+              },
+            },
+            {
+              name: 'assignedTestimonials',
+              type: 'relationship',
+              relationTo: 'testimonials',
+              hasMany: true,
+              admin: {
+                description: '⭐ Manually assign testimonials to feature on this service page.',
+              },
+            },
+            {
+              name: 'assignedLawyers',
+              type: 'relationship',
+              relationTo: 'lawyers',
+              hasMany: true,
+              admin: {
+                description: '👨‍⚖️ Highlight specific lawyers for this service.',
+              },
+            },
+          ],
+        },
+
+        // ── SEO Tab ─────────────────────────────────────────────────────────
+        {
+          label: 'SEO',
+          fields: [
+            {
+              name: 'seo',
+              type: 'group',
+              label: false,
+              fields: [
+                { name: 'metaTitle', type: 'text', label: 'Meta Title' },
+                { name: 'metaDescription', type: 'textarea', label: 'Meta Description' },
+                { name: 'keywords', type: 'text', label: 'Keywords (comma separated)' },
+                { name: 'ogImage', type: 'upload', relationTo: 'media', label: 'OG Image' },
+                { name: 'canonicalUrl', type: 'text', label: 'Canonical URL' },
+                {
+                  name: 'robotsMeta',
+                  type: 'select',
+                  label: 'Robots Meta',
+                  defaultValue: 'index,follow',
+                  options: [
+                    { label: 'Index, Follow', value: 'index,follow' },
+                    { label: 'No Index, Follow', value: 'noindex,follow' },
+                    { label: 'Index, No Follow', value: 'index,nofollow' },
+                    { label: 'No Index, No Follow', value: 'noindex,nofollow' },
+                  ],
+                },
+                { name: 'schemaMarkup', type: 'json', label: 'Schema Markup (JSON-LD)' },
+              ],
+            },
+          ],
+        },
       ],
-      admin: {
-        description: '🎨 Using Blocks will OVERRIDE the legacy fixed fields below (banner, content, highlights) on the frontend. Use this to design flexible service pages!',
-      },
     },
-    {
-      name: 'banner',
-      type: 'upload',
-      relationTo: 'media',
-    },
+
+    // ── Sidebar fields ───────────────────────────────────────────────────────
     {
       name: 'activeLocations',
       type: 'relationship',
@@ -120,7 +217,7 @@ export const Services: CollectionConfig = {
       hasMany: true,
       admin: {
         position: 'sidebar',
-        description: 'Select the cities where this service is actively offered. Only selected cities will generate live landing pages.',
+        description: 'Select the cities where this service is actively offered.',
       },
     },
     {
@@ -165,7 +262,7 @@ export const Services: CollectionConfig = {
       label: 'Category Heading',
       admin: {
         position: 'sidebar',
-        description: 'Group heading inside the dropdown (e.g. "Family / Personal", "Criminal / Writ"). Items with the same heading are grouped together.',
+        description: 'Group heading inside the dropdown (e.g. "Family / Personal").',
         condition: (data) => data.showInHeader && data.navDropdown && data.navDropdown !== 'none',
       },
     },
@@ -191,19 +288,11 @@ export const Services: CollectionConfig = {
       },
     },
     {
-      name: 'icon',
-      type: 'upload',
-      relationTo: 'media',
-      admin: {
-        description: 'Legacy icon upload (optional). Prefer using the Native Legal Icon below.',
-      }
-    },
-    {
       name: 'uiIcon',
       type: 'select',
       label: 'Native Legal Icon',
       admin: {
-        description: 'Select a highly optimized SVG icon to use for standard layout cards.',
+        description: 'Select a highly optimized SVG icon for navigation cards.',
         position: 'sidebar',
       },
       options: [
@@ -222,71 +311,6 @@ export const Services: CollectionConfig = {
         { label: 'Money Bill (Finance)', value: 'money-bill' },
         { label: 'Book (Education/Law Book)', value: 'book' },
         { label: 'Stamp (Certification)', value: 'stamp' },
-      ],
-    },
-    {
-      name: 'content',
-      type: 'richText',
-    },
-    {
-      name: 'highlights',
-      type: 'array',
-      admin: {
-        description: 'Key highlights / features of this service',
-      },
-      fields: [
-        {
-          name: 'title',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'description',
-          type: 'textarea',
-        },
-        {
-          name: 'icon',
-          type: 'upload',
-          relationTo: 'media',
-        },
-      ],
-    },
-    {
-      name: 'faqs',
-      type: 'relationship',
-      relationTo: 'faqs',
-      hasMany: true,
-      admin: {
-        description: 'Assign existing FAQs to this service',
-      },
-    },
-    // SEO Group
-    {
-      name: 'seo',
-      type: 'group',
-      label: 'SEO',
-      admin: {
-        description: 'Search engine optimization fields',
-      },
-      fields: [
-        { name: 'metaTitle', type: 'text', label: 'Meta Title' },
-        { name: 'metaDescription', type: 'textarea', label: 'Meta Description' },
-        { name: 'keywords', type: 'text', label: 'Keywords (comma separated)' },
-        { name: 'ogImage', type: 'upload', relationTo: 'media', label: 'OG Image' },
-        { name: 'canonicalUrl', type: 'text', label: 'Canonical URL' },
-        {
-          name: 'robotsMeta',
-          type: 'select',
-          label: 'Robots Meta',
-          defaultValue: 'index,follow',
-          options: [
-            { label: 'Index, Follow', value: 'index,follow' },
-            { label: 'No Index, Follow', value: 'noindex,follow' },
-            { label: 'Index, No Follow', value: 'index,nofollow' },
-            { label: 'No Index, No Follow', value: 'noindex,nofollow' },
-          ],
-        },
-        { name: 'schemaMarkup', type: 'json', label: 'Schema Markup (JSON-LD)' },
       ],
     },
   ],
