@@ -7,36 +7,29 @@ import { InlineLeadForm } from './InlineLeadForm'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import {
-  FaBalanceScale,
-  FaCheckCircle,
-  FaUsers,
-  FaClock,
-  FaShieldAlt,
-  FaStar,
-  FaFileAlt,
-  FaTrophy,
-  FaPhoneAlt,
-  FaWhatsapp,
+  FaBalanceScale, FaCheckCircle, FaUsers, FaClock,
+  FaShieldAlt, FaStar, FaFileAlt, FaTrophy,
+  FaPhoneAlt, FaWhatsapp,
 } from 'react-icons/fa'
 
 const IconMap: Record<string, React.ReactNode> = {
-  scale: <FaBalanceScale />,
-  check: <FaCheckCircle />,
-  users: <FaUsers />,
-  clock: <FaClock />,
-  shield: <FaShieldAlt />,
-  star: <FaStar />,
-  file: <FaFileAlt />,
-  trophy: <FaTrophy />,
+  scale: <FaBalanceScale />, check: <FaCheckCircle />, users: <FaUsers />,
+  clock: <FaClock />, shield: <FaShieldAlt />, star: <FaStar />,
+  file: <FaFileAlt />, trophy: <FaTrophy />,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function HeroBlock({ block }: { block: any }) {
   const bgImage = block.backgroundImage
-  const isLeadForm = block.layoutStyle === 'withLeadForm'
-  const showSearch = block.showSearchBar !== false && !isLeadForm
-  const showLeadForm = isLeadForm || block.showLeadForm === true
-  const hasRightPanel = showLeadForm
+
+  // ── Layout flags ──────────────────────────────────────────────────────────
+  // withLeadForm  → split: text left, full lead form right
+  // standard + showLeadForm checked → split: text left, compact form right
+  // standard (default) → everything CENTERED, no form at all
+  const isWithLeadForm  = block.layoutStyle === 'withLeadForm'
+  const isStandardForm  = block.layoutStyle === 'standard' && block.showLeadForm === true
+  const hasRightPanel   = isWithLeadForm || isStandardForm
+  const showSearch      = block.showSearchBar !== false
 
   const payload = await getPayload({ config: configPromise })
   const [svcRes, locRes] = await Promise.all([
@@ -49,143 +42,140 @@ export async function HeroBlock({ block }: { block: any }) {
   return (
     <div className="hero-wrapper">
 
-      {/* ── HERO SECTION ─────────────────────────────────────────────── */}
-      <div className="hero-section">
+      {/* ── HERO SECTION ──────────────────────────────────────────────────── */}
+      <div className={`hero-section ${hasRightPanel ? 'hero-section--tall' : 'hero-section--compact'}`}>
 
         {/* Background */}
         {bgImage?.url ? (
           <div className="hero-bg">
-            <Image
-              src={bgImage.url}
-              alt={bgImage.alt || 'Hero background'}
-              fill
-              className="hero-bg-img"
-              priority
-              sizes="100vw"
-            />
+            <Image src={bgImage.url} alt={bgImage.alt || ''} fill className="hero-bg-img" priority sizes="100vw" />
             <div className="hero-overlay hero-overlay-lr" />
             <div className="hero-overlay hero-overlay-bt" />
           </div>
         ) : (
-          <div className="hero-bg hero-bg-solid">
-            <div className="hero-glow" />
-          </div>
+          <div className="hero-bg hero-bg-solid"><div className="hero-glow" /></div>
         )}
 
         <div className="container-page hero-content">
-          <div className={`hero-grid ${hasRightPanel ? 'hero-grid--with-form' : 'hero-grid--no-form'}`}>
 
-            {/* ── LEFT — Text + Search ─────────────────────────────── */}
-            <div className="hero-text">
-
+          {/* ── CENTERED layout (standard, no form) ──────────────────────── */}
+          {!hasRightPanel && (
+            <div className="hero-centered">
               {/* Live badge */}
               <div className="hero-badge">
                 <div className="hero-badge-avatars">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="hero-badge-avatar">
-                      <div className="hero-badge-avatar-inner" />
-                    </div>
-                  ))}
+                  {[1, 2, 3].map((i) => <div key={i} className="hero-badge-avatar"><div className="hero-badge-avatar-inner" /></div>)}
                 </div>
                 <span className="hero-badge-label">
-                  <span className="hero-badge-dot">
-                    <span className="hero-badge-dot-ping" />
-                    <span className="hero-badge-dot-solid" />
-                  </span>
+                  <span className="hero-badge-dot"><span className="hero-badge-dot-ping" /><span className="hero-badge-dot-solid" /></span>
                   150+ Lawyers Online Now
                 </span>
               </div>
 
-              {/* Heading */}
-              <h1 className="hero-heading">
+              <h1 className="hero-heading hero-heading--centered">
                 {block.heading || 'Online Legal Advice From Top Lawyers In India'}
               </h1>
 
-              {/* Subheading */}
               {block.subheading && (
-                <p className="hero-subheading">{block.subheading}</p>
+                <p className="hero-subheading hero-subheading--centered">{block.subheading}</p>
               )}
 
               {/* Trust pills */}
-              <div className="hero-trust-pills">
-                <div className="hero-trust-pill">
-                  <FaCheckCircle className="hero-trust-pill-icon" />
-                  Free First Consultation
-                </div>
-                <div className="hero-trust-pill">
-                  <FaShieldAlt className="hero-trust-pill-icon" />
-                  100% Confidential
-                </div>
-                <div className="hero-trust-pill">
-                  <FaClock className="hero-trust-pill-icon" />
-                  Reply in &lt; 5 Min
-                </div>
+              <div className="hero-trust-pills hero-trust-pills--centered">
+                <div className="hero-trust-pill"><FaCheckCircle className="hero-trust-pill-icon" />Free First Consultation</div>
+                <div className="hero-trust-pill"><FaShieldAlt className="hero-trust-pill-icon" />100% Confidential</div>
+                <div className="hero-trust-pill"><FaClock className="hero-trust-pill-icon" />Reply in &lt; 5 Min</div>
               </div>
 
-              {/* Search Bar — only on standard layout */}
+              {/* Search bar */}
               {showSearch && (
-                <div className="hero-search-wrap">
+                <div className="hero-search-wrap hero-search-wrap--centered">
                   <SearchBar locations={locations} services={services} />
                 </div>
               )}
 
-              {/* CTA Buttons */}
-              <div className="hero-cta-row">
+              {/* CTA buttons */}
+              <div className="hero-cta-row hero-cta-row--centered">
                 <Link href={block.ctaLink || '/consultation'} className="hero-btn-gold">
-                  <FaPhoneAlt />
-                  {block.ctaText || 'Book Free Consultation'}
+                  <FaPhoneAlt />{block.ctaText || 'Book Free Consultation'}
                 </Link>
                 {block.secondaryCta?.text && (
-                  <a
-                    href={block.secondaryCta.link || 'https://wa.me/919650515469'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hero-btn-whatsapp"
-                  >
-                    <FaWhatsapp />
-                    {block.secondaryCta.text}
+                  <a href={block.secondaryCta.link || 'https://wa.me/919650515469'} target="_blank" rel="noopener noreferrer" className="hero-btn-whatsapp">
+                    <FaWhatsapp />{block.secondaryCta.text}
                   </a>
                 )}
               </div>
             </div>
+          )}
 
-            {/* ── RIGHT — Lead Form (only when enabled) ────────────── */}
-            {hasRightPanel && (
-              <div className="hero-form-wrap">
-                <div className="hero-form-glow" />
-                <div className="hero-form-inner">
-                  {isLeadForm ? (
-                    <LeadFormWidget services={services} locations={locations} />
-                  ) : (
-                    <InlineLeadForm services={services} />
+          {/* ── SPLIT layout (with form) ──────────────────────────────────── */}
+          {hasRightPanel && (
+            <div className="hero-grid hero-grid--with-form">
+              {/* Left */}
+              <div className="hero-text">
+                <div className="hero-badge">
+                  <div className="hero-badge-avatars">
+                    {[1, 2, 3].map((i) => <div key={i} className="hero-badge-avatar"><div className="hero-badge-avatar-inner" /></div>)}
+                  </div>
+                  <span className="hero-badge-label">
+                    <span className="hero-badge-dot"><span className="hero-badge-dot-ping" /><span className="hero-badge-dot-solid" /></span>
+                    150+ Lawyers Online Now
+                  </span>
+                </div>
+
+                <h1 className="hero-heading">{block.heading || 'Online Legal Advice From Top Lawyers In India'}</h1>
+
+                {block.subheading && <p className="hero-subheading">{block.subheading}</p>}
+
+                <div className="hero-trust-pills">
+                  <div className="hero-trust-pill"><FaCheckCircle className="hero-trust-pill-icon" />Free First Consultation</div>
+                  <div className="hero-trust-pill"><FaShieldAlt className="hero-trust-pill-icon" />100% Confidential</div>
+                  <div className="hero-trust-pill"><FaClock className="hero-trust-pill-icon" />Reply in &lt; 5 Min</div>
+                </div>
+
+                <div className="hero-cta-row">
+                  <Link href={block.ctaLink || '/consultation'} className="hero-btn-gold">
+                    <FaPhoneAlt />{block.ctaText || 'Book Free Consultation'}
+                  </Link>
+                  {block.secondaryCta?.text && (
+                    <a href={block.secondaryCta.link || 'https://wa.me/919650515469'} target="_blank" rel="noopener noreferrer" className="hero-btn-whatsapp">
+                      <FaWhatsapp />{block.secondaryCta.text}
+                    </a>
                   )}
                 </div>
               </div>
-            )}
 
-          </div>
+              {/* Right — form */}
+              <div className="hero-form-wrap">
+                <div className="hero-form-glow" />
+                <div className="hero-form-inner">
+                  {isWithLeadForm
+                    ? <LeadFormWidget services={services} locations={locations} />
+                    : <InlineLeadForm services={services} />}
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
 
-      {/* ── STATS BAR ────────────────────────────────────────────────── */}
+      {/* ── STATS BAR ──────────────────────────────────────────────────────── */}
       {block.showStatsBar !== false && (() => {
         const defaultStats = [
           { icon: 'scale', value: '25k+', label: 'Consultations' },
-          { icon: 'check', value: '98%', label: 'Success Rate' },
+          { icon: 'check', value: '98%',  label: 'Success Rate' },
           { icon: 'users', value: '1.2k+', label: 'Verified Advocates' },
-          { icon: 'clock', value: '15m', label: 'Response Time' },
+          { icon: 'clock', value: '15m',  label: 'Response Time' },
         ]
-        const statsData = block.stats && block.stats.length > 0 ? block.stats : defaultStats
-
+        const statsData = (block.stats?.length > 0) ? block.stats : defaultStats
         return (
           <div className="hero-stats-bar">
             <div className="container-page">
               <div className="hero-stats-grid">
                 {statsData.map((stat: { icon: string; value: string; label: string }, i: number) => (
                   <div key={i} className="hero-stat-item">
-                    <span className="hero-stat-icon text-[var(--color-secondary)]">
-                      {IconMap[stat.icon] || <FaStar />}
-                    </span>
+                    <span className="hero-stat-icon text-[var(--color-secondary)]">{IconMap[stat.icon] || <FaStar />}</span>
                     <div>
                       <span className="hero-stat-value">{stat.value}</span>
                       <span className="hero-stat-label">{stat.label}</span>
