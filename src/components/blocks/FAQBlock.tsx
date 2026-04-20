@@ -92,17 +92,19 @@ function FAQItem({
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-      {isOpen && (
-        <div className="px-5 pb-5 text-[var(--color-text-secondary)] leading-relaxed border-t border-[var(--color-border)] bg-slate-50/50">
-          <div className="pt-5 rich-text prose prose-sm max-w-none">
-            {typeof answer === 'string' ? (
-              <div dangerouslySetInnerHTML={{ __html: answer }} />
-            ) : (
-              <div dangerouslySetInnerHTML={{ __html: serializeLexical(answer) }} />
-            )}
+      <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+        <div className="overflow-hidden">
+          <div className="px-5 pb-5 text-[var(--color-text-secondary)] leading-relaxed border-t border-[var(--color-border)] bg-slate-50/50">
+            <div className="pt-5 rich-text prose prose-sm max-w-none">
+              {typeof answer === 'string' ? (
+                <div dangerouslySetInnerHTML={{ __html: answer }} />
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: serializeLexical(answer) }} />
+              )}
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }

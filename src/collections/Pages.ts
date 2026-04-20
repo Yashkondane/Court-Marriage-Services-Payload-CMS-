@@ -21,7 +21,6 @@ import { CodeSnippet } from '@/blocks/CodeSnippet'
 import { Logos } from '@/blocks/Logos'
 
 import { Documents } from '@/blocks/Documents'
-import { RawImage } from '@/blocks/RawImage'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -123,7 +122,6 @@ export const Pages: CollectionConfig = {
                 Logos,
 
                 Documents,
-                RawImage,
               ],
               admin: {
                 description: '🎨 Build your webpage here! Click "Add Block" below to stack sections. ⚠️ CRITICAL WARNING: If you forget a required field, hit Save, and get an error, DO NOT hit save again. Delete the blocks and re-add them, or start a new page, otherwise it will crash the save pipeline!',

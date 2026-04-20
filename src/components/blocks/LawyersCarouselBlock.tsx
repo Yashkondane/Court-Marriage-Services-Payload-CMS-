@@ -3,7 +3,8 @@ import React, { useEffect, useState, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FaStar, FaMapMarkerAlt, FaClock, FaCheckCircle, FaAward } from 'react-icons/fa'
+import { FiAward, FiMapPin, FiBriefcase, FiClock, FiStar, FiCheckCircle } from 'react-icons/fi'
+import { FaStar, FaCheckCircle as FaCheckCircleSolid } from 'react-icons/fa'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function LawyersCarouselBlock({ block }: { block: any }) {
@@ -98,7 +99,7 @@ export function LawyersCarouselBlock({ block }: { block: any }) {
                     </div>
                     {/* Verification Badge */}
                     <div className="absolute bottom-2 right-2 z-10 bg-white rounded-full p-0.5">
-                      <FaCheckCircle className="text-green-500 text-2xl" />
+                      <FaCheckCircleSolid className="text-green-500 text-2xl" />
                     </div>
                   </div>
 
@@ -125,22 +126,16 @@ export function LawyersCarouselBlock({ block }: { block: any }) {
 
                   {/* Info Grid */}
                   <div className="w-full text-left space-y-3 mb-8">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400">
-                        <FaAward className="text-sm" />
-                      </div>
+                    <div className="flex items-center gap-3 text-gray-500">
+                      <FiAward className="text-lg text-[var(--color-secondary)]" />
                       <span className="text-sm font-bold text-gray-700">{experience || 0} Years Experience</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400">
-                        <FaMapMarkerAlt className="text-sm" />
-                      </div>
-                      <span className="text-sm font-medium text-gray-500">{locationText || 'India'}</span>
+                    <div className="flex items-center gap-3 text-gray-500">
+                      <FiMapPin className="text-lg text-[var(--color-secondary)]" />
+                      <span className="text-sm font-medium">{locationText || 'India'}</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400">
-                        <FaBalanceScale className="text-sm" />
-                      </div>
+                    <div className="flex items-center gap-3 text-gray-500">
+                      <FiBriefcase className="text-lg text-[var(--color-secondary)]" />
                       <p className="text-sm font-bold text-gray-700 line-clamp-1">
                         {specializations?.map((s: any) => s.title || (typeof s.service === 'object' ? s.service.title : 'General Law')).slice(0, 2).join(', ') || 'General Practice'}
                         {specializations?.length > 2 && <span className="text-[var(--color-secondary)] font-bold ml-1">, +more</span>}
@@ -151,7 +146,7 @@ export function LawyersCarouselBlock({ block }: { block: any }) {
                   {/* Response Time Badge */}
                   <div className="mb-8 w-full">
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50/50 rounded-full border border-amber-100 text-amber-800">
-                      <FaClock className="text-sm opacity-60" />
+                      <FiClock className="text-sm opacity-60" />
                       <span className="text-[11px] font-black uppercase tracking-wider">{responseTime || 'Typically responds in 1 hour'}</span>
                     </div>
                   </div>
@@ -200,11 +195,3 @@ export function LawyersCarouselBlock({ block }: { block: any }) {
   )
 }
 
-// Icon for the grid view
-function FaBalanceScale({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="currentColor" viewBox="0 0 20 20">
-      <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.501 3.501 0 0113 16a3.5 3.5 0 01-4.718-2.618l-.963-.482a1 1 0 01-.447-1.342l1.638-3.276-1.51-.604V18a1 1 0 11-2 0V7.618l-1.51.604 1.638 3.276a1 1 0 01-.447 1.342l-.963.482A3.5 3.5 0 013 16a3.501 3.501 0 01-4.718-2.618a1 1 0 01-.285-1.05l1.738-5.42-1.233-.616a1 1 0 01.894-1.79l1.599.8L13 4.323V3a1 1 0 011-1z" clipRule="evenodd" />
-    </svg>
-  )
-}

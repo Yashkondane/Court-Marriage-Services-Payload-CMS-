@@ -18,7 +18,6 @@ import { WhyChooseUsBlock } from '@/components/blocks/WhyChooseUsBlock'
 import { RegistrationLicensesBlock } from '@/components/blocks/RegistrationLicensesBlock'
 import { HowItWorksBlock } from '@/components/blocks/HowItWorksBlock'
 import { ConsultationBlock } from './ConsultationBlock'
-import { RawImageBlock } from './RawImageBlock'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Block = Record<string, any>
@@ -43,7 +42,6 @@ const blockComponents: Record<string, React.FC<{ block: Block }>> = {
   codeSnippet: CodeSnippetBlock,
 
   documents: DocumentsBlock,
-  rawImage: RawImageBlock,
 }
 
 function getVisibilityClasses(block: Block): string {
