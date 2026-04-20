@@ -42,6 +42,12 @@ for (const col of rels_columns) {
   console.log(`  ✓ services_rels.${col}`)
 }
 
+// ── 1b. Add new columns to existing hero block tables ──────────────────────
+await client.query(`ALTER TABLE "services_blocks_hero" ADD COLUMN IF NOT EXISTS "show_lead_form" boolean DEFAULT false`)
+await client.query(`ALTER TABLE "pages_blocks_hero" ADD COLUMN IF NOT EXISTS "show_lead_form" boolean DEFAULT false`)
+console.log('  ✓ *_blocks_hero.show_lead_form columns ready')
+
+
 // ── 2. Create services_blocks_raw_image if missing ─────────────────────────
 await client.query(`
   CREATE TABLE IF NOT EXISTS "services_blocks_raw_image" (

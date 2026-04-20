@@ -13,9 +13,9 @@ export function RichContentBlock({ block }: { block: any }) {
   const maxWidth = widthMap[block.maxWidth] || widthMap.default
 
   return (
-    <div className="py-12 md:py-16">
+    <div className="py-8 md:py-10">
       <div className={`container-page ${maxWidth} mx-auto`}>
-        <div className="rich-text prose prose-lg prose-slate max-w-none">
+        <div className="rich-text">
           {block.content && (
             <div
               dangerouslySetInnerHTML={{

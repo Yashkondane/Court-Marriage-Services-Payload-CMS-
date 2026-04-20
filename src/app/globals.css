@@ -1539,3 +1539,123 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 2px;
 }
 
+
+/* ==========================================================================
+   RICH CONTENT BLOCK — Article style matching screenshot
+   ========================================================================== */
+
+.rich-text {
+  font-family: var(--font-body);
+  color: #1a1a1a;
+  font-size: 0.975rem;
+  line-height: 1.75;
+}
+
+/* Main heading (h1, h2) — large, bold, tight */
+.rich-text h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #111;
+  margin: 0 0 0.75rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.rich-text h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111;
+  margin: 1.5rem 0 0.2rem;
+  line-height: 1.25;
+}
+
+/* Subheadings (h3) — arrow prefix style like screenshot */
+.rich-text h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111;
+  margin: 1rem 0 0.15rem;
+  line-height: 1.4;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.rich-text h3::before {
+  content: '?';
+  color: #111;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.rich-text h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0.75rem 0 0.1rem;
+}
+
+/* Paragraphs — very tight, close to headings */
+.rich-text p {
+  margin: 0 0 0.6rem;
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* First para after an h3 — no top gap */
+.rich-text h3 + p {
+  margin-top: 0;
+}
+
+.rich-text h2 + p {
+  margin-top: 0.1rem;
+}
+
+/* Lists */
+.rich-text ul,
+.rich-text ol {
+  margin: 0.4rem 0 0.75rem 1.25rem;
+  padding: 0;
+}
+
+.rich-text li {
+  margin-bottom: 0.2rem;
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+/* Links */
+.rich-text a {
+  color: var(--color-secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.rich-text a:hover {
+  opacity: 0.8;
+}
+
+/* Bold */
+.rich-text strong,
+.rich-text b {
+  font-weight: 700;
+  color: #111;
+}
+
+/* Horizontal rule */
+.rich-text hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 1.5rem 0;
+}
+
+/* Blockquote */
+.rich-text blockquote {
+  border-left: 3px solid var(--color-secondary);
+  padding: 0.5rem 0 0.5rem 1rem;
+  margin: 1rem 0;
+  color: #444;
+  font-style: italic;
+}
