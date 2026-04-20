@@ -78,6 +78,17 @@ export const Hero: Block = {
       label: 'Show Search Bar',
       admin: {
         description: 'Display the City + Legal Matter search bar below the hero text.',
+        condition: (_data, siblingData) => siblingData?.layoutStyle === 'standard',
+      },
+    },
+    {
+      name: 'showLeadForm',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Show Lead Capture Form (Standard layout only)',
+      admin: {
+        description: 'Show a compact lead form card on the right side alongside the search bar.',
+        condition: (_data, siblingData) => siblingData?.layoutStyle === 'standard',
       },
     },
     {

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { LeadFormWidget } from './LeadFormWidget'
 import { SearchBar } from './SearchBar'
+import { InlineLeadForm } from './InlineLeadForm'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import {
@@ -17,7 +18,6 @@ import {
   FaPhoneAlt,
   FaWhatsapp,
 } from 'react-icons/fa'
-import { InlineLeadForm } from './InlineLeadForm'
 
 const IconMap: Record<string, React.ReactNode> = {
   scale: <FaBalanceScale />,
@@ -34,6 +34,9 @@ const IconMap: Record<string, React.ReactNode> = {
 export async function HeroBlock({ block }: { block: any }) {
   const bgImage = block.backgroundImage
   const isLeadForm = block.layoutStyle === 'withLeadForm'
+  const showSearch = block.showSearchBar !== false && !isLeadForm
+  const showLeadForm = isLeadForm || block.showLeadForm === true
+  const hasRightPanel = showLeadForm
 
   const payload = await getPayload({ config: configPromise })
   const [svcRes, locRes] = await Promise.all([
@@ -70,9 +73,9 @@ export async function HeroBlock({ block }: { block: any }) {
         )}
 
         <div className="container-page hero-content">
-          <div className={`hero-grid ${isLeadForm ? 'hero-grid--with-form' : 'hero-grid--with-form'}`}>
+          <div className={`hero-grid ${hasRightPanel ? 'hero-grid--with-form' : 'hero-grid--no-form'}`}>
 
-            {/* ── LEFT — Text Content ──────────────────────────────── */}
+            {/* ── LEFT — Text + Search ─────────────────────────────── */}
             <div className="hero-text">
 
               {/* Live badge */}
@@ -119,37 +122,46 @@ export async function HeroBlock({ block }: { block: any }) {
                 </div>
               </div>
 
-              {/* CTA buttons — only on full-screen (no lead form) */}
-              {!isLeadForm && (
-                <div className="hero-cta-row">
-                  <Link href={block.ctaLink || '/consultation'} className="hero-btn-gold">
-                    <FaPhoneAlt />
-                    {block.ctaText || 'Book Free Consultation'}
-                  </Link>
+              {/* Search Bar — only on standard layout */}
+              {showSearch && (
+                <div className="hero-search-wrap">
+                  <SearchBar locations={locations} services={services} />
+                </div>
+              )}
+
+              {/* CTA Buttons */}
+              <div className="hero-cta-row">
+                <Link href={block.ctaLink || '/consultation'} className="hero-btn-gold">
+                  <FaPhoneAlt />
+                  {block.ctaText || 'Book Free Consultation'}
+                </Link>
+                {block.secondaryCta?.text && (
                   <a
-                    href={block.secondaryCtaLink || 'https://wa.me/919650515469'}
+                    href={block.secondaryCta.link || 'https://wa.me/919650515469'}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hero-btn-whatsapp"
                   >
                     <FaWhatsapp />
-                    {block.secondaryCtaText || 'WhatsApp Us'}
+                    {block.secondaryCta.text}
                   </a>
-                </div>
-              )}
-            </div>
-
-            {/* ── RIGHT — Lead Form (both layouts now show a form) ─── */}
-            <div className="hero-form-wrap">
-              <div className="hero-form-glow" />
-              <div className="hero-form-inner">
-                {isLeadForm ? (
-                  <LeadFormWidget services={services} locations={locations} />
-                ) : (
-                  <InlineLeadForm services={services} />
                 )}
               </div>
             </div>
+
+            {/* ── RIGHT — Lead Form (only when enabled) ────────────── */}
+            {hasRightPanel && (
+              <div className="hero-form-wrap">
+                <div className="hero-form-glow" />
+                <div className="hero-form-inner">
+                  {isLeadForm ? (
+                    <LeadFormWidget services={services} locations={locations} />
+                  ) : (
+                    <InlineLeadForm services={services} />
+                  )}
+                </div>
+              </div>
+            )}
 
           </div>
         </div>
