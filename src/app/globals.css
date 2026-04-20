@@ -1228,3 +1228,314 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 1.75rem;
   }
 }
+
+/* ==========================================================================
+   HERO TRUST PILLS
+   ========================================================================== */
+
+.hero-trust-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero-trust-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.75rem;
+  border-radius: 2px;
+  backdrop-filter: blur(4px);
+}
+
+.hero-trust-pill-icon {
+  color: var(--color-secondary);
+  font-size: 0.7rem;
+}
+
+/* ==========================================================================
+   INLINE LEAD FORM — compact card for standard hero layout
+   ========================================================================== */
+
+.inline-lead-card {
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 420px;
+  margin-left: auto;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(194, 152, 33, 0.08);
+  position: relative;
+}
+
+.inline-lead-badge {
+  background: var(--color-secondary);
+  color: #000;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.45rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.inline-lead-badge-dot {
+  width: 6px;
+  height: 6px;
+  background: #000;
+  border-radius: 50%;
+  display: inline-block;
+  animation: pulse 2s infinite;
+}
+
+.inline-lead-header {
+  padding: 1.5rem 1.75rem 0.75rem;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.04), transparent);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.inline-lead-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0 0 0.35rem;
+}
+
+.inline-lead-title-accent {
+  color: var(--color-secondary);
+}
+
+.inline-lead-subtitle {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 500;
+  margin: 0;
+}
+
+.inline-lead-form {
+  padding: 1.25rem 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.inline-lead-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.inline-lead-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.inline-lead-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.inline-lead-input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+  font-weight: 400;
+}
+
+.inline-lead-input:focus {
+  border-color: var(--color-secondary);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.inline-lead-phone-wrap {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.inline-lead-phone-prefix {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 0.9rem;
+  background: rgba(194, 152, 33, 0.15);
+  border: 1px solid rgba(194, 152, 33, 0.3);
+  border-right: none;
+  border-radius: 2px 0 0 2px;
+  color: var(--color-secondary);
+  font-size: 0.85rem;
+  font-weight: 800;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.inline-lead-input--phone {
+  border-radius: 0 2px 2px 0;
+  border-left: none;
+}
+
+.inline-lead-select {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  transition: border-color 0.2s;
+}
+
+.inline-lead-select option {
+  background: #111;
+  color: #fff;
+}
+
+.inline-lead-select:focus {
+  border-color: var(--color-secondary);
+}
+
+.inline-lead-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: var(--color-secondary);
+  color: #000;
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  margin-top: 0.25rem;
+}
+
+.inline-lead-submit:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.inline-lead-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.inline-lead-submit-arrow {
+  opacity: 0.6;
+  font-size: 0.75rem;
+}
+
+.inline-lead-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.inline-lead-privacy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.04em;
+}
+
+/* Success state */
+.inline-lead-success {
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 3rem 2rem;
+  text-align: center;
+  max-width: 420px;
+  margin-left: auto;
+}
+
+.inline-lead-success-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--color-secondary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  font-size: 1.5rem;
+  color: #000;
+}
+
+.inline-lead-success h3 {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.inline-lead-success p {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.inline-lead-success strong {
+  color: var(--color-secondary);
+}
+
+.inline-lead-success-badge {
+  display: inline-block;
+  margin-top: 1.5rem;
+  background: rgba(194, 152, 33, 0.1);
+  border: 1px solid rgba(194, 152, 33, 0.3);
+  color: var(--color-secondary);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.4rem 1rem;
+  border-radius: 2px;
+}
+

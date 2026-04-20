@@ -20,6 +20,7 @@ import { LawyersCarousel } from '@/blocks/LawyersCarousel'
 import { CodeSnippet } from '@/blocks/CodeSnippet'
 import { Logos } from '@/blocks/Logos'
 import { Documents } from '@/blocks/Documents'
+import { RawImage } from '@/blocks/RawImage'
 
 export const Services: CollectionConfig = {
   slug: 'services',
@@ -115,6 +116,7 @@ export const Services: CollectionConfig = {
                 CodeSnippet,
                 Logos,
                 Documents,
+                RawImage,
               ],
               admin: {
                 description: '🎨 Build this service page using flexible blocks — just like Pages.',
