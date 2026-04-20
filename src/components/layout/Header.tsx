@@ -202,12 +202,14 @@ function MegaDropdown({
       </button>
 
       {/* Mega dropdown panel */}
-      <div
-        className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 bg-white border border-gray-100 shadow-2xl rounded-sm opacity-0 translate-y-3 pointer-events-none group-hover/mega:opacity-100 group-hover/mega:translate-y-0 group-hover/mega:pointer-events-auto transition-all duration-300 z-[110] min-w-[480px]"
-        style={{ width: `${Math.max(480, colCount * 180)}px`, maxWidth: '90vw' }}
-      >
-        {/* Arrow tip */}
-        <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45 shadow-[-2px_-2px_4px_rgba(0,0,0,0.04)]" />
+      {/* Wrapper with padding-top (pt-6) creates an invisible "bridge" for the mouse, preventing it from losing hover state. */}
+      <div className="absolute top-full left-1/2 -translate-x-1/2 pt-6 opacity-0 translate-y-3 pointer-events-none group-hover/mega:opacity-100 group-hover/mega:translate-y-0 group-hover/mega:pointer-events-auto transition-all duration-300 z-[110]">
+        <div
+          className="bg-white border border-gray-100 shadow-2xl rounded-sm min-w-[480px] relative"
+          style={{ width: `${Math.max(480, colCount * 180)}px`, maxWidth: '90vw' }}
+        >
+          {/* Arrow tip */}
+          <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45 shadow-[-2px_-2px_4px_rgba(0,0,0,0.04)]" />
 
         {hasGroups ? (
           <div className="p-6">
@@ -252,22 +254,21 @@ function MegaDropdown({
           </div>
         )}
 
-        {/* Bottom CTA bar */}
-        <div className="bg-gray-50 border-t border-gray-100 px-6 py-3 flex items-center justify-between rounded-b-sm">
-          <div className="flex items-center gap-4 text-[11px] text-gray-500 font-medium">
-            <span className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-              Verified Experts
-            </span>
-            <span>·</span>
-            <span>Free First Consultation</span>
+        {/* Bottom banner */}
+        <div className="bg-gray-50 border-t border-gray-100 p-4 rounded-b-sm flex items-center justify-between">
+          <div className="text-[11px] font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 block" />
+            Verified Experts
+            <span className="mx-1 text-gray-300">·</span>
+            Free First Consultation
           </div>
           <Link
             href={allHref}
-            className="text-[11px] font-black text-[var(--color-secondary)] uppercase tracking-widest hover:underline shrink-0"
+            className="text-[11px] font-black text-[var(--color-secondary)] uppercase tracking-[0.15em] hover:text-[#a07c16] transition-colors flex items-center"
           >
-            {allLabel} →
+            {allLabel} <span className="ml-1 text-[14px]">→</span>
           </Link>
+        </div>
         </div>
       </div>
     </div>
