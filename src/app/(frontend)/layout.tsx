@@ -96,8 +96,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     })
     footerLocations = footerLocResult.docs
 
-    // @ts-ignore - Bypass type check until payload-types.ts is re-generated
-    siteSettings = await payload.findGlobal({
+    // Bypass type check completely by casting payload to any until types generation syncs
+    siteSettings = await (payload as any).findGlobal({
       slug: 'site-settings',
       depth: 0,
     })
