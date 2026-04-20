@@ -7,9 +7,7 @@ export const RawImage: Block = {
     singular: 'Raw Image',
     plural: 'Raw Images',
   },
-  admin: {
-    description: 'Display an image exactly as uploaded — no Next.js optimisation, no WebP conversion, no resizing.',
-  },
+
   fields: [
     {
       name: 'image',
