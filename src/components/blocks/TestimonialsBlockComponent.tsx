@@ -1,5 +1,4 @@
 import React from 'react'
-import CircularTestimonials from '@/components/ui/circular-testimonials'
 import { FaUserCircle, FaStar } from 'react-icons/fa'
 import { ImQuotesRight } from 'react-icons/im'
 
@@ -36,9 +35,6 @@ export function TestimonialsBlockComponent({ block }: { block: any }) {
         </div>
 
         {testimonials.length > 0 ? (
-          layout === 'carousel' ? (
-            <CircularTestimonials testimonials={testimonials} />
-          ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {testimonials.map((t: any, i: number) => (
                 <div key={i} className="bg-white p-8 rounded-sm shadow-sm border border-gray-100 flex flex-col h-full hover:shadow-lg transition-shadow duration-300 relative group">
@@ -71,9 +67,7 @@ export function TestimonialsBlockComponent({ block }: { block: any }) {
                     </div>
                   </div>
                 </div>
-              ))}
             </div>
-          )
         ) : (
           <div className="col-span-full text-center py-20 bg-white rounded-md border border-dashed border-gray-200">
             <p className="text-gray-400 text-lg">
