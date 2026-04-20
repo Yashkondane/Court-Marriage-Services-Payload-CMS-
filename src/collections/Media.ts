@@ -22,6 +22,11 @@ export const Media: CollectionConfig = {
             file.mimetype?.startsWith('image/') &&
             !['image/svg+xml', 'image/gif'].includes(file.mimetype)
           ) {
+            // Skip optimization if the file is already under 100KB (preserve original)
+            if (file.size && file.size < 100 * 1024) {
+              return args
+            }
+
             try {
               const sharp = require('sharp')
               
