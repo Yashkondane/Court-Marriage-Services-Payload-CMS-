@@ -20,7 +20,6 @@ import { LawyersCarousel } from '@/blocks/LawyersCarousel'
 import { CodeSnippet } from '@/blocks/CodeSnippet'
 import { Logos } from '@/blocks/Logos'
 import { Documents } from '@/blocks/Documents'
-import { RawImage } from '@/blocks/RawImage'
 
 export const Services: CollectionConfig = {
   slug: 'services',
@@ -116,7 +115,6 @@ export const Services: CollectionConfig = {
                 CodeSnippet,
                 Logos,
                 Documents,
-                RawImage,
               ],
               admin: {
                 description: '🎨 Build this service page using flexible blocks — just like Pages.',
@@ -230,6 +228,16 @@ export const Services: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description: 'If enabled, this service will appear in the "Services" menu in the header.',
+      },
+    },
+    {
+      name: 'showInHeroForm',
+      type: 'checkbox',
+      label: 'Show in Hero Lead/Search Forms',
+      defaultValue: true,
+      admin: {
+        position: 'sidebar',
+        description: 'If disabled, this service will NOT appear in the hero search bar or lead capture dropdowns.',
       },
     },
     {

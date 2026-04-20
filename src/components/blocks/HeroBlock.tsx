@@ -36,7 +36,10 @@ export async function HeroBlock({ block }: { block: any }) {
     payload.find({ collection: 'services', limit: 100, depth: 0 }),
     payload.find({ collection: 'locations', limit: 100, depth: 0 }),
   ])
-  const services = svcRes.docs
+  
+  // Only include services that have showInHeroForm explicitly true,
+  // or that don't have the field yet (for backward compatibility).
+  const services = svcRes.docs.filter((s: any) => s.showInHeroForm !== false)
   const locations = locRes.docs
 
   return (

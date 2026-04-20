@@ -47,6 +47,11 @@ await client.query(`ALTER TABLE "services_blocks_hero" ADD COLUMN IF NOT EXISTS 
 await client.query(`ALTER TABLE "pages_blocks_hero" ADD COLUMN IF NOT EXISTS "show_lead_form" boolean DEFAULT false`)
 console.log('  ✓ *_blocks_hero.show_lead_form columns ready')
 
+// ── 1c. Add search visibility column to services ───────────────────────────
+await client.query(`ALTER TABLE "services" ADD COLUMN IF NOT EXISTS "show_in_hero_form" boolean DEFAULT true`)
+console.log('  ✓ services.show_in_hero_form column ready')
+
+
 
 // ── 2. Create services_blocks_raw_image if missing ─────────────────────────
 await client.query(`
