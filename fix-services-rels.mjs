@@ -20,6 +20,13 @@ const client = new Client({
 await client.connect()
 console.log('🔌 Connected to database')
 
+await client.query(`
+  ALTER TABLE locations 
+  ADD COLUMN IF NOT EXISTS show_in_footer boolean,
+  ADD COLUMN IF NOT EXISTS footer_order numeric
+`);
+console.log('Successfully checked/added footer columns to locations.');
+
 // ── 1. services_rels: add missing relationship columns ─────────────────────
 const rels_columns = [
   'pages_id',
@@ -48,8 +55,10 @@ await client.query(`ALTER TABLE "pages_blocks_hero" ADD COLUMN IF NOT EXISTS "sh
 console.log('  ✓ *_blocks_hero.show_lead_form columns ready')
 
 // ── 1c. Add search visibility column to services ───────────────────────────
-await client.query(`ALTER TABLE "services" ADD COLUMN IF NOT EXISTS "show_in_hero_form" boolean DEFAULT true`)
-console.log('  ✓ services.show_in_hero_form column ready')
+await client.query(`ALTER TABLE services ADD COLUMN IF NOT EXISTS show_in_hero_form boolean DEFAULT true`);
+await client.query(`ALTER TABLE services ADD COLUMN IF NOT EXISTS show_in_footer boolean`);
+await client.query(`ALTER TABLE services ADD COLUMN IF NOT EXISTS footer_order numeric`);
+console.log('Successfully checked/added show_in_hero_form, show_in_footer, and footer_order columns to services.');
 
 
 

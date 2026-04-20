@@ -17,50 +17,80 @@ export const Locations: CollectionConfig = {
   },
   fields: [
     {
-      name: 'name',
-      type: 'text',
-      required: true,
-    },
-    {
-      name: 'slug',
-      type: 'text',
-      required: true,
-      admin: {
-        description: 'URL-friendly name (e.g., "delhi", "saket")',
-      },
-    },
-    {
-      name: 'type',
-      type: 'select',
-      required: true,
-      options: [
-        { label: 'Country', value: 'country' },
-        { label: 'State', value: 'state' },
-        { label: 'City', value: 'city' },
-        { label: 'Area', value: 'area' },
-      ],
-    },
-    {
-      name: 'parent',
-      type: 'relationship',
-      relationTo: 'locations',
-      admin: {
-        description: 'Parent location (e.g., City → State, Area → City)',
-      },
-      filterOptions: ({ relationTo, data }) => {
-        // Only allow selecting a parent of a higher level type
-        const typeHierarchy: Record<string, string[]> = {
-          state: ['country'],
-          city: ['state'],
-          area: ['city'],
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'General',
+          fields: [
+            {
+              name: 'name',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'slug',
+              type: 'text',
+              required: true,
+              admin: {
+                description: 'URL-friendly name (e.g., "delhi", "saket")',
+              },
+            },
+            {
+              name: 'type',
+              type: 'select',
+              required: true,
+              options: [
+                { label: 'Country', value: 'country' },
+                { label: 'State', value: 'state' },
+                { label: 'City', value: 'city' },
+                { label: 'Area', value: 'area' },
+              ],
+            },
+            {
+              name: 'parent',
+              type: 'relationship',
+              relationTo: 'locations',
+              admin: {
+                description: 'Parent location (e.g., City → State, Area → City)',
+              },
+              filterOptions: ({ relationTo, data }) => {
+                // Only allow selecting a parent of a higher level type
+                const typeHierarchy: Record<string, string[]> = {
+                  state: ['country'],
+                  city: ['state'],
+                  area: ['city'],
+                }
+                const currentType = data?.type as string
+                const allowedParentTypes = typeHierarchy[currentType]
+                if (!allowedParentTypes) return true
+                return {
+                  type: { in: allowedParentTypes },
+                }
+              },
+            },
+          ]
+        },
+        {
+          label: 'Footer Config',
+          fields: [
+            {
+              name: 'showInFooter',
+              type: 'checkbox',
+              defaultValue: false,
+              label: 'Show in Footer Links',
+            },
+            {
+              name: 'footerOrder',
+              type: 'number',
+              defaultValue: 0,
+              label: 'Footer Display Order',
+              admin: {
+                condition: (data) => data.showInFooter,
+              },
+            },
+          ]
         }
-        const currentType = data?.type as string
-        const allowedParentTypes = typeHierarchy[currentType]
-        if (!allowedParentTypes) return true
-        return {
-          type: { in: allowedParentTypes },
-        }
-      },
-    },
+      ]
+    }
   ],
 }

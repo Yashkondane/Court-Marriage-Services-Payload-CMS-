@@ -58,6 +58,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   let legalMatterGroups: NavGroup[] = []
   let navServices: any[] = [] // keep for backward compat
   
+  let footerServices: any[] = []
+  let footerLocations: any[] = []
+  let siteSettings: any = null
+  
   try {
     const payload = await getPayload()
     const result = await payload.find({
@@ -72,6 +76,30 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     navServices = result.docs
     findALawyerGroups = groupServices(result.docs, 'find-a-lawyer')
     legalMatterGroups = groupServices(result.docs, 'legal-matter')
+
+    // Fetch footer data
+    const footerSvcResult = await payload.find({
+      collection: 'services',
+      where: { showInFooter: { equals: true } },
+      sort: 'footerOrder',
+      limit: 50,
+      depth: 0,
+    })
+    footerServices = footerSvcResult.docs
+
+    const footerLocResult = await payload.find({
+      collection: 'locations',
+      where: { showInFooter: { equals: true } },
+      sort: 'footerOrder',
+      limit: 50,
+      depth: 0,
+    })
+    footerLocations = footerLocResult.docs
+
+    siteSettings = await payload.findGlobal({
+      slug: 'site-settings' as any,
+      depth: 0,
+    })
   } catch (error) {
     console.error('Error fetching nav services:', error)
   }
@@ -90,7 +118,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           legalMatterGroups={legalMatterGroups}
         />
         <main className="flex-1">{children}</main>
-        <Footer />
+        <Footer 
+          services={footerServices} 
+          locations={footerLocations} 
+          settings={siteSettings} 
+        />
       </body>
     </html>
   )
