@@ -1,6 +1,7 @@
 "use client"
 import React from 'react'
 import Link from 'next/link'
+import { SectionTitle } from '@/components/ui/SectionTitle'
 import { 
   FaWallet, FaRegBuilding, FaUtensils, FaBriefcase, 
   FaGlobe, FaCertificate, FaCrown, FaFileContract,
@@ -30,20 +31,18 @@ export function RegistrationLicensesBlock({ block }: { block: any }) {
       <div className="container-page px-4 md:px-8">
         
         {/* Section Header */}
-        <div className="mb-16 text-center md:text-left">
+        <div className="mb-16 text-center">
           {badge && (
             <div className="inline-block px-4 py-1.5 mb-6 bg-white border border-gray-200 text-[10px] font-black tracking-[0.2em] uppercase text-[#111] rounded-sm shadow-sm">
               {badge}
             </div>
           )}
-          <h2 className="text-4xl md:text-5xl font-heading font-black text-[#111] tracking-tight mb-6">
-            {heading}
-          </h2>
-          {subheading && (
-            <p className="text-lg text-gray-500 max-w-2xl font-medium leading-relaxed">
-              {subheading}
-            </p>
-          )}
+          <SectionTitle 
+            title={heading} 
+            subtitle={subheading} 
+            centered={true} 
+            className="md:items-center"
+          />
         </div>
 
         {/* Square Bento Grid */}

@@ -1,5 +1,6 @@
 "use client"
 import React from 'react'
+import { SectionTitle } from '@/components/ui/SectionTitle'
 import { 
   FaPhoneAlt, FaChess, FaGavel, FaChartLine, 
   FaLaptop, FaCreditCard, FaShieldAlt, FaUsers 
@@ -25,16 +26,8 @@ export function WhyChooseUsBlock({ block }: { block: any }) {
       <div className="container-page">
         
         {/* Section Header */}
-        <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-heading font-black text-[#111] mb-6 tracking-tight">
-            {heading}
-          </h2>
-          <div className="w-20 h-1.5 bg-gold-gradient mx-auto mb-8 rounded-full" />
-          {subheading && (
-            <p className="text-lg text-gray-500 font-medium leading-relaxed">
-              {subheading}
-            </p>
-          )}
+        <div className="mb-16 max-w-3xl mx-auto">
+          <SectionTitle title={heading} subtitle={subheading} centered={true} />
         </div>
 
         {/* Bento-Style Grid */}

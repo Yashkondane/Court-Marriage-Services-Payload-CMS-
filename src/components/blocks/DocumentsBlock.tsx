@@ -1,5 +1,6 @@
 import React from 'react'
 import { serializeLexical } from '@/lib/payload/lexical'
+import { SectionTitle } from '@/components/ui/SectionTitle'
 
 // Simple SVG Icons
 const Icons: Record<string, React.ReactNode> = {
@@ -48,19 +49,11 @@ export function DocumentsBlock({ block }: { block: any }) {
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-amber-100/20 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="container-page relative z-10">
-        <div className="text-center max-w-4xl mx-auto mb-20 animate-fade-in">
-          <span className="text-[var(--color-secondary)] font-bold uppercase tracking-[0.2em] text-sm mb-4 block">
+        <div className="mb-20 animate-fade-in">
+          <span className="text-center text-[var(--color-secondary)] font-bold uppercase tracking-[0.2em] text-sm mb-4 block">
             Requirements Checklist
           </span>
-          <h2 className="text-4xl md:text-6xl font-extrabold text-[#1a365d] mb-8 leading-tight">
-            {block.heading}
-          </h2>
-          {block.description && (
-            <p className="text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto">
-              {block.description}
-            </p>
-          )}
-          <div className="mt-8 w-24 h-1.5 bg-[var(--color-secondary)] mx-auto rounded-full" />
+          <SectionTitle title={block.heading} subtitle={block.description} centered={true} />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">

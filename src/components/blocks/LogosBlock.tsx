@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import { SectionTitle } from '@/components/ui/SectionTitle'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function LogosBlock({ block }: { block: any }) {
@@ -10,13 +11,11 @@ export function LogosBlock({ block }: { block: any }) {
   return (
     <section className="py-20 bg-slate-50 border-y border-slate-100">
       <div className="container-page">
-        <div className="text-center mb-12">
-          <span className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 block">
+        <div className="mb-12">
+          <span className="text-center text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 block">
             Media Recognition
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-[#1a365d]">
-            {heading || 'As Featured In'}
-          </h2>
+          <SectionTitle title={heading || 'As Featured In'} centered={true} />
         </div>
 
         <div className="flex flex-wrap justify-center items-center gap-10 md:gap-20">

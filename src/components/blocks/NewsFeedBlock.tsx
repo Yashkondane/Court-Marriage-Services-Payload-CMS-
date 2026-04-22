@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { SectionTitle } from '@/components/ui/SectionTitle'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function NewsFeedBlock({ block }: { block: any }) {
@@ -16,9 +17,7 @@ export function NewsFeedBlock({ block }: { block: any }) {
     <div className="py-12 md:py-16">
       <div className="container-page">
         {block.heading && (
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
-            {block.heading}
-          </h2>
+          <SectionTitle title={block.heading} centered={true} />
         )}
         <div className={layoutMap[block.layout] || layoutMap.grid}>
           {news.length > 0 ? (

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiAward, FiMapPin, FiBriefcase, FiClock, FiStar, FiCheckCircle } from 'react-icons/fi'
 import { FaStar, FaCheckCircle as FaCheckCircleSolid } from 'react-icons/fa'
+import { SectionTitle } from '@/components/ui/SectionTitle'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function LawyersCarouselBlock({ block }: { block: any }) {
@@ -51,11 +52,7 @@ export function LawyersCarouselBlock({ block }: { block: any }) {
   return (
     <section className="py-24 bg-[#fafafa] overflow-hidden">
       <div className="container-page">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-heading font-black text-[#111] tracking-tight border-b-4 border-[var(--color-secondary)] inline-block pb-2">
-            {heading}
-          </h2>
-        </div>
+        <SectionTitle title={heading} centered={true} className="mb-16" />
 
         <div 
           className="relative group"

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { serializeLexical } from '@/lib/payload/lexical'
+import { SectionTitle } from '@/components/ui/SectionTitle'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function FAQBlock({ block }: { block: any }) {
@@ -11,14 +12,11 @@ export function FAQBlock({ block }: { block: any }) {
     <div className="py-12 md:py-16 bg-white">
       <div className="container-page max-w-4xl mx-auto">
         {block.heading && (
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-            {block.heading}
-          </h2>
-        )}
-        {block.description && (
-          <p className="text-center text-[var(--color-text-secondary)] mb-10 max-w-2xl mx-auto">
-            {block.description}
-          </p>
+          <SectionTitle 
+            title={block.heading} 
+            subtitle={block.description}
+            centered={true}
+          />
         )}
         <div className="space-y-3">
           {faqs.length > 0 ? (

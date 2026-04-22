@@ -2,6 +2,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { SectionTitle } from '@/components/ui/SectionTitle'
 import { 
   FaGavel, FaHandshake, FaBalanceScale, FaRegBuilding, 
   FaFileContract, FaShieldAlt, FaUserTie, FaUsers, 
@@ -114,7 +115,7 @@ export function ServicesCarouselBlock({ block }: { block: any }) {
       <div className="container-page">
         {/* Section Heading */}
         <div className="svc-carousel-header">
-          <h2 className="svc-carousel-title">{heading || 'Our Legal Services'}</h2>
+          <SectionTitle title={heading || 'Our Legal Services'} centered={true} />
         </div>
 
         <div className="svc-carousel-wrapper">

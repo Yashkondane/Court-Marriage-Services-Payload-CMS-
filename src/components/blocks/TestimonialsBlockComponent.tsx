@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaUserCircle, FaStar } from 'react-icons/fa'
 import { ImQuotesRight } from 'react-icons/im'
+import { SectionTitle } from '@/components/ui/SectionTitle'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function TestimonialsBlockComponent({ block }: { block: any }) {
@@ -17,20 +18,12 @@ export function TestimonialsBlockComponent({ block }: { block: any }) {
       <div className="container-page px-4">
 
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          {block.heading && (
-            <div className="relative inline-block mb-6">
-              <h2 className="text-4xl md:text-5xl font-extrabold text-[#111]">
-                {block.heading}
-              </h2>
-              <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-16 h-1 bg-[var(--color-secondary)]" />
-            </div>
-          )}
-          {block.description && (
-            <p className="text-lg text-gray-600 mt-6 leading-relaxed">
-              {block.description}
-            </p>
-          )}
+        <div className="mb-16">
+          <SectionTitle 
+            title={block.heading} 
+            subtitle={block.description}
+            centered={true}
+          />
         </div>
 
         {/* Grid */}

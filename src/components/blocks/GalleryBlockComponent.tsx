@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import { SectionTitle } from '@/components/ui/SectionTitle'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function GalleryBlockComponent({ block }: { block: any }) {
@@ -15,9 +16,7 @@ export function GalleryBlockComponent({ block }: { block: any }) {
     <div className="py-12 md:py-16">
       <div className="container-page">
         {block.heading && (
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
-            {block.heading}
-          </h2>
+          <SectionTitle title={block.heading} centered={true} />
         )}
         <div className={`grid grid-cols-1 ${colsMap[block.columns] || colsMap['3']} gap-4`}>
           {images.length > 0 ? (
