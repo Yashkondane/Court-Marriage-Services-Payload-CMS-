@@ -110,8 +110,8 @@ export async function POST(request: NextRequest) {
             },
           ],
           seo: {
-            metaTitle: `${service.title} in ${area.name}, ${city.name} | Kaushal Associates`,
-            metaDescription: `Looking for ${service.title.toLowerCase()} in ${area.name}, ${city.name}? Kaushal Associates provides expert legal services. Call now for a free consultation.`,
+            metaTitle: `${service.title} in ${area.name}, ${city.name} | VakilFirst`,
+            metaDescription: `Looking for ${service.title.toLowerCase()} in ${area.name}, ${city.name}? VakilFirst provides expert legal services. Call now for a free consultation.`,
             robotsMeta: 'index,follow',
           },
         },

@@ -6,7 +6,7 @@ import { getPayload } from '@/lib/payload/getPayload'
 
 export const metadata: Metadata = {
   title: 'Blog',
-  description: 'Latest legal insights, articles, and updates from Kaushal Associates.',
+  description: 'Latest legal insights, articles, and updates from VakilFirst.',
 }
 
 export const dynamic = 'force-dynamic'
