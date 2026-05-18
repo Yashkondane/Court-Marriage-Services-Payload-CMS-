@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
-import configPromise from '@payload-config'
+import configPromise from '@/payload.config'
 
 // Simple in-memory rate limiter
 // For production, consider Redis/Upstash
@@ -12,14 +12,14 @@ export async function POST(req: NextRequest) {
   try {
     const ip = req.headers.get('x-forwarded-for') || 'anonymous'
     const now = Date.now()
-    
+
     // Rate check
     const clientData = ipCache.get(ip)
     if (clientData) {
       if (now - clientData.firstRequest < RATE_LIMIT_WINDOW) {
         if (clientData.count >= MAX_REQUESTS) {
-          return NextResponse.json({ 
-            error: 'Too many requests. Please wait a few minutes before submitting again.' 
+          return NextResponse.json({
+            error: 'Too many requests. Please wait a few minutes before submitting again.'
           }, { status: 429 })
         }
         clientData.count += 1

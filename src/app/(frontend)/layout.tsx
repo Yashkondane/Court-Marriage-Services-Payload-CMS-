@@ -4,6 +4,7 @@ import '@/app/globals.css'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { getPayload } from '@/lib/payload/getPayload'
+import { ServiceLeadPopup } from '@/components/blocks/ServiceLeadPopup'
 
 export const metadata: Metadata = {
   title: {
@@ -124,6 +125,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           locations={footerLocations} 
           settings={siteSettings} 
         />
+        <ServiceLeadPopup />
       </body>
     </html>
   )

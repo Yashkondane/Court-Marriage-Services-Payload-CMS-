@@ -4,7 +4,7 @@
 // This is the Payload admin layout
 
 import type { ServerFunctionClient } from 'payload'
-import config from '@payload-config'
+import config from '@/payload.config'
 import { RootLayout, handleServerFunctions } from '@payloadcms/next/layouts'
 import React from 'react'
 import { importMap } from './admin/importMap.js'

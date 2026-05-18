@@ -109,8 +109,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -239,7 +243,7 @@ export interface Page {
    */
   slug: string;
   /**
-   * 🎨 Build your webpage here! Click "Add Block" below to stack sections. ⚠️ CRITICAL WARNING: If you forget a required field, hit Save, and get an error, DO NOT hit save again. Delete the blocks and re-add them, or start a new page, otherwise it will crash the save pipeline!
+   * 🎨 Build your webpage here! Click "Add Block" below to stack sections.
    */
   layout: (
     | {
@@ -263,6 +267,10 @@ export interface Page {
          * Display the City + Legal Matter search bar below the hero text.
          */
         showSearchBar?: boolean | null;
+        /**
+         * Show a compact lead form card on the right side alongside the search bar.
+         */
+        showLeadForm?: boolean | null;
         /**
          * e.g., "Book a Consultation"
          */
@@ -716,6 +724,55 @@ export interface Page {
         blockName?: string | null;
         blockType: 'lawyersCarousel';
       }
+    | {
+        heading: string;
+        subheading?: string | null;
+        onlineCountText?: string | null;
+        /**
+         * Upload a custom premium transparent/dark accent image to display on the right of the directory hero card. Fallback is the golden Scales of Justice.
+         */
+        accentImage?: (number | null) | Media;
+        showFilters?: boolean | null;
+        whyChooseHeading?: string | null;
+        whyChoosePoints?:
+          | {
+              title: string;
+              description: string;
+              id?: string | null;
+            }[]
+          | null;
+        faqsHeading?: string | null;
+        faqs?: (number | Faq)[] | null;
+        reviewsHeading?: string | null;
+        reviews?: (number | Testimonial)[] | null;
+        consultationWidget?: {
+          heading?: string | null;
+          subheading?: string | null;
+          price?: string | null;
+          originalPrice?: string | null;
+          image?: (number | null) | Media;
+        };
+        helpContactWidget?: {
+          heading?: string | null;
+          phone?: string | null;
+          timings?: string | null;
+          callbackText?: string | null;
+        };
+        /**
+         * Control where and on which devices this block appears.
+         */
+        visibility?: {
+          showOnDesktop?: boolean | null;
+          showOnMobile?: boolean | null;
+          targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+          targetPages?: (number | Page)[] | null;
+          targetServices?: (number | Service)[] | null;
+          targetLocations?: (number | Location)[] | null;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'lawyersList';
+      }
     | CodeSnippetBlockType
     | LogosBlockType
     | {
@@ -821,7 +878,7 @@ export interface Service {
    */
   slug: string;
   /**
-   * 🎨 Using Blocks will OVERRIDE the legacy fixed fields below (banner, content, highlights) on the frontend. Use this to design flexible service pages!
+   * 🎨 Build this service page using flexible blocks — just like Pages.
    */
   layout?:
     | (
@@ -846,6 +903,10 @@ export interface Service {
              * Display the City + Legal Matter search bar below the hero text.
              */
             showSearchBar?: boolean | null;
+            /**
+             * Show a compact lead form card on the right side alongside the search bar.
+             */
+            showLeadForm?: boolean | null;
             /**
              * e.g., "Book a Consultation"
              */
@@ -1301,6 +1362,55 @@ export interface Service {
             blockName?: string | null;
             blockType: 'lawyersCarousel';
           }
+        | {
+            heading: string;
+            subheading?: string | null;
+            onlineCountText?: string | null;
+            /**
+             * Upload a custom premium transparent/dark accent image to display on the right of the directory hero card. Fallback is the golden Scales of Justice.
+             */
+            accentImage?: (number | null) | Media;
+            showFilters?: boolean | null;
+            whyChooseHeading?: string | null;
+            whyChoosePoints?:
+              | {
+                  title: string;
+                  description: string;
+                  id?: string | null;
+                }[]
+              | null;
+            faqsHeading?: string | null;
+            faqs?: (number | Faq)[] | null;
+            reviewsHeading?: string | null;
+            reviews?: (number | Testimonial)[] | null;
+            consultationWidget?: {
+              heading?: string | null;
+              subheading?: string | null;
+              price?: string | null;
+              originalPrice?: string | null;
+              image?: (number | null) | Media;
+            };
+            helpContactWidget?: {
+              heading?: string | null;
+              phone?: string | null;
+              timings?: string | null;
+              callbackText?: string | null;
+            };
+            /**
+             * Control where and on which devices this block appears.
+             */
+            visibility?: {
+              showOnDesktop?: boolean | null;
+              showOnMobile?: boolean | null;
+              targetType?: ('global' | 'selectedPages' | 'selectedServices' | 'selectedLocations') | null;
+              targetPages?: (number | Page)[] | null;
+              targetServices?: (number | Service)[] | null;
+              targetLocations?: (number | Location)[] | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'lawyersList';
+          }
         | CodeSnippetBlockType
         | LogosBlockType
         | {
@@ -1349,15 +1459,60 @@ export interface Service {
           }
       )[]
     | null;
-  banner?: (number | null) | Media;
   /**
-   * Select the cities where this service is actively offered. Only selected cities will generate live landing pages.
+   * 📋 Assign FAQs to show on this service page (used by the FAQ block in auto mode).
+   */
+  assignedFAQs?: (number | Faq)[] | null;
+  /**
+   * 📰 Manually assign blog posts to feature on this service page.
+   */
+  assignedBlogs?: (number | Blog)[] | null;
+  /**
+   * 📣 Manually assign news articles to feature on this service page.
+   */
+  assignedNews?: (number | News)[] | null;
+  /**
+   * ⭐ Manually assign testimonials to feature on this service page.
+   */
+  assignedTestimonials?: (number | Testimonial)[] | null;
+  /**
+   * 👨‍⚖️ Highlight specific lawyers for this service.
+   */
+  assignedLawyers?: (number | Lawyer)[] | null;
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    keywords?: string | null;
+    ogImage?: (number | null) | Media;
+    canonicalUrl?: string | null;
+    robotsMeta?: ('index,follow' | 'noindex,follow' | 'index,nofollow' | 'noindex,nofollow') | null;
+    schemaMarkup?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+  };
+  /**
+   * Select the cities where this service is actively offered.
    */
   activeLocations?: (number | Location)[] | null;
   /**
    * If enabled, this service will appear in the "Services" menu in the header.
    */
   showInHeader?: boolean | null;
+  /**
+   * If enabled, this service will appear in the footer links.
+   */
+  showInFooter?: boolean | null;
+  footerOrder?: number | null;
+  /**
+   * If disabled, this service will NOT appear in the hero search bar or lead capture dropdowns.
+   */
+  showInHeroForm?: boolean | null;
   /**
    * Lower numbers appear first in the dropdown.
    */
@@ -1367,7 +1522,7 @@ export interface Service {
    */
   navDropdown?: ('find-a-lawyer' | 'legal-matter' | 'none') | null;
   /**
-   * Group heading inside the dropdown (e.g. "Family / Personal", "Criminal / Writ"). Items with the same heading are grouped together.
+   * Group heading inside the dropdown (e.g. "Family / Personal").
    */
   navCategory?: string | null;
   /**
@@ -1379,11 +1534,7 @@ export interface Service {
    */
   navLabel?: string | null;
   /**
-   * Legacy icon upload (optional). Prefer using the Native Legal Icon below.
-   */
-  icon?: (number | null) | Media;
-  /**
-   * Select a highly optimized SVG icon to use for standard layout cards.
+   * Select a highly optimized SVG icon for navigation cards.
    */
   uiIcon?:
     | (
@@ -1404,56 +1555,6 @@ export interface Service {
         | 'stamp'
       )
     | null;
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  /**
-   * Key highlights / features of this service
-   */
-  highlights?:
-    | {
-        title: string;
-        description?: string | null;
-        icon?: (number | null) | Media;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Assign existing FAQs to this service
-   */
-  faqs?: (number | Faq)[] | null;
-  /**
-   * Search engine optimization fields
-   */
-  seo?: {
-    metaTitle?: string | null;
-    metaDescription?: string | null;
-    keywords?: string | null;
-    ogImage?: (number | null) | Media;
-    canonicalUrl?: string | null;
-    robotsMeta?: ('index,follow' | 'noindex,follow' | 'index,nofollow' | 'noindex,nofollow') | null;
-    schemaMarkup?:
-      | {
-          [k: string]: unknown;
-        }
-      | unknown[]
-      | string
-      | number
-      | boolean
-      | null;
-  };
   updatedAt: string;
   createdAt: string;
 }
@@ -1473,6 +1574,8 @@ export interface Location {
    * Parent location (e.g., City → State, Area → City)
    */
   parent?: (number | null) | Location;
+  showInFooter?: boolean | null;
+  footerOrder?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -2249,6 +2352,7 @@ export interface PagesSelect<T extends boolean = true> {
               backgroundColor?: T;
               textColorTheme?: T;
               showSearchBar?: T;
+              showLeadForm?: T;
               ctaText?: T;
               ctaLink?: T;
               secondaryCta?:
@@ -2606,6 +2710,56 @@ export interface PagesSelect<T extends boolean = true> {
               lawyers?: T;
               autoplay?: T;
               interval?: T;
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        lawyersList?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              onlineCountText?: T;
+              accentImage?: T;
+              showFilters?: T;
+              whyChooseHeading?: T;
+              whyChoosePoints?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              faqsHeading?: T;
+              faqs?: T;
+              reviewsHeading?: T;
+              reviews?: T;
+              consultationWidget?:
+                | T
+                | {
+                    heading?: T;
+                    subheading?: T;
+                    price?: T;
+                    originalPrice?: T;
+                    image?: T;
+                  };
+              helpContactWidget?:
+                | T
+                | {
+                    heading?: T;
+                    phone?: T;
+                    timings?: T;
+                    callbackText?: T;
+                  };
               visibility?:
                 | T
                 | {
@@ -2771,6 +2925,7 @@ export interface ServicesSelect<T extends boolean = true> {
               backgroundColor?: T;
               textColorTheme?: T;
               showSearchBar?: T;
+              showLeadForm?: T;
               ctaText?: T;
               ctaLink?: T;
               secondaryCta?:
@@ -3141,6 +3296,56 @@ export interface ServicesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        lawyersList?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              onlineCountText?: T;
+              accentImage?: T;
+              showFilters?: T;
+              whyChooseHeading?: T;
+              whyChoosePoints?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              faqsHeading?: T;
+              faqs?: T;
+              reviewsHeading?: T;
+              reviews?: T;
+              consultationWidget?:
+                | T
+                | {
+                    heading?: T;
+                    subheading?: T;
+                    price?: T;
+                    originalPrice?: T;
+                    image?: T;
+                  };
+              helpContactWidget?:
+                | T
+                | {
+                    heading?: T;
+                    phone?: T;
+                    timings?: T;
+                    callbackText?: T;
+                  };
+              visibility?:
+                | T
+                | {
+                    showOnDesktop?: T;
+                    showOnMobile?: T;
+                    targetType?: T;
+                    targetPages?: T;
+                    targetServices?: T;
+                    targetLocations?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
         codeSnippet?: T | CodeSnippetBlockTypeSelect<T>;
         logos?: T | LogosBlockTypeSelect<T>;
         documents?:
@@ -3171,26 +3376,11 @@ export interface ServicesSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
-  banner?: T;
-  activeLocations?: T;
-  showInHeader?: T;
-  menuOrder?: T;
-  navDropdown?: T;
-  navCategory?: T;
-  navCategoryOrder?: T;
-  navLabel?: T;
-  icon?: T;
-  uiIcon?: T;
-  content?: T;
-  highlights?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        icon?: T;
-        id?: T;
-      };
-  faqs?: T;
+  assignedFAQs?: T;
+  assignedBlogs?: T;
+  assignedNews?: T;
+  assignedTestimonials?: T;
+  assignedLawyers?: T;
   seo?:
     | T
     | {
@@ -3202,6 +3392,17 @@ export interface ServicesSelect<T extends boolean = true> {
         robotsMeta?: T;
         schemaMarkup?: T;
       };
+  activeLocations?: T;
+  showInHeader?: T;
+  showInFooter?: T;
+  footerOrder?: T;
+  showInHeroForm?: T;
+  menuOrder?: T;
+  navDropdown?: T;
+  navCategory?: T;
+  navCategoryOrder?: T;
+  navLabel?: T;
+  uiIcon?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -3214,6 +3415,8 @@ export interface LocationsSelect<T extends boolean = true> {
   slug?: T;
   type?: T;
   parent?: T;
+  showInFooter?: T;
+  footerOrder?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -3499,6 +3702,52 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  quickLinks?:
+    | {
+        /**
+         * The text that users will click on.
+         */
+        label: string;
+        /**
+         * The relative URL (e.g. /about) or absolute URL.
+         */
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  officeAddress?: string | null;
+  phoneNumber?: string | null;
+  emailAddress?: string | null;
+  openingHours?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  quickLinks?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  officeAddress?: T;
+  phoneNumber?: T;
+  emailAddress?: T;
+  openingHours?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

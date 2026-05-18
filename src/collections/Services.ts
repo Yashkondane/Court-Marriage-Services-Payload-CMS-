@@ -1,7 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin } from '@/access/isAdmin'
 import { isPublic } from '@/access/index'
-import { randomUUID } from 'crypto'
 import { Hero } from '@/blocks/Hero'
 import { RichContent } from '@/blocks/RichContent'
 import { FAQ } from '@/blocks/FAQ'
@@ -20,6 +19,7 @@ import { LawyersCarousel } from '@/blocks/LawyersCarousel'
 import { CodeSnippet } from '@/blocks/CodeSnippet'
 import { Logos } from '@/blocks/Logos'
 import { Documents } from '@/blocks/Documents'
+import { LawyersList } from '@/blocks/LawyersList'
 
 export const Services: CollectionConfig = {
   slug: 'services',
@@ -37,38 +37,6 @@ export const Services: CollectionConfig = {
     read: isPublic,
     update: isAdmin,
     delete: isAdmin,
-  },
-  hooks: {
-    beforeValidate: [
-      ({ data }) => {
-        function forceNewIds(obj: any): void {
-          if (!obj || typeof obj !== 'object') return;
-          if (Array.isArray(obj)) {
-            for (const item of obj) {
-              if (item && typeof item === 'object') {
-                if ('id' in item && typeof item.id === 'string') {
-                  item.id = randomUUID();
-                }
-                forceNewIds(item);
-              }
-            }
-          } else {
-            for (const key of Object.keys(obj)) {
-              if (key === 'id') continue;
-              const val = obj[key];
-              if (val && typeof val === 'object' && !Buffer.isBuffer(val)) {
-                forceNewIds(val);
-              }
-            }
-          }
-        }
-
-        if (data?.layout) {
-          forceNewIds(data.layout);
-        }
-        return data;
-      },
-    ],
   },
   fields: [
     // ── Tabs ────────────────────────────────────────────────────────────────
@@ -112,6 +80,7 @@ export const Services: CollectionConfig = {
                 TestimonialsBlock,
                 ServicesCarousel,
                 LawyersCarousel,
+                LawyersList,
                 CodeSnippet,
                 Logos,
                 Documents,
@@ -228,6 +197,26 @@ export const Services: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description: 'If enabled, this service will appear in the "Services" menu in the header.',
+      },
+    },
+    {
+      name: 'showInFooter',
+      type: 'checkbox',
+      label: 'Show in Footer Links',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'If enabled, this service will appear in the footer links.',
+      },
+    },
+    {
+      name: 'footerOrder',
+      type: 'number',
+      label: 'Footer Display Order',
+      defaultValue: 0,
+      admin: {
+        position: 'sidebar',
+        condition: (data) => data.showInFooter,
       },
     },
     {

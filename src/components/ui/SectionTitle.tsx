@@ -3,33 +3,36 @@ import React from 'react'
 interface SectionTitleProps {
   title: string | React.ReactNode
   subtitle?: string | React.ReactNode
+  label?: string               // small eyebrow label above title
   centered?: boolean
   theme?: 'light' | 'dark'
   className?: string
 }
 
-export function SectionTitle({ 
-  title, 
+export function SectionTitle({
+  title,
   subtitle,
+  label,
   centered = true,
   theme = 'light',
-  className = ''
+  className = '',
 }: SectionTitleProps) {
+  const isDark = theme === 'dark'
   return (
-    <div className={`mb-10 lg:mb-12 ${centered ? 'text-center flex flex-col items-center' : 'text-left flex flex-col items-start'} ${className}`}>
-      <h2 
-        className={`text-3xl md:text-4xl lg:text-5xl font-heading font-black tracking-tight mb-4 ${
-          theme === 'dark' ? 'text-white' : 'text-[#111]'
-        }`}
-      >
+    <div
+      className={`section-title-wrap ${centered ? 'section-title-wrap--centered' : ''} ${className}`}
+    >
+      {label && (
+        <span className={`section-eyebrow ${isDark ? 'section-eyebrow--dark' : ''}`}>
+          {label}
+        </span>
+      )}
+      <h2 className={`section-heading ${isDark ? 'section-heading--dark' : ''}`}>
         {title}
       </h2>
-      <div className="w-24 h-[4px] bg-[var(--color-secondary)] rounded-full mb-5"></div>
-      
+      <div className="section-rule" />
       {subtitle && (
-        <p className={`text-base md:text-lg max-w-3xl ${
-          theme === 'dark' ? 'text-white/80' : 'text-gray-600'
-        } ${centered ? 'mx-auto' : ''}`}>
+        <p className={`section-subtitle ${isDark ? 'section-subtitle--dark' : ''} ${centered ? 'section-subtitle--centered' : ''}`}>
           {subtitle}
         </p>
       )}

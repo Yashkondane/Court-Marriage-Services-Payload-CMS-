@@ -1,109 +1,108 @@
 import React from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
 import type { Metadata } from 'next'
-import { FaStar, FaMapMarkerAlt } from 'react-icons/fa'
+import { getPayload } from '@/lib/payload/getPayload'
+import { RenderBlocks } from '@/components/blocks/RenderBlocks'
+import { LawyersList } from '@/components/blocks/LawyersList'
 
-export const metadata: Metadata = {
-  title: 'Find a Lawyer | VakilFirst',
-  description: 'Browse our directory of verified, expert lawyers across India. Filter by specialization, location, and more.',
+export const dynamic = 'force-dynamic'
+
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const payload = await getPayload()
+    const pages = await payload.find({
+      collection: 'pages',
+      where: { slug: { equals: 'lawyers' } },
+      limit: 1,
+    })
+
+    const page = pages.docs[0]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const seo = (page as any)?.seo
+
+    if (seo) {
+      return {
+        title: seo.metaTitle || 'Find a Lawyer | VakilFirst',
+        description: seo.metaDescription || 'Browse our directory of verified, expert lawyers across India.',
+        keywords: seo.keywords,
+        openGraph: {
+          title: seo.metaTitle,
+          description: seo.metaDescription,
+          images: seo.ogImage?.url ? [{ url: seo.ogImage.url }] : [],
+        },
+        robots: seo.robotsMeta,
+        alternates: seo.canonicalUrl ? { canonical: seo.canonicalUrl } : undefined,
+      }
+    }
+  } catch {
+    // DB offline/not connected yet
+  }
+
+  return {
+    title: 'Find a Lawyer | VakilFirst',
+    description: 'Browse our directory of verified, expert lawyers across India. Filter by specialization, location, and more.',
+  }
 }
 
 export default async function LawyersDirectoryPage() {
-  const payload = await getPayload({ config: configPromise })
+  let page = null
 
-  const result = await (payload.find as any)({
-    collection: 'lawyers',
-    where: { status: { equals: 'approved' } },
-    limit: 100,
-    depth: 2,
-    sort: '-isSponsored',
-  })
+  try {
+    const payload = await getPayload()
+    const pages = await payload.find({
+      collection: 'pages',
+      where: { slug: { equals: 'lawyers' } },
+      limit: 1,
+      depth: 3,
+    })
+    page = pages.docs[0]
+  } catch {
+    // DB not connected yet
+  }
 
-  const lawyers = result.docs
+  if (!page) {
+    // Fallback: Render the dynamic LawyersList directly with default configuration
+    const defaultBlock = {
+      blockType: 'lawyersList',
+      heading: 'Consult with the Best Lawyers & Advocates in India',
+      subheading: 'Navigating legal matters can be daunting, but with the best lawyers in India, you can secure the expert guidance you need. We connect individuals and businesses with top-rated advocates and legal experts.',
+      onlineCountText: '104+ Lawyers Online',
+      showFilters: true,
+      whyChooseHeading: 'Why Choose Our Lawyers & Advocates?',
+      whyChoosePoints: [
+        {
+          title: 'Bar Council Verified Advocates',
+          description: 'Every lawyer registered with VakilFirst undergoes rigorous verification of their credentials, licensing, and enrollment details.',
+        },
+        {
+          title: '4.8+ Client Ratings & Reviews',
+          description: 'Read verified testimonials, reviews, and client satisfaction ratings before consulting with your advocate.',
+        },
+        {
+          title: '100% Secure & Confidential',
+          description: 'All consultations, case evaluations, and document transmissions are protected under strict attorney-client privilege.',
+        },
+        {
+          title: 'Quick Response (under 5 Min)',
+          description: 'Connect with a local legal expert instantly for urgent litigation, document filings, or general counsel.',
+        }
+      ],
+      consultationWidget: {
+        heading: 'Consult a Lawyer',
+        subheading: 'No Minutes Limit',
+        price: '1000',
+        originalPrice: '2000',
+      },
+      helpContactWidget: {
+        heading: 'Need Help?',
+        phone: '+91-8800 788 535',
+        timings: 'Timing: 9AM to 8PM',
+        callbackText: 'Arrange a Callback',
+      }
+    }
 
-  return (
-    <div className="lawyers-directory">
-      <div className="lawyers-directory-hero">
-        <div className="container-page">
-          <h1 className="lawyers-directory-title">Find a Lawyer</h1>
-          <p className="lawyers-directory-sub">Browse our network of verified legal experts across India</p>
-        </div>
-      </div>
+    return <LawyersList block={defaultBlock} />
+  }
 
-      <div className="container-page lawyers-directory-content">
-        {lawyers.length === 0 ? (
-          <div className="lawyers-directory-empty">
-            <p>No lawyers available yet. Check back soon!</p>
-          </div>
-        ) : (
-          <div className="lawyers-directory-grid">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {lawyers.map((lawyer: any) => {
-              const photo = lawyer.photo
-              const specs = lawyer.specializations || []
-
-              return (
-                <Link
-                  key={lawyer.id}
-                  href={`/lawyers/${lawyer.slug}`}
-                  className={`lawyers-card ${lawyer.isSponsored ? 'lawyers-card--sponsored' : ''}`}
-                >
-                  {lawyer.isSponsored && (
-                    <span className="lawyers-card-badge">⭐ Sponsored</span>
-                  )}
-
-                  <div className="lawyers-card-photo-wrap">
-                    {photo?.url ? (
-                      <Image
-                        src={photo.url}
-                        alt={lawyer.name}
-                        width={80}
-                        height={80}
-                        className="lawyers-card-photo"
-                        quality={75}
-                      />
-                    ) : (
-                      <div className="lawyers-card-photo-placeholder">
-                        {lawyer.name?.charAt(0)?.toUpperCase()}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="lawyers-card-info">
-                    <h3 className="lawyers-card-name">{lawyer.name}</h3>
-                    {lawyer.designation && (
-                      <p className="lawyers-card-designation">{lawyer.designation}</p>
-                    )}
-
-                    <div className="lawyers-card-rating">
-                      <FaStar className="star-filled" />
-                      <span>{lawyer.rating?.toFixed(1) || '0.0'}</span>
-                      <span className="lawyers-card-rating-count">({lawyer.ratingCount || 0})</span>
-                    </div>
-
-                    {lawyer.locationText && (
-                      <p className="lawyers-card-location">
-                        <FaMapMarkerAlt /> {lawyer.locationText}
-                      </p>
-                    )}
-
-                    {specs.length > 0 && (
-                      <div className="lawyers-card-specs">
-                        {specs.slice(0, 3).map((spec: { title: string }, i: number) => (
-                          <span key={i} className="lawyers-card-spec-tag">{spec.title}</span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
-        )}
-      </div>
-    </div>
-  )
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return <RenderBlocks blocks={(page as any).layout} />
 }

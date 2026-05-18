@@ -21,15 +21,25 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const page = pages.docs[0] as any
-    const seo = page?.seo
+    
+    // Resolve service relation if available
+    let seo = page?.seo
+    let pageTitle = page?.title
+    if (page?.pageType === 'service' && page.service) {
+      const svc = page.service as any
+      if (svc.seo?.metaTitle || svc.seo?.metaDescription) {
+        seo = svc.seo
+      }
+      pageTitle = svc.title || pageTitle
+    }
 
     if (seo) {
       return {
-        title: seo.metaTitle || page.title,
+        title: seo.metaTitle || pageTitle,
         description: seo.metaDescription,
         keywords: seo.keywords,
         openGraph: {
-          title: seo.metaTitle || page.title,
+          title: seo.metaTitle || pageTitle,
           description: seo.metaDescription,
           images: seo.ogImage?.url ? [{ url: seo.ogImage.url }] : [],
         },
@@ -65,6 +75,9 @@ export default async function ServicePage({ params }: { params: Params }) {
     if (pages.docs.length > 0) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const page = pages.docs[0] as any
+      if (page.pageType === 'service' && page.service?.layout) {
+        return <RenderBlocks blocks={page.service.layout} />
+      }
       return <RenderBlocks blocks={page.layout} />
     }
 

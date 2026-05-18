@@ -4,7 +4,7 @@
 // This is the Payload admin page catch-all route
 
 import type { Metadata } from 'next'
-import config from '@payload-config'
+import config from '@/payload.config'
 import { RootPage, generatePageMetadata } from '@payloadcms/next/views'
 import { importMap } from '../importMap.js'
 

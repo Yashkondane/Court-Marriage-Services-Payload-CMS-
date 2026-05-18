@@ -23,7 +23,7 @@ export function HowItWorksBlock({ block }: { block: any }) {
       <div className="grid lg:grid-cols-2">
         
         {/* Left Side: Cinematic Visual */}
-        <div className="relative min-h-[500px] lg:min-h-[700px] flex items-center justify-center px-8 md:px-16 overflow-hidden border-r border-white/5">
+        <div className="relative min-h-[350px] lg:min-h-[550px] flex items-center justify-center px-8 md:px-16 overflow-hidden border-r border-white/5">
           {backgroundImage && typeof backgroundImage === 'object' && (
             <Image
               src={backgroundImage.url}
@@ -39,7 +39,7 @@ export function HowItWorksBlock({ block }: { block: any }) {
           <div className="relative z-10 max-w-lg">
             <div className="flex gap-6">
               <div className="w-1.5 bg-gold-gradient shrink-0 rounded-full shadow-lg shadow-[var(--color-secondary)]/20" />
-              <p className="text-2xl md:text-4xl font-heading font-medium text-white italic leading-relaxed drop-shadow-md">
+              <p className="text-xl md:text-3xl font-heading font-medium text-white italic leading-relaxed drop-shadow-md">
                 {quoteText}
               </p>
             </div>
@@ -47,22 +47,22 @@ export function HowItWorksBlock({ block }: { block: any }) {
         </div>
 
         {/* Right Side: The Process */}
-        <div className="py-20 lg:py-32 px-8 md:px-16 lg:px-24 flex flex-col justify-center relative">
+        <div className="py-12 lg:py-16 px-8 md:px-16 lg:px-24 flex flex-col justify-center relative">
           {/* Subtle Background Accent */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--color-secondary)]/5 blur-[120px] rounded-full pointer-events-none" />
           
-          <div className="mb-16 relative z-10">
-            <span className="text-[var(--color-secondary)] text-[10px] font-black tracking-[0.4em] uppercase block mb-4">
+          <div className="mb-8 relative z-10">
+            <span className="section-eyebrow">
               {processLabel || 'The Roadmap'}
             </span>
-            <h2 className="text-4xl md:text-6xl font-heading font-black tracking-tight leading-tight" style={{ color: '#ffffff' }}>
+            <h2 className="section-heading section-heading--dark">
               {heading}
             </h2>
-            <div className="w-20 h-1 bg-gold-gradient mt-8 rounded-full" />
+            <div className="section-rule" />
           </div>
 
           {/* Vertical Timeline */}
-          <div className="relative space-y-12 mb-16 z-10">
+          <div className="relative space-y-8 mb-10 z-10">
             {/* Thread Path Line */}
             <div className="absolute left-7 top-4 bottom-4 w-px bg-white/10" />
             
@@ -77,10 +77,10 @@ export function HowItWorksBlock({ block }: { block: any }) {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-xl font-heading font-black mb-2 tracking-tight group-hover:text-[var(--color-secondary)] transition-colors duration-500" style={{ color: '#ffffff' }}>
+                    <h3 className="card-heading mb-1 group-hover:text-[var(--color-secondary)] transition-colors duration-300" style={{ color: '#ffffff' }}>
                       {step.title}
                     </h3>
-                    <p className="text-gray-400 font-medium leading-relaxed max-w-md text-sm md:text-base">
+                    <p className="block-body--dark text-[0.9375rem] leading-relaxed">
                       {step.description}
                     </p>
                   </div>

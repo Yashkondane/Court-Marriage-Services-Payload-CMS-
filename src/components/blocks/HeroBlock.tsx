@@ -5,7 +5,7 @@ import { LeadFormWidget } from './LeadFormWidget'
 import { SearchBar } from './SearchBar'
 import { InlineLeadForm } from './InlineLeadForm'
 import { getPayload } from 'payload'
-import configPromise from '@payload-config'
+import configPromise from '@/payload.config'
 import {
   FaBalanceScale, FaCheckCircle, FaUsers, FaClock,
   FaShieldAlt, FaStar, FaFileAlt, FaTrophy,
@@ -26,17 +26,17 @@ export async function HeroBlock({ block }: { block: any }) {
   // withLeadForm  → split: text left, full lead form right
   // standard + showLeadForm checked → split: text left, compact form right
   // standard (default) → everything CENTERED, no form at all
-  const isWithLeadForm  = block.layoutStyle === 'withLeadForm'
-  const isStandardForm  = block.layoutStyle === 'standard' && block.showLeadForm === true
-  const hasRightPanel   = isWithLeadForm || isStandardForm
-  const showSearch      = block.showSearchBar !== false
+  const isWithLeadForm = block.layoutStyle === 'withLeadForm'
+  const isStandardForm = block.layoutStyle === 'standard' && block.showLeadForm === true
+  const hasRightPanel = isWithLeadForm || isStandardForm
+  const showSearch = block.showSearchBar !== false
 
   const payload = await getPayload({ config: configPromise })
   const [svcRes, locRes] = await Promise.all([
     payload.find({ collection: 'services', limit: 100, depth: 0 }),
     payload.find({ collection: 'locations', limit: 100, depth: 0 }),
   ])
-  
+
   // Only include services that have showInHeroForm explicitly true,
   // or that don't have the field yet (for backward compatibility).
   const services = svcRes.docs.filter((s: any) => s.showInHeroForm !== false)
@@ -136,6 +136,13 @@ export async function HeroBlock({ block }: { block: any }) {
                   <div className="hero-trust-pill"><FaClock className="hero-trust-pill-icon" />Reply in &lt; 5 Min</div>
                 </div>
 
+                {/* Search bar */}
+                {showSearch && (
+                  <div className="hero-search-wrap max-w-xl mb-6">
+                    <SearchBar locations={locations} services={services} />
+                  </div>
+                )}
+
                 <div className="hero-cta-row">
                   <Link href={block.ctaLink || '/consultation'} className="hero-btn-gold">
                     <FaPhoneAlt />{block.ctaText || 'Book Free Consultation'}
@@ -167,9 +174,9 @@ export async function HeroBlock({ block }: { block: any }) {
       {block.showStatsBar !== false && (() => {
         const defaultStats = [
           { icon: 'scale', value: '25k+', label: 'Consultations' },
-          { icon: 'check', value: '98%',  label: 'Success Rate' },
+          { icon: 'check', value: '98%', label: 'Success Rate' },
           { icon: 'users', value: '1.2k+', label: 'Verified Advocates' },
-          { icon: 'clock', value: '15m',  label: 'Response Time' },
+          { icon: 'clock', value: '15m', label: 'Response Time' },
         ]
         const statsData = (block.stats?.length > 0) ? block.stats : defaultStats
         return (

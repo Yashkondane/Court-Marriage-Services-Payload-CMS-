@@ -9,7 +9,7 @@ export function LogosBlock({ block }: { block: any }) {
   if (!logos || logos.length === 0) return null
 
   return (
-    <section className="py-20 bg-slate-50 border-y border-slate-100">
+    <section className="section bg-slate-50 border-y border-slate-100">
       <div className="container-page">
         <div className="mb-12">
           <span className="text-center text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 block">

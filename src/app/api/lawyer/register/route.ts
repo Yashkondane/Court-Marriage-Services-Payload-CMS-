@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { getPayload } from 'payload'
-import configPromise from '@payload-config'
+import configPromise from '@/payload.config'
 
 function slugify(text: string): string {
   return text
@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
 
     // 3. Create Lawyer profile in Payload (status: pending_review)
     console.log('Creating lawyer profile with data:', { name, email, slug, supabaseId });
-    
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const lawyer = await (payload.create as any)({
       collection: 'lawyers',
@@ -142,10 +142,10 @@ export async function POST(req: NextRequest) {
     } else {
       console.error(error);
     }
-    
+
     // Return a more descriptive error if it's a Payload validation error
     const message = error.data?.errors?.[0]?.message || error.message || 'Something went wrong. Please try again.';
-    
+
     return NextResponse.json(
       { error: message },
       { status: error.status || 500 }

@@ -16,7 +16,7 @@ export function BlogFeedBlock({ block }: { block: any }) {
   }
 
   return (
-    <div className="py-12 md:py-16 bg-[var(--color-bg-primary)]">
+    <div className="section bg-[var(--color-bg-primary)]">
       <div className="container-page">
         {block.heading && (
           <SectionTitle title={block.heading} centered={true} />

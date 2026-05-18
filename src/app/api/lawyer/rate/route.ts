@@ -1,17 +1,17 @@
 import { getPayload } from 'payload'
-import configPromise from '@payload-config'
+import configPromise from '@/payload.config'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
   try {
     const { lawyerId, rating } = await req.json()
-    
+
     if (!lawyerId || !rating || rating < 1 || rating > 5) {
       return NextResponse.json({ success: false, error: 'Invalid rating' }, { status: 400 })
     }
 
     const payload = await getPayload({ config: configPromise })
-    
+
     // Fetch current lawyer data
     const lawyer = await payload.findByID({
       collection: 'lawyers',
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
     const currentRating = lawyer.rating || 0
     const currentCount = lawyer.ratingCount || 0
-    
+
     // Calculate new weighted average
     const newCount = currentCount + 1
     const newRating = ((currentRating * currentCount) + rating) / newCount
@@ -39,10 +39,10 @@ export async function POST(req: Request) {
       },
     })
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       newRating: newRating.toFixed(1),
-      newCount 
+      newCount
     })
   } catch (error: any) {
     console.error('Rating Error:', error)

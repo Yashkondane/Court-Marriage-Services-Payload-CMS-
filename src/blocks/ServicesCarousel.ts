@@ -1,6 +1,5 @@
 import type { Block } from 'payload'
 import { visibilityFields } from './shared/visibilityFields'
-import { randomUUID } from 'crypto'
 
 export const ServicesCarousel: Block = {
   slug: 'servicesCarousel',

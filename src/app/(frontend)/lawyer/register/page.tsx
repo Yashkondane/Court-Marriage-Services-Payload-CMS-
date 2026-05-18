@@ -123,9 +123,19 @@ export default function LawyerRegisterPage() {
         {/* Left - Branding Panel */}
         <div className="lawyer-auth-brand">
           <div className="lawyer-auth-brand-inner">
-            <h2 className="lawyer-auth-brand-title">Join VakilFirst</h2>
+            <div className="flex items-center gap-2 mb-10">
+              <div className="relative w-6 h-6 flex items-center justify-center">
+                <div className="absolute inset-0 bg-[var(--color-secondary)] rounded-sm rotate-45" />
+                <div className="relative z-10 text-[#0a0a0a] font-black text-sm italic flex items-center justify-center -mb-0.5">V</div>
+              </div>
+              <span className="text-lg font-heading font-extrabold text-[var(--color-secondary)] tracking-widest uppercase">
+                VakilFirst
+              </span>
+            </div>
+            
+            <h2 className="lawyer-auth-brand-title">Join <span style={{color: 'var(--color-secondary)'}}>VakilFirst</span></h2>
             <p className="lawyer-auth-brand-sub">
-              Grow your legal practice with India&apos;s most trusted legal platform. Get discovered by thousands of clients.
+              Create your legal presence with India's most trusted legal platform. Get discovered by thousands of clients.
             </p>
             <div className="lawyer-auth-brand-stats">
               <div className="lawyer-auth-brand-stat">
@@ -181,7 +191,7 @@ export default function LawyerRegisterPage() {
                   type="text"
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  placeholder="e.g., Adv. Yash Kondane"
+                  placeholder="e.g., Adv. Priya Sharma"
                   required
                 />
               </div>

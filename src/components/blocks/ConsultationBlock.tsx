@@ -47,11 +47,11 @@ export function ConsultationBlock({ block }: { block: any }) {
   }
 
   return (
-    <section className="bg-surface py-12 md:py-24 px-4 overflow-hidden">
-      <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px]">
+    <section className="bg-surface section px-4 overflow-hidden">
+      <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[500px]">
         
         {/* Left Side: Lead Capture Form */}
-        <div className="w-full md:w-1/2 p-8 md:p-16 flex flex-col justify-center bg-white">
+        <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col justify-center bg-white">
           {success ? (
             <div className="text-center">
               <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -155,7 +155,7 @@ export function ConsultationBlock({ block }: { block: any }) {
         </div>
 
         {/* Right Side: Professional Visual */}
-        <div className="w-full md:w-1/2 relative min-h-[400px] md:min-h-full bg-[#0a0a0a] flex flex-col justify-end p-8 md:p-16">
+        <div className="w-full md:w-1/2 relative min-h-[350px] md:min-h-full bg-[#0a0a0a] flex flex-col justify-end p-6 md:p-10">
           {image && typeof image === 'object' && (
             <Image
               src={image.url}

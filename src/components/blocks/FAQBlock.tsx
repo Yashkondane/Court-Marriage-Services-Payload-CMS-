@@ -9,7 +9,7 @@ export function FAQBlock({ block }: { block: any }) {
   const faqs = block.faqs || []
 
   return (
-    <div className="py-12 md:py-16 bg-white">
+    <div className="section--sm bg-white">
       <div className="container-page max-w-4xl mx-auto">
         {block.heading && (
           <SectionTitle 

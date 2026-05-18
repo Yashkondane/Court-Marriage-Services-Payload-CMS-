@@ -27,7 +27,7 @@ export function RegistrationLicensesBlock({ block }: { block: any }) {
   const { badge, heading, subheading, cards, ctaSection } = block
 
   return (
-    <section className="py-24 bg-[var(--color-surface)] overflow-hidden">
+    <section className="section bg-[var(--color-surface)] overflow-hidden">
       <div className="container-page px-4 md:px-8">
         
         {/* Section Header */}

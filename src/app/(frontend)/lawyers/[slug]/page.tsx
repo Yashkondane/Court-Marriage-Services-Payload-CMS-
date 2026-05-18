@@ -3,14 +3,17 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getPayload } from 'payload'
-import configPromise from '@payload-config'
+import configPromise from '@/payload.config'
 import type { Metadata } from 'next'
-import { 
-  FaStar, FaMapMarkerAlt, FaCalendarAlt, FaLanguage, 
+import {
+  FaStar, FaMapMarkerAlt, FaCalendarAlt, FaLanguage,
   FaCheck, FaChevronDown, FaGavel, FaGraduationCap
 } from 'react-icons/fa'
 import LawyerEnquiryForm from '@/components/forms/LawyerEnquiryForm'
 import LawyerRatingForm from '@/components/forms/LawyerRatingForm'
+
+import { RenderBlocks } from '@/components/blocks/RenderBlocks'
+import { LawyersList } from '@/components/blocks/LawyersList'
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -19,6 +22,38 @@ type PageProps = {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const payload = await getPayload({ config: configPromise })
+
+  // 1. Check if slug is a location/city
+  const locationRes = await (payload.find as any)({
+    collection: 'locations',
+    where: { slug: { equals: slug } },
+    limit: 1,
+  })
+
+  if (locationRes.docs.length > 0) {
+    const location = locationRes.docs[0] as any
+    // Check if custom page exists for "lawyers-${slug}" or "lawyers/${slug}"
+    const pages = await (payload.find as any)({
+      collection: 'pages',
+      where: { slug: { in: [`lawyers-${slug}`, `lawyers/${slug}`] } },
+      limit: 1,
+    })
+    const page = pages.docs[0] as any
+    if (page?.seo?.metaTitle) {
+      return {
+        title: page.seo.metaTitle,
+        description: page.seo.metaDescription,
+        keywords: page.seo.keywords,
+      }
+    }
+
+    return {
+      title: `Best Lawyers & Advocates in ${location.name} | VakilFirst`,
+      description: `Find and consult with top-rated, Bar Council verified advocates and lawyers in ${location.name} for expert legal guidance on court marriage, family law, and litigation.`,
+    }
+  }
+
+  // 2. Otherwise query lawyer
   const result = await (payload.find as any)({
     collection: 'lawyers',
     where: { slug: { equals: slug }, status: { equals: 'approved' } },
@@ -38,6 +73,73 @@ export default async function LawyerProfilePage({ params }: PageProps) {
   const { slug } = await params
   const payload = await getPayload({ config: configPromise })
 
+  // 1. Check if slug is a location/city
+  const locationRes = await (payload.find as any)({
+    collection: 'locations',
+    where: { slug: { equals: slug } },
+    limit: 1,
+  })
+
+  if (locationRes.docs.length > 0) {
+    const location = locationRes.docs[0] as any
+    
+    // Check if custom page exists for "lawyers-${slug}" or "lawyers/${slug}"
+    const pages = await (payload.find as any)({
+      collection: 'pages',
+      where: { slug: { in: [`lawyers-${slug}`, `lawyers/${slug}`] } },
+      limit: 1,
+      depth: 3,
+    })
+
+    if (pages.docs.length > 0) {
+      return <RenderBlocks blocks={(pages.docs[0] as any).layout} />
+    }
+
+    // Otherwise render fallback pre-filtered LawyersList
+    const defaultBlock = {
+      blockType: 'lawyersList',
+      heading: `Consult with the Best Lawyers & Advocates in ${location.name}`,
+      subheading: `Navigating legal matters in ${location.name} can be daunting, but with the best local advocates, you can secure the expert guidance you need. We connect you with top-rated verified advocates.`,
+      onlineCountText: '104+ Lawyers Online',
+      preselectedCity: location.name,
+      showFilters: true,
+      whyChooseHeading: `Why Choose Our Lawyers in ${location.name}?`,
+      whyChoosePoints: [
+        {
+          title: 'Bar Council Verified Advocates',
+          description: `Every lawyer registered in ${location.name} undergoes rigorous verification of their credentials and licensing.`,
+        },
+        {
+          title: '4.8+ Client Ratings & Reviews',
+          description: 'Read verified testimonials, reviews, and client satisfaction ratings before consulting with your advocate.',
+        },
+        {
+          title: '100% Secure & Confidential',
+          description: 'All consultations, case evaluations, and document transmissions are protected under strict attorney-client privilege.',
+        },
+        {
+          title: 'Quick Response (under 5 Min)',
+          description: 'Connect with a local legal expert instantly for urgent litigation, document filings, or general counsel.',
+        }
+      ],
+      consultationWidget: {
+        heading: 'Consult a Lawyer',
+        subheading: 'No Minutes Limit',
+        price: '1000',
+        originalPrice: '2000',
+      },
+      helpContactWidget: {
+        heading: 'Need Help?',
+        phone: '+91-8800 788 535',
+        timings: 'Timing: 9AM to 8PM',
+        callbackText: 'Arrange a Callback',
+      }
+    }
+
+    return <LawyersList block={defaultBlock} />
+  }
+
+  // 2. Otherwise load single lawyer profile
   const result = await (payload.find as any)({
     collection: 'lawyers',
     where: { slug: { equals: slug }, status: { equals: 'approved' } },
@@ -57,7 +159,7 @@ export default async function LawyerProfilePage({ params }: PageProps) {
     collection: 'lawyers',
     id: lawyer.id,
     data: { profileViews: (lawyer.profileViews || 0) + 1 } as any,
-  }).catch(() => {})
+  }).catch(() => { })
 
   return (
     <div className="lawyer-profile-v2">
@@ -82,9 +184,9 @@ export default async function LawyerProfilePage({ params }: PageProps) {
               <div className="flex items-center gap-4 mb-4">
                 <div className="flex text-gold mb-1">
                   {[...Array(5)].map((_, i) => (
-                    <FaStar 
-                      key={i} 
-                      className={i < Math.round(lawyer.rating || 0) ? 'text-gold' : 'text-white/20'} 
+                    <FaStar
+                      key={i}
+                      className={i < Math.round(lawyer.rating || 0) ? 'text-gold' : 'text-white/20'}
                     />
                   ))}
                 </div>
@@ -128,9 +230,9 @@ export default async function LawyerProfilePage({ params }: PageProps) {
               <h3 className="lawyer-card-title-premium">About Advocate</h3>
               <div className="lawyer-bio-premium">
                 <p className="whitespace-pre-wrap leading-relaxed">
-                  {typeof lawyer.bio === 'string' ? lawyer.bio : 
-                   (lawyer.bio?.root ? "Professional bio being updated..." : 
-                   (lawyer.bio || `Advocate ${lawyer.name} is a dedicated legal professional specializing in ${lawyer.designation || 'legal matters'}. With a client-focused approach and a track record of success, they provide strategic counsel across various complex jurisdictions.`))}
+                  {typeof lawyer.bio === 'string' ? lawyer.bio :
+                    (lawyer.bio?.root ? "Professional bio being updated..." :
+                      (lawyer.bio || `Advocate ${lawyer.name} is a dedicated legal professional specializing in ${lawyer.designation || 'legal matters'}. With a client-focused approach and a track record of success, they provide strategic counsel across various complex jurisdictions.`))}
                 </p>
                 {!lawyer.bio && (
                   <p className="mt-4 opacity-50 italic text-sm">
@@ -197,12 +299,12 @@ export default async function LawyerProfilePage({ params }: PageProps) {
 
           {/* RIGHT: Enquiry Sticky */}
           <aside className="space-y-8">
-            <LawyerEnquiryForm 
-              lawyerId={lawyer.id} 
-              lawyerName={lawyer.name} 
-              lawyerSlug={lawyer.slug} 
+            <LawyerEnquiryForm
+              lawyerId={lawyer.id}
+              lawyerName={lawyer.name}
+              lawyerSlug={lawyer.slug}
             />
-            
+
             <div id="rate-lawyer">
               <LawyerRatingForm lawyerId={lawyer.id} />
             </div>

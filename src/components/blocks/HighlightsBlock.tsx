@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import { SectionTitle } from '@/components/ui/SectionTitle'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function HighlightsBlock({ block }: { block: any }) {
@@ -45,31 +46,24 @@ export function HighlightsBlock({ block }: { block: any }) {
   }
 
   return (
-    <div className="py-20 md:py-24 bg-white">
+    <div className="section bg-white">
       <div className="container-page">
         {(block.heading || block.description) && (
-          <div className="text-center mb-16 max-w-3xl mx-auto">
-            {block.heading && (
-              <h2 className="text-4xl md:text-5xl font-heading font-black text-[#111] mb-6 tracking-tight">
-                {block.heading}
-              </h2>
-            )}
-            {block.description && (
-              <p className="text-lg text-gray-500 font-medium leading-relaxed">
-                {block.description}
-              </p>
-            )}
-          </div>
+          <SectionTitle
+            title={block.heading}
+            subtitle={block.description}
+            centered={true}
+          />
         )}
         <div className={`grid grid-cols-1 ${gridCols[columns]} gap-8`}>
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {items.map((item: any, index: number) => (
             <div
               key={item.id || index}
-              className="bg-[var(--color-surface)] rounded-sm p-10 shadow-sm hover:shadow-xl transition-all duration-500 border border-transparent hover:border-[var(--color-secondary)]/20 group transform hover:-translate-y-1"
+              className="card group flex flex-col"
             >
               {item.icon?.url ? (
-                <div className="w-16 h-16 mb-8 relative group-hover:scale-110 transition-transform duration-500">
+                <div className="w-14 h-14 mb-6 relative group-hover:scale-110 transition-transform duration-300">
                   <Image
                     src={item.icon.url}
                     alt={item.icon.alt || item.title}
@@ -78,17 +72,15 @@ export function HighlightsBlock({ block }: { block: any }) {
                   />
                 </div>
               ) : (
-                <div className="w-16 h-16 mb-8 rounded-sm bg-black/5 flex items-center justify-center text-3xl group-hover:bg-[var(--color-secondary)]/10 transition-colors">
+                <div className="card-icon-wrap mb-6">
                   ⚖️
                 </div>
               )}
-              <h3 className="text-xl font-heading font-extrabold text-[#111] mb-4 group-hover:text-[var(--color-secondary)] transition-colors">
+              <h3 className="card-heading group-hover:text-[var(--color-secondary)] transition-colors">
                 {item.title}
               </h3>
               {item.description && (
-                <p className="text-gray-500 leading-relaxed text-sm font-medium">
-                  {item.description}
-                </p>
+                <p className="block-body">{item.description}</p>
               )}
             </div>
           ))}

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
-import configPromise from '@payload-config'
+import configPromise from '@/payload.config'
 import { getLawyerFromToken } from '@/lib/lawyer-auth'
 
 export async function POST(req: NextRequest) {

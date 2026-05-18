@@ -50,9 +50,9 @@ export function LawyersCarouselBlock({ block }: { block: any }) {
   }, [activeIndex])
 
   return (
-    <section className="py-24 bg-[#fafafa] overflow-hidden">
+    <section className="section bg-[#fafafa] overflow-hidden">
       <div className="container-page">
-        <SectionTitle title={heading} centered={true} className="mb-16" />
+        <SectionTitle title={heading} centered={true} />
 
         <div 
           className="relative group"
@@ -102,7 +102,9 @@ export function LawyersCarouselBlock({ block }: { block: any }) {
 
                   {/* Name & Title */}
                   <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-2xl font-heading font-black text-[#111]">Adv. {name}</h3>
+                    <h3 className="card-heading text-[1.125rem]">
+                      Adv. {name}
+                    </h3>
                     {isPremiumPartner && (
                       <div className="flex items-center gap-1 bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full border border-amber-200">
                         <FaStar className="text-xs" />

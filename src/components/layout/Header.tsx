@@ -43,7 +43,7 @@ export function Header({
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center gap-8 xl:gap-10">
+          <div className="hidden lg:flex items-center gap-5 xl:gap-6">
 
             {/* Find A Lawyer Mega Dropdown */}
             <MegaDropdown
@@ -76,9 +76,21 @@ export function Header({
               </Link>
             ))}
 
-            {/* CTA */}
-            <Link href="/consultation" className="btn-gold px-7 py-3.5 rounded-sm text-sm shrink-0">
-              Talk to a Lawyer
+            {/* Divider */}
+            <div className="w-px h-5 bg-white/15" />
+
+            {/* Lawyer Auth */}
+            <Link
+              href="/lawyer/login"
+              className="text-[13px] font-bold tracking-[0.1em] text-gray-300 hover:text-[var(--color-secondary)] transition-all shrink-0"
+            >
+              Lawyer Login
+            </Link>
+            <Link
+              href="/lawyer/register"
+              className="btn-gold px-6 py-2.5 rounded-sm text-[13px] font-bold shrink-0"
+            >
+              Join as Lawyer
             </Link>
           </div>
 
@@ -145,13 +157,20 @@ export function Header({
             </Link>
           ))}
 
-          <div className="p-5">
+          <div className="p-5 flex flex-col gap-3">
             <Link
-              href="/consultation"
+              href="/lawyer/login"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="btn-gold w-full py-4 text-center block tracking-widest"
+              className="text-[13px] font-bold tracking-wider text-gray-300 py-3 text-center hover:text-white transition-all"
             >
-              Talk to a Lawyer
+              Lawyer Login
+            </Link>
+            <Link
+              href="/lawyer/register"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="btn-gold w-full py-4 text-center block tracking-widest text-[13px] font-bold rounded-sm"
+            >
+              Join as Lawyer
             </Link>
           </div>
         </div>

@@ -116,6 +116,8 @@ export default function LawyerDashboard() {
             yearsInField: s.yearsInField?.toString() || '',
           })) || []
         )
+      } else {
+        setError(data.error || 'Failed to load profile details.')
       }
     } catch {
       setError('Failed to load profile.')
@@ -261,6 +263,19 @@ export default function LawyerDashboard() {
       <div className="lawyer-dash-loading">
         <div className="lawyer-dash-spinner" />
         <p>Loading your dashboard...</p>
+      </div>
+    )
+  }
+
+  if (error && !lawyer) {
+    return (
+      <div className="lawyer-dash-loading text-center p-10 min-h-[60vh] flex flex-col items-center justify-center">
+        <FaExclamationCircle className="text-5xl text-red-500 mb-4" />
+        <h2 className="text-2xl font-black text-gray-900">Oops, something went wrong.</h2>
+        <p className="text-gray-500 mt-2">{error}</p>
+        <button onClick={logout} className="mt-6 px-6 py-3 bg-black text-white font-bold rounded-sm shadow hover:bg-gray-800 transition-colors">
+          Logout & Try Again
+        </button>
       </div>
     )
   }

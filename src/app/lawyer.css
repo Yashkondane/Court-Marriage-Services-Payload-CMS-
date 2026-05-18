@@ -4,23 +4,23 @@
 
 /* Auth Page Layout */
 .lawyer-auth-page {
-  min-height: 100vh;
+  min-height: calc(100vh - 86px);
   display: flex;
   align-items: center;
   justify-content: center;
   background: #f3f4f6;
-  padding: 2rem;
+  padding: 3rem 2rem;
 }
 
 .lawyer-auth-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  max-width: 960px;
+  max-width: 1000px;
   width: 100%;
   background: #fff;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
 }
 
 .lawyer-auth-container--login {
@@ -38,8 +38,9 @@
 
 /* Brand Panel */
 .lawyer-auth-brand {
-  background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
-  padding: 3rem;
+  background: #0a0a0a;
+  background-image: radial-gradient(circle at bottom right, rgba(194,152,33,0.15) 0%, transparent 60%), linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+  padding: 4rem;
   display: flex;
   align-items: center;
   position: relative;
@@ -100,7 +101,10 @@
 
 /* Form Panel */
 .lawyer-auth-form-panel {
-  padding: 2.5rem;
+  padding: 4rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .lawyer-auth-form {

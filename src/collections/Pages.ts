@@ -1,7 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin } from '@/access/isAdmin'
 import { isPublic } from '@/access/index'
-import { randomUUID } from 'crypto'
 import { Hero } from '@/blocks/Hero'
 import { RichContent } from '@/blocks/RichContent'
 import { FAQ } from '@/blocks/FAQ'
@@ -19,6 +18,7 @@ import { ServicesCarousel } from '@/blocks/ServicesCarousel'
 import { LawyersCarousel } from '@/blocks/LawyersCarousel'
 import { CodeSnippet } from '@/blocks/CodeSnippet'
 import { Logos } from '@/blocks/Logos'
+import { LawyersList } from '@/blocks/LawyersList'
 
 import { Documents } from '@/blocks/Documents'
 
@@ -39,42 +39,6 @@ export const Pages: CollectionConfig = {
     read: isPublic,
     update: isAdmin,
     delete: isAdmin,
-  },
-  hooks: {
-    beforeValidate: [
-      ({ data }) => {
-        // Force-regenerate EVERY string `id` in the entire layout tree.
-        // This prevents collisions when blocks are copy-pasted between pages
-        // (the pasted block carries the original page's UUID, which already
-        // exists in the database).
-        function forceNewIds(obj: any): void {
-          if (!obj || typeof obj !== 'object') return;
-          if (Array.isArray(obj)) {
-            for (const item of obj) {
-              if (item && typeof item === 'object') {
-                if ('id' in item && typeof item.id === 'string') {
-                  item.id = randomUUID();
-                }
-                forceNewIds(item);
-              }
-            }
-          } else {
-            for (const key of Object.keys(obj)) {
-              if (key === 'id') continue;
-              const val = obj[key];
-              if (val && typeof val === 'object' && !Buffer.isBuffer(val)) {
-                forceNewIds(val);
-              }
-            }
-          }
-        }
-
-        if (data?.layout) {
-          forceNewIds(data.layout);
-        }
-        return data;
-      },
-    ],
   },
   fields: [
 
@@ -118,13 +82,14 @@ export const Pages: CollectionConfig = {
                 TestimonialsBlock,
                 ServicesCarousel,
                 LawyersCarousel,
+                LawyersList,
                 CodeSnippet,
                 Logos,
 
                 Documents,
               ],
               admin: {
-                description: '🎨 Build your webpage here! Click "Add Block" below to stack sections. ⚠️ CRITICAL WARNING: If you forget a required field, hit Save, and get an error, DO NOT hit save again. Delete the blocks and re-add them, or start a new page, otherwise it will crash the save pipeline!',
+                description: '🎨 Build your webpage here! Click "Add Block" below to stack sections.',
               },
             },
           ],

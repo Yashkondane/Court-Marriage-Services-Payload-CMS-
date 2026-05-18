@@ -3,7 +3,7 @@
  * `getPayload()` with no arguments instead of importing configPromise every time.
  */
 import { getPayload as _getPayload } from 'payload'
-import configPromise from '@payload-config'
+import configPromise from '@/payload.config'
 
 export async function getPayload() {
   return _getPayload({ config: configPromise })

@@ -18,6 +18,7 @@ import { WhyChooseUsBlock } from '@/components/blocks/WhyChooseUsBlock'
 import { RegistrationLicensesBlock } from '@/components/blocks/RegistrationLicensesBlock'
 import { HowItWorksBlock } from '@/components/blocks/HowItWorksBlock'
 import { ConsultationBlock } from './ConsultationBlock'
+import { LawyersList } from './LawyersList'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Block = Record<string, any>
@@ -38,6 +39,7 @@ const blockComponents: Record<string, React.FC<{ block: Block }>> = {
   testimonialsBlock: TestimonialsBlockComponent,
   servicesCarousel: ServicesCarouselBlock,
   lawyersCarousel: LawyersCarouselBlock,
+  lawyersList: LawyersList,
   logos: LogosBlock,
   codeSnippet: CodeSnippetBlock,
 
