@@ -269,6 +269,9 @@ export const Lawyers: CollectionConfig = {
           required: true,
           admin: {
             description: 'Link to a service (e.g., Divorce, Property, Criminal Law)',
+            displayOptions: {
+              appearance: 'default', // Use default select/modal instead of auto-fetch
+            },
           },
         },
         {

@@ -3,11 +3,11 @@ import React, { useState, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
-  FaStar, FaMapMarkerAlt, FaLanguage,
-  FaSearch, FaUndo, FaChevronDown,
-  FaUserTie, FaAward, FaHourglassHalf, FaCalendarCheck,
-  FaTimes, FaCheckCircle
-} from 'react-icons/fa'
+  Star, MapPin, Globe,
+  Search, RotateCcw, ChevronDown,
+  User, Briefcase, Clock, Phone,
+  X, CheckCircle, Zap, Award
+} from 'lucide-react'
 import { serializeLexical } from '@/lib/payload/lexical'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -232,7 +232,7 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
               }}
               className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-slate-200 bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)] text-xs font-semibold shadow-inner transition-all"
             />
-            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
           </div>
 
           <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
@@ -253,11 +253,11 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                   <Link
                     key={lawyer.id}
                     href={`/lawyers/${lawyer.slug}`}
-                    className="bg-white rounded-xl border border-slate-100 hover:border-[var(--color-secondary)]/40 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col sm:flex-row items-stretch group"
+                    className="bg-white rounded-2xl border border-slate-200 hover:border-[var(--color-secondary)]/60 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col sm:flex-row items-stretch group hover:bg-slate-50/50"
                   >
-                    {/* Unified Left Section: Photo & Basic Rating */}
-                    <div className="sm:w-40 bg-[#fafafa] p-5 flex flex-row sm:flex-col items-center justify-center gap-4 sm:gap-2 border-b sm:border-b-0 sm:border-r border-slate-100 shrink-0">
-                      <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-white shadow shrink-0">
+                    {/* Left Section: Profile Photo with Badge */}
+                    <div className="sm:w-44 bg-gradient-to-br from-slate-50 to-slate-100 p-6 flex flex-col items-center justify-start gap-4 border-b sm:border-b-0 sm:border-r border-slate-200 shrink-0">
+                      <div className="relative w-24 h-24 rounded-full overflow-hidden border-3 border-white shadow-md shrink-0">
                         {lawyer.photo?.url ? (
                           <Image
                             src={lawyer.photo.url}
@@ -266,105 +266,137 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                             className="object-cover"
                           />
                         ) : (
-                          <div className="w-full h-full bg-slate-200 flex items-center justify-center text-slate-600">
-                            <FaUserTie className="text-2xl" />
+                          <div className="w-full h-full bg-gradient-to-br from-slate-300 to-slate-400 flex items-center justify-center text-white">
+                            <User size={40} />
                           </div>
                         )}
                       </div>
 
-                      <div className="flex flex-col items-center">
-                        <div className="flex items-center gap-1 text-xs font-bold text-slate-800">
-                          <FaStar className="text-amber-500" />
+                      {/* Rating Badge */}
+                      <div className="flex flex-col items-center gap-1 w-full">
+                        <div className="flex items-center justify-center gap-1.5 text-sm font-bold text-slate-900">
+                          <Star size={16} className="text-amber-400 fill-amber-400" />
                           <span>{lawyer.rating?.toFixed(1) || '5.0'}</span>
                         </div>
-                        <span className="text-[9px] font-bold text-slate-400">({lawyer.ratingCount || 0} reviews)</span>
+                        <span className="text-xs font-semibold text-slate-500">({lawyer.ratingCount || 0} {lawyer.ratingCount === 1 ? 'review' : 'reviews'})</span>
+                      </div>
+
+                      {/* Status Badges */}
+                      <div className="flex flex-col gap-2 w-full">
+                        {lawyer.isSponsored && (
+                          <div className="flex items-center justify-center gap-1.5 bg-amber-50 border border-amber-200 rounded-lg px-2 py-1.5">
+                            <Award size={14} className="text-amber-600" />
+                            <span className="text-xs font-bold text-amber-700 uppercase tracking-wide">Sponsored</span>
+                          </div>
+                        )}
+                        {lawyer.isPremiumPartner && (
+                          <div className="flex items-center justify-center gap-1.5 bg-[var(--color-secondary)]/10 border border-[var(--color-secondary)]/30 rounded-lg px-2 py-1.5">
+                            <Award size={14} className="text-[var(--color-secondary)]" />
+                            <span className="text-xs font-bold text-[var(--color-secondary)] uppercase tracking-wide">Premium</span>
+                          </div>
+                        )}
                       </div>
                     </div>
 
-                    {/* Middle Section: Clean Advocate Details */}
-                    <div className="flex-1 p-5 flex flex-col justify-between gap-4">
-                      <div>
-                        <div className="flex flex-wrap items-center gap-2 mb-1">
-                          <h3 className="text-lg font-heading font-black text-slate-900 group-hover:text-[var(--color-secondary)] transition-colors leading-snug">
+                    {/* Middle Section: Advocate Details */}
+                    <div className="flex-1 p-6 flex flex-col justify-between gap-4">
+                      <div className="space-y-3">
+                        <div>
+                          <h3 className="text-lg font-black text-slate-900 group-hover:text-[var(--color-secondary)] transition-colors leading-tight">
                             Advocate {lawyer.name}
                           </h3>
-                          {lawyer.isPremiumPartner && (
-                            <span className="bg-[var(--color-secondary)]/10 text-[var(--color-secondary)] font-black text-[8px] uppercase tracking-wider px-2 py-0.5 rounded">
-                              Premium Partner
-                            </span>
-                          )}
-                          {lawyer.isSponsored && (
-                            <span className="bg-amber-100 text-amber-800 font-bold text-[8px] uppercase tracking-wider px-2 py-0.5 rounded">
-                              ⭐ Sponsored
-                            </span>
-                          )}
+                          <p className="text-sm font-bold text-[var(--color-secondary)] uppercase tracking-wide mt-1">
+                            {lawyer.designation || 'Legal Practitioner'}
+                          </p>
                         </div>
 
-                        <p className="text-[11px] text-[var(--color-secondary)] font-black uppercase tracking-wider mb-3">
-                          {lawyer.designation || 'Supreme Court Practitioner'}
-                        </p>
+                        {/* Info Grid with Icons */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                          {/* Experience */}
+                          <div className="flex items-center gap-3 p-2.5 bg-slate-50 rounded-lg border border-slate-200/50">
+                            <Briefcase size={18} className="text-[var(--color-secondary)] shrink-0" />
+                            <div className="flex flex-col">
+                              <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Experience</span>
+                              <span className="text-sm font-black text-slate-900">{lawyer.experience || 0} Years</span>
+                            </div>
+                          </div>
 
-                        {/* Clean Metadata Icons */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-bold text-slate-600 mt-2">
-                          <div className="flex items-center gap-2">
-                            <FaAward className="text-slate-400 text-sm shrink-0" />
-                            <span>{lawyer.experience || 0} Years Experience</span>
+                          {/* Location */}
+                          <div className="flex items-center gap-3 p-2.5 bg-slate-50 rounded-lg border border-slate-200/50">
+                            <MapPin size={18} className="text-red-500 shrink-0" />
+                            <div className="flex flex-col min-w-0">
+                              <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Location</span>
+                              <span className="text-sm font-black text-slate-900 truncate">{lawyer.locationText || 'India'}</span>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <FaMapMarkerAlt className="text-slate-400 text-sm shrink-0" />
-                            <span className="truncate">{lawyer.locationText || 'India'}</span>
+
+                          {/* Languages */}
+                          <div className="flex items-center gap-3 p-2.5 bg-slate-50 rounded-lg border border-slate-200/50">
+                            <Globe size={18} className="text-blue-500 shrink-0" />
+                            <div className="flex flex-col min-w-0">
+                              <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Languages</span>
+                              <span className="text-sm font-black text-slate-900 truncate">
+                                {lawyer.languages?.map((l: any) => l.language).join(', ') || 'English, Hindi'}
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <FaLanguage className="text-slate-400 text-sm shrink-0" />
-                            <span className="truncate">
-                              {lawyer.languages?.map((l: any) => l.language).join(', ') || 'English, Hindi'}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <FaHourglassHalf className="text-slate-400 text-sm shrink-0" />
-                            <span className="truncate text-emerald-600">{lawyer.responseTime || 'Responds quickly'}</span>
+
+                          {/* Response Time */}
+                          <div className="flex items-center gap-3 p-2.5 bg-emerald-50 rounded-lg border border-emerald-200/50">
+                            <Clock size={18} className="text-emerald-600 shrink-0" />
+                            <div className="flex flex-col">
+                              <span className="text-xs font-bold text-emerald-700 uppercase tracking-wide">Response</span>
+                              <span className="text-sm font-black text-emerald-900">{lawyer.responseTime || 'Quick'}</span>
+                            </div>
                           </div>
                         </div>
                       </div>
 
                       {/* Specializations Skill Chips */}
                       {lawyer.specializations && lawyer.specializations.length > 0 && (
-                        <div className="flex flex-wrap gap-1">
+                        <div className="flex flex-wrap gap-2 pt-2">
                           {lawyer.specializations.slice(0, 3).map((spec: any, idx: number) => (
                             <span
                               key={idx}
-                              className="bg-slate-100 text-slate-600 text-[9px] font-bold px-2 py-0.5 rounded border border-slate-200/50"
+                              className="bg-[var(--color-secondary)]/8 text-[var(--color-secondary)] text-xs font-bold px-3 py-1.5 rounded-full border border-[var(--color-secondary)]/20"
                             >
                               {spec.title}
                             </span>
                           ))}
+                          {lawyer.specializations.length > 3 && (
+                            <span className="text-xs font-bold text-slate-500 px-3 py-1.5">
+                              +{lawyer.specializations.length - 3} more
+                            </span>
+                          )}
                         </div>
                       )}
                     </div>
 
-                    {/* Right Section: Compact CTA Button */}
-                    <div className="p-5 flex flex-col justify-center items-center gap-2 border-t sm:border-t-0 sm:border-l border-slate-100 bg-[#fafafa] sm:w-44 shrink-0">
+                    {/* Right Section: CTA Button */}
+                    <div className="p-6 flex flex-col justify-center items-center gap-3 border-t sm:border-t-0 sm:border-l border-slate-200 bg-slate-50 sm:w-48 shrink-0">
                       <button
                         onClick={(e) => openCallbackModal(e, lawyer)}
-                        className="btn-gold w-full py-2.5 px-4 text-center text-xs font-black tracking-widest uppercase rounded-lg active:scale-95 transition-all shadow-sm flex items-center justify-center gap-1.5"
+                        className="btn-gold w-full py-3 px-4 text-center text-xs font-black tracking-widest uppercase rounded-xl active:scale-95 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 whitespace-nowrap"
                       >
-                        <FaCalendarCheck /> Contact Now
+                        <Phone size={16} />
+                        Contact Now
                       </button>
-                      <span className="text-[9px] font-bold text-slate-400">
-                        ⚡ Instant Callback
-                      </span>
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200/50 w-full justify-center">
+                        <Zap size={14} className="fill-emerald-600" />
+                        Instant Callback
+                      </div>
                     </div>
 
                   </Link>
                 ))
               ) : (
-                <div className="bg-white p-12 rounded-xl border border-dashed border-slate-200 text-center space-y-4 shadow-sm">
-                  <p className="text-slate-400 font-bold text-lg">No matching advocates found.</p>
+                <div className="bg-white p-12 rounded-2xl border border-dashed border-slate-300 text-center space-y-4 shadow-sm">
+                  <p className="text-slate-600 font-bold text-lg">No matching advocates found.</p>
                   <button
                     onClick={handleResetFilters}
-                    className="inline-flex items-center gap-2 px-6 py-2 bg-slate-100 text-slate-600 rounded-lg text-xs font-black uppercase tracking-widest hover:bg-slate-200 transition-all"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-100 text-slate-700 rounded-lg text-xs font-black uppercase tracking-widest hover:bg-slate-200 transition-all"
                   >
-                    <FaUndo /> Reset Filters
+                    <RotateCcw size={16} /> Reset Filters
                   </button>
                 </div>
               )}
@@ -429,7 +461,10 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                           className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-50 transition-colors"
                         >
                           <span className="font-bold text-slate-800 text-xs md:text-sm">{faq.question}</span>
-                          <span className={`text-[var(--color-secondary)] text-xs font-black transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>▼</span>
+                          <ChevronDown
+                            size={18}
+                            className={`text-[var(--color-secondary)] transition-transform duration-300 shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+                          />
                         </button>
                         <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                           <div className="overflow-hidden">
@@ -459,9 +494,13 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                   {initialReviews.map((rev: any, idx: number) => (
                     <div key={idx} className="bg-slate-50/50 p-5 rounded-xl border border-slate-100 flex flex-col justify-between hover:shadow-md transition-all">
                       <div>
-                        <div className="flex text-amber-500 gap-0.5 mb-2">
+                        <div className="flex gap-0.5 mb-2">
                           {[...Array(5)].map((_, i) => (
-                            <FaStar key={i} className={i < (rev.rating || 5) ? 'text-amber-500 text-xs' : 'text-slate-200 text-xs'} />
+                            <Star
+                              key={i}
+                              size={16}
+                              className={i < (rev.rating || 5) ? 'text-amber-400 fill-amber-400' : 'text-slate-200'}
+                            />
                           ))}
                         </div>
                         <p className="text-slate-600 font-semibold italic text-xs leading-relaxed mb-4">
