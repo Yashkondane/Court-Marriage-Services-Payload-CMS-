@@ -21,9 +21,9 @@ export function Header({
   const [mobileOpenSection, setMobileOpenSection] = useState<string | null>(null)
 
   const staticLinks = [
-    { label: 'LEGAL BLOG', href: '/blog' },
-    { label: 'ABOUT US', href: '/about' },
-    { label: 'CONTACT', href: '/contact' },
+    { label: 'Legal Blog', href: '/blog' },
+    { label: 'About Us', href: '/about' },
+    { label: 'Contact', href: '/contact' },
   ]
 
   return (
@@ -89,6 +89,7 @@ export function Header({
             <Link
               href="/lawyer/register"
               className="btn-gold px-6 py-2.5 rounded-sm text-[13px] font-bold shrink-0"
+              style={{ textTransform: 'none' }}
             >
               Join as Lawyer
             </Link>
@@ -149,7 +150,7 @@ export function Header({
               key={link.label}
               href={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`px-6 py-5 text-base font-bold uppercase tracking-wider transition-colors ${
+              className={`px-6 py-5 text-base font-bold tracking-wider transition-colors ${
                 pathname === link.href ? 'text-[var(--color-secondary)]' : 'text-gray-300'
               }`}
             >
@@ -169,6 +170,7 @@ export function Header({
               href="/lawyer/register"
               onClick={() => setIsMobileMenuOpen(false)}
               className="btn-gold w-full py-4 text-center block tracking-widest text-[13px] font-bold rounded-sm"
+              style={{ textTransform: 'none' }}
             >
               Join as Lawyer
             </Link>

@@ -67,7 +67,11 @@ export async function HeroBlock({ block }: { block: any }) {
               {/* Live badge */}
               <div className="hero-badge">
                 <div className="hero-badge-avatars">
-                  {[1, 2, 3].map((i) => <div key={i} className="hero-badge-avatar"><div className="hero-badge-avatar-inner" /></div>)}
+                  {['/images/advocate.jpeg', '/images/advocate 2.jpeg', '/images/advocate 3.png'].map((src, i) => (
+                    <div key={i} className="hero-badge-avatar relative">
+                      <Image src={src} alt="Lawyer" fill className="object-cover" />
+                    </div>
+                  ))}
                 </div>
                 <span className="hero-badge-label">
                   <span className="hero-badge-dot"><span className="hero-badge-dot-ping" /><span className="hero-badge-dot-solid" /></span>
@@ -118,7 +122,11 @@ export async function HeroBlock({ block }: { block: any }) {
               <div className="hero-text">
                 <div className="hero-badge">
                   <div className="hero-badge-avatars">
-                    {[1, 2, 3].map((i) => <div key={i} className="hero-badge-avatar"><div className="hero-badge-avatar-inner" /></div>)}
+                    {['/images/advocate.jpeg', '/images/advocate 2.jpeg', '/images/advocate 3.png'].map((src, i) => (
+                      <div key={i} className="hero-badge-avatar relative">
+                        <Image src={src} alt="Lawyer" fill className="object-cover" />
+                      </div>
+                    ))}
                   </div>
                   <span className="hero-badge-label">
                     <span className="hero-badge-dot"><span className="hero-badge-dot-ping" /><span className="hero-badge-dot-solid" /></span>

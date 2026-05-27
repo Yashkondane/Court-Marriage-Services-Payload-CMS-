@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from 'react'
+import Image from 'next/image'
 
 export function LeadFormWidget({ services = [], locations = [] }: { services?: any[], locations?: any[] }) {
   const [loading, setLoading] = useState(false)
@@ -53,24 +54,24 @@ export function LeadFormWidget({ services = [], locations = [] }: { services?: a
       {/* Form Header */}
       <div className="p-8 pb-4 relative overflow-hidden bg-gradient-to-b from-white/5 to-transparent">
         <div className="absolute top-0 right-0 p-4">
-           <div className="font-heading text-[10px] font-black bg-[var(--color-secondary)] text-black px-3 py-1 rounded-sm uppercase tracking-widest shadow-lg">
+           <div className="font-heading text-[10px] font-black bg-[var(--color-secondary)] text-white px-3 py-1 rounded-sm tracking-widest shadow-lg">
              Most Trusted Legal Platform
            </div>
         </div>
 
         <div className="flex items-center justify-between mb-2">
-           <h3 className="text-2xl font-heading font-black !text-white uppercase tracking-tight leading-none">
+           <h3 className="text-2xl font-heading font-black !text-white tracking-tight leading-none">
              Premium Legal <br /> Consultation
            </h3>
            <div className="text-right">
               <div className="flex -space-x-3 mb-1 justify-end">
-                {[1, 2, 3].map((i) => (
+                {['/images/advocate.jpeg', '/images/advocate 2.jpeg', '/images/advocate 3.png'].map((src, i) => (
                   <div key={i} className="w-8 h-8 rounded-full border-2 border-[#111] bg-gray-600 overflow-hidden relative shadow-md">
-                     <div className="absolute inset-0 bg-gradient-to-br from-gray-400 to-gray-600" />
+                     <Image src={src} alt="Expert" fill className="object-cover" />
                   </div>
                 ))}
               </div>
-              <span className="font-heading block text-[10px] font-black text-gray-500 uppercase tracking-widest">Top-Rated Experts</span>
+              <span className="font-heading block text-[10px] font-black text-gray-200 tracking-widest">Top-Rated Experts</span>
            </div>
         </div>
       </div>

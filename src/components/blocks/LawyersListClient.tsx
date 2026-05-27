@@ -2,8 +2,8 @@
 import React, { useState, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { 
-  FaStar, FaMapMarkerAlt, FaLanguage, 
+import {
+  FaStar, FaMapMarkerAlt, FaLanguage,
   FaSearch, FaUndo, FaChevronDown,
   FaUserTie, FaAward, FaHourglassHalf, FaCalendarCheck,
   FaTimes, FaCheckCircle
@@ -18,7 +18,7 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
   const [selectedCity, setSelectedCity] = useState(block.preselectedCity || '')
   const [selectedPracticeArea, setSelectedPracticeArea] = useState('')
   const [selectedRating, setSelectedRating] = useState('')
-  
+
   // Pagination State - 20 items per page!
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 20
@@ -69,9 +69,9 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
     return lawyers.filter((lawyer: any) => {
       const matchSearch = searchQuery
         ? lawyer.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          lawyer.designation?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          lawyer.bio?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          lawyer.locationText?.toLowerCase().includes(searchQuery.toLowerCase())
+        lawyer.designation?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        lawyer.bio?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        lawyer.locationText?.toLowerCase().includes(searchQuery.toLowerCase())
         : true
 
       const matchState = selectedState
@@ -154,11 +154,11 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
   return (
     <section className="section bg-[#fafafa] text-[#111111] py-10">
       <div className="container-page px-4 md:px-6">
-        
+
         {/* Dynamic Premium Header Card - Sleek Grid with Right Image Accent */}
         <div className="bg-[#0a0a0a] text-white rounded-2xl p-8 md:p-10 border border-neutral-800 shadow-xl relative overflow-hidden mb-8">
           <div className="absolute top-0 right-0 w-80 h-80 bg-[var(--color-secondary)]/5 blur-[100px] rounded-full pointer-events-none" />
-          
+
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative z-10">
             {/* Left Content Column */}
             <div className="md:col-span-8 space-y-4">
@@ -171,14 +171,14 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                   {block.onlineCountText || '104+ Verified Advocates Active'}
                 </span>
               </div>
-              
-              <h1 
-                className="text-2xl md:text-4xl font-heading font-black leading-tight tracking-tight" 
+
+              <h1
+                className="text-2xl md:text-4xl font-heading font-black leading-tight tracking-tight"
                 style={{ color: '#ffffff' }}
               >
                 {block.heading}
               </h1>
-              
+
               <p className="text-white/60 text-xs md:text-sm leading-relaxed max-w-2xl">
                 {block.subheading}
               </p>
@@ -193,11 +193,10 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                       setSelectedCity(selectedCity === city ? '' : city)
                       setCurrentPage(1)
                     }}
-                    className={`px-3 py-1 rounded-full text-xs font-bold transition-all border ${
-                      selectedCity === city
+                    className={`px-3 py-1 rounded-full text-xs font-bold transition-all border ${selectedCity === city
                         ? 'bg-[var(--color-secondary)] border-[var(--color-secondary)] text-black'
                         : 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10 hover:text-white'
-                    }`}
+                      }`}
                   >
                     {city}
                   </button>
@@ -209,8 +208,8 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
             <div className="md:col-span-4 flex justify-center md:justify-end">
               <div className="relative w-full max-w-[240px] aspect-[4/3] rounded-xl overflow-hidden border border-neutral-800 bg-gradient-to-br from-[#121212] to-[#000000] shadow-2xl flex items-center justify-center group/img">
                 <Image
-                  src={block.accentImage?.url || "/images/law_hero_accent.png"}
-                  alt={block.accentImage?.alt || "Elite Legal Accent"}
+                  src="/images/law_hero_accent.png"
+                  alt="Elite Legal Scales of Justice Accent"
                   fill
                   className="object-cover opacity-90 group-hover/img:scale-105 transition-transform duration-700"
                 />
@@ -223,7 +222,7 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
         {/* Dynamic Controls Bar */}
         <div className="bg-white p-3.5 rounded-xl border border-slate-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
           <div className="relative w-full md:max-w-md">
-            <input 
+            <input
               type="text"
               placeholder="Search by advocate name, specialty, or court..."
               value={searchQuery}
@@ -235,24 +234,24 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
             />
             <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
           </div>
-          
+
           <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
             Showing {filteredLawyers.length} Advocates
           </div>
         </div>
-        
+
         {/* Main Grid System */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-          
+
           {/* LEFT SIDE: Directory Content */}
           <div className="lg:col-span-2 space-y-6">
-            
+
             {/* Highly Polished List View of Cards */}
             <div className="space-y-4">
               {paginatedLawyers.length > 0 ? (
                 paginatedLawyers.map((lawyer: any) => (
                   <Link
-                    key={lawyer.id} 
+                    key={lawyer.id}
                     href={`/lawyers/${lawyer.slug}`}
                     className="bg-white rounded-xl border border-slate-100 hover:border-[var(--color-secondary)]/40 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col sm:flex-row items-stretch group"
                   >
@@ -260,10 +259,10 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                     <div className="sm:w-40 bg-[#fafafa] p-5 flex flex-row sm:flex-col items-center justify-center gap-4 sm:gap-2 border-b sm:border-b-0 sm:border-r border-slate-100 shrink-0">
                       <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-white shadow shrink-0">
                         {lawyer.photo?.url ? (
-                          <Image 
-                            src={lawyer.photo.url} 
-                            alt={lawyer.name} 
-                            fill 
+                          <Image
+                            src={lawyer.photo.url}
+                            alt={lawyer.name}
+                            fill
                             className="object-cover"
                           />
                         ) : (
@@ -272,7 +271,7 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                           </div>
                         )}
                       </div>
-                      
+
                       <div className="flex flex-col items-center">
                         <div className="flex items-center gap-1 text-xs font-bold text-slate-800">
                           <FaStar className="text-amber-500" />
@@ -300,11 +299,11 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                             </span>
                           )}
                         </div>
-                        
+
                         <p className="text-[11px] text-[var(--color-secondary)] font-black uppercase tracking-wider mb-3">
                           {lawyer.designation || 'Supreme Court Practitioner'}
                         </p>
-                        
+
                         {/* Clean Metadata Icons */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-bold text-slate-600 mt-2">
                           <div className="flex items-center gap-2">
@@ -332,8 +331,8 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                       {lawyer.specializations && lawyer.specializations.length > 0 && (
                         <div className="flex flex-wrap gap-1">
                           {lawyer.specializations.slice(0, 3).map((spec: any, idx: number) => (
-                            <span 
-                              key={idx} 
+                            <span
+                              key={idx}
                               className="bg-slate-100 text-slate-600 text-[9px] font-bold px-2 py-0.5 rounded border border-slate-200/50"
                             >
                               {spec.title}
@@ -345,7 +344,7 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
 
                     {/* Right Section: Compact CTA Button */}
                     <div className="p-5 flex flex-col justify-center items-center gap-2 border-t sm:border-t-0 sm:border-l border-slate-100 bg-[#fafafa] sm:w-44 shrink-0">
-                      <button 
+                      <button
                         onClick={(e) => openCallbackModal(e, lawyer)}
                         className="btn-gold w-full py-2.5 px-4 text-center text-xs font-black tracking-widest uppercase rounded-lg active:scale-95 transition-all shadow-sm flex items-center justify-center gap-1.5"
                       >
@@ -361,7 +360,7 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
               ) : (
                 <div className="bg-white p-12 rounded-xl border border-dashed border-slate-200 text-center space-y-4 shadow-sm">
                   <p className="text-slate-400 font-bold text-lg">No matching advocates found.</p>
-                  <button 
+                  <button
                     onClick={handleResetFilters}
                     className="inline-flex items-center gap-2 px-6 py-2 bg-slate-100 text-slate-600 rounded-lg text-xs font-black uppercase tracking-widest hover:bg-slate-200 transition-all"
                   >
@@ -374,7 +373,7 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
             {/* Pagination Controls */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center gap-1.5 pt-4">
-                <button 
+                <button
                   disabled={currentPage === 1}
                   onClick={() => {
                     setCurrentPage(p => Math.max(p - 1, 1))
@@ -384,7 +383,7 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                 >
                   Previous
                 </button>
-                
+
                 {[...Array(totalPages)].map((_, i) => (
                   <button
                     key={i}
@@ -392,17 +391,16 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                       setCurrentPage(i + 1)
                       window.scrollTo({ top: 300, behavior: 'smooth' })
                     }}
-                    className={`w-8 h-8 rounded text-xs font-bold transition-all ${
-                      currentPage === i + 1
+                    className={`w-8 h-8 rounded text-xs font-bold transition-all ${currentPage === i + 1
                         ? 'bg-[var(--color-secondary)] text-white'
                         : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
-                    }`}
+                      }`}
                   >
                     {i + 1}
                   </button>
                 ))}
 
-                <button 
+                <button
                   disabled={currentPage === totalPages}
                   onClick={() => {
                     setCurrentPage(p => Math.min(p + 1, totalPages))
@@ -486,21 +484,21 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
             )}
 
           </div>
-          
+
           {/* ── RIGHT SIDE: Sticky Filtering Sidebar ── */}
           <aside className="lg:sticky lg:top-8 space-y-6">
-            
+
             {/* Sidebar Search Widget */}
             {block.showFilters && (
               <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-4">
                 <h3 className="font-heading font-black text-slate-900 text-sm uppercase tracking-wider border-b border-slate-100 pb-2">
                   Refine Search
                 </h3>
-                
+
                 {/* State Select */}
                 <div className="space-y-1">
                   <label className="text-[9px] font-black uppercase tracking-widest text-slate-400">State</label>
-                  <select 
+                  <select
                     value={selectedState}
                     onChange={(e) => {
                       setSelectedState(e.target.value)
@@ -518,7 +516,7 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                 {/* City Select */}
                 <div className="space-y-1">
                   <label className="text-[9px] font-black uppercase tracking-widest text-slate-400">City</label>
-                  <select 
+                  <select
                     value={selectedCity}
                     onChange={(e) => {
                       setSelectedCity(e.target.value)
@@ -536,7 +534,7 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                 {/* Practice Area Select */}
                 <div className="space-y-1">
                   <label className="text-[9px] font-black uppercase tracking-widest text-slate-400">Expertise</label>
-                  <select 
+                  <select
                     value={selectedPracticeArea}
                     onChange={(e) => {
                       setSelectedPracticeArea(e.target.value)
@@ -554,7 +552,7 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                 {/* Ratings Select */}
                 <div className="space-y-1">
                   <label className="text-[9px] font-black uppercase tracking-widest text-slate-400">Minimum Rating</label>
-                  <select 
+                  <select
                     value={selectedRating}
                     onChange={(e) => {
                       setSelectedRating(e.target.value)
@@ -570,7 +568,7 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                 </div>
 
                 {/* Reset Buttons */}
-                <button 
+                <button
                   onClick={handleResetFilters}
                   className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-black uppercase tracking-widest hover:bg-slate-200 transition-all active:scale-95"
                 >
@@ -608,7 +606,7 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                       </div>
                     </div>
 
-                    <button 
+                    <button
                       onClick={(e) => openCallbackModal(e, null)}
                       className="btn-gold py-2.5 px-5 text-center text-xs font-black tracking-widest uppercase rounded-lg active:scale-95 transition-all shadow-sm"
                     >
@@ -631,13 +629,13 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
           <div className="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden">
-            
+
             {/* Header */}
             <div className="bg-slate-50 px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
               <h4 className="font-heading font-black text-slate-900 text-xs md:text-sm">
                 {selectedLawyerForCallback ? `Consult Advocate ${selectedLawyerForCallback.name}` : 'Arrange a Callback'}
               </h4>
-              <button 
+              <button
                 onClick={() => setIsModalOpen(false)}
                 className="w-7 h-7 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-700 flex items-center justify-center transition-all"
               >
@@ -661,8 +659,8 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                 <form onSubmit={handleCallbackSubmit} className="space-y-4">
                   <div className="space-y-1">
                     <label className="text-[9px] font-black uppercase tracking-widest text-slate-400">Your Full Name</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       required
                       placeholder="e.g. Rahul Sharma"
                       value={callbackName}
@@ -673,8 +671,8 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
 
                   <div className="space-y-1">
                     <label className="text-[9px] font-black uppercase tracking-widest text-slate-400">Mobile Number</label>
-                    <input 
-                      type="tel" 
+                    <input
+                      type="tel"
                       required
                       placeholder="+91 98XXX XXXXX"
                       value={callbackPhone}
@@ -684,7 +682,7 @@ export function LawyersListClient({ block, lawyers, initialFaqs, initialReviews 
                   </div>
 
                   <div className="pt-1">
-                    <button 
+                    <button
                       type="submit"
                       disabled={callbackLoading}
                       className="btn-gold w-full py-3 text-center text-xs font-black tracking-widest uppercase rounded-lg active:scale-95 transition-all shadow-md"

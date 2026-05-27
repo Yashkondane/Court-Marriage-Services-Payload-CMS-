@@ -3,10 +3,6 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getPayload } from 'payload'
 import configPromise from '@/payload.config'
 
-/**
- * Verifies the Supabase JWT from the Authorization header 
- * and returns the corresponding Lawyer profile from Payload.
- */
 export async function getLawyerFromToken(req: NextRequest) {
   const authHeader = req.headers.get('authorization')
   if (!authHeader?.startsWith('Bearer ')) {
@@ -23,7 +19,7 @@ export async function getLawyerFromToken(req: NextRequest) {
 
   const payload = await getPayload({ config: configPromise })
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const result = await (payload.find as any)({
     collection: 'lawyers',
     where: { supabaseId: { equals: user.id } },
